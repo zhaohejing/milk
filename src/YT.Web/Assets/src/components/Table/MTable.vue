@@ -1,0 +1,118 @@
+<template>
+    <div>
+        <Table :stripe="stripe" :show-header="showHeader" :columns="columns" :data="items" :no-data-text="emptyContent" @on-select="selectOne" @on-select-cancel="cancelSelect" @on-select-all="selectAll">
+        </Table>
+        <Page :total="total" :current="pageModel.current" show-total show-sizer show-elevator @on-change="pageChange" @on-page-size-change="pageSizeChange" style="text-align:right;margin-top:50px"></Page>
+    </div>
+</template>
+
+<script>
+
+export default {
+    name: 'milk-table',
+    props: {
+        //斑马纹
+        stripe: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
+        //表格头字段
+        columns: {
+            type: Array,
+            required: true
+        },
+        //是否显示表头
+        showHeader: {
+            type: Boolean,
+            required: false,
+            default: true
+        },
+        /*是否分页，默认分页*/
+        pagination: {
+            type: Boolean,
+            default: true,
+            required: false
+        },
+        /*查询Api,方法*/
+        searchApi: {
+            type: Function,
+            required: true
+        },
+        //参数
+        params: {
+            type: Object,
+            default() {
+                return {};
+            },
+            required: false
+        }
+
+    },
+    data() {
+        return {
+            items: [],
+            total: 0,
+            selects: [],
+            emptyContent: '暂无数据',
+            pageModel: {
+                current: 1,
+                maxResultCount: 10
+            }
+        }
+
+    },
+    created() {
+        this.initData();
+    },
+    methods: {
+        //初始化
+        async initData() {
+            try {
+                this.getApiData();
+            } catch (err) {
+                this.$message.error('获取数据失败');
+            }
+        },
+        /*获取数据*/
+        async getApiData() {
+            var params = this.params;
+            params.skipCount = (this.pageModel.current - 1) * this.pageModel.maxResultCount;
+            params.maxResultCount = this.pageModel.maxResultCount;
+            this.items = [];
+            const result = await this.searchApi(params);
+            this.items = (result && result.result && (result.result.rows || result.result.items)) || [];
+            this.total = (result && result.result && (result.result.total || result.result.totalCount)) || 0;
+        },
+        selectOne(selection, row) {
+            this.selects = selection;
+        },
+        cancelSelect(selection, row) {
+            this.selects = selection;
+        }, selectAll(all, sels) {
+            this.selects = selection;
+        }, pageChange(current) {
+            this.pageModel.current = current;
+            this.getApiData();
+        }, pageSizeChange(size) {
+            this.pageModel.maxResultCount = size;
+            this.getApiData();
+        }
+    },
+    computed() {
+
+    }
+}
+</script>
+
+<style rel="stylesheet/scss" lang="scss" scoped>
+.wscn-icon {
+    margin-right: 10px;
+}
+
+.hideSidebar .menu-indent {
+    display: block;
+    text-indent: 10px;
+}
+</style>
+
