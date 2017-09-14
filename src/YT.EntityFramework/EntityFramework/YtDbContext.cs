@@ -7,6 +7,7 @@ using YT.Authorizations;
 using YT.Managers.MultiTenancy;
 using YT.Managers.Roles;
 using YT.Managers.Users;
+using YT.Models;
 using YT.MultiTenancy;
 using YT.Navigations;
 using YT.Organizations;
@@ -38,6 +39,27 @@ namespace YT.EntityFramework
         public virtual IDbSet<YtPermission> YtPermissions { get; set; }
 
         public new virtual IDbSet<Organization> OrganizationUnits { get; set; }
+
+        /// <summary>
+        /// 卡片
+        /// </summary>
+        public virtual IDbSet<Card> Cards { get; set; }
+        /// <summary>
+        /// 客户
+        /// </summary>
+        public virtual IDbSet<Customer> Customers { get; set; }
+        /// <summary>
+        /// 推广员 
+        /// </summary>
+        public virtual IDbSet<Promoter> Promoters { get; set; }
+        /// <summary>
+        /// 奶鲜卡
+        /// </summary>
+        public  virtual  IDbSet<SpecialCard> SpecialCards { get; set; }
+        /// <summary>
+        /// 区域
+        /// </summary>
+        public  virtual  IDbSet<Area> Areas { get; set; }
 
         public YtDbContext()
             : base("Default")
