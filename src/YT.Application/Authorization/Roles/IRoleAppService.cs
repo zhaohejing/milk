@@ -12,9 +12,8 @@ namespace YT.Authorization.Roles
     {/// <summary>
     /// 分页获取角色信息
     /// </summary>
-    /// <param name="input"></param>
     /// <returns></returns>
-        Task<ListResultDto<RoleListDto>> GetRoles(GetRolesInput input);
+        Task<ListResultDto<RoleListDto>> GetRoles();
         /// <summary>
         /// 获取角色+权限信息
         /// </summary>

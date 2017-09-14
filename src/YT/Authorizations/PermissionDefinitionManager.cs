@@ -18,14 +18,15 @@ namespace YT.Authorizations
         private readonly IPermissionConfiguration _permissionConfiguration;
         private readonly IRepository<YtPermission> _permissionRepository;
         private readonly ILevelEntityHandler<YtPermission> _levelEntityHandler;
-        private readonly ISettingManager _settingManager;
 
-        public PermissionDefinitionManager(IPermissionConfiguration permissionConfiguration, IRepository<YtPermission> permissionRepository, ILevelEntityHandler<YtPermission> levelEntityHandler, ISettingManager settingManager)
+        public PermissionDefinitionManager(IPermissionConfiguration permissionConfiguration,
+            IRepository<YtPermission> permissionRepository,
+            ILevelEntityHandler<YtPermission> levelEntityHandler
+          )
         {
             _permissionConfiguration = permissionConfiguration;
             _permissionRepository = permissionRepository;
             _levelEntityHandler = levelEntityHandler;
-            _settingManager = settingManager;
         }
         public async Task Initialize()
         {
@@ -64,9 +65,7 @@ namespace YT.Authorizations
                 if (per.Id == default(int))
                 {
 
-                    var defaultactive = 
-                        _settingManager.GetSettingValueForApplication<bool>(YtSettings.General.PermissionDefaultActive);
-                    per.IsActive = defaultactive;
+                   per.IsActive = true;
                     _levelEntityHandler.Create(per);
                 }
                 else

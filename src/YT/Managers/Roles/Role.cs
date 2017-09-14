@@ -33,5 +33,9 @@ namespace YT.Managers.Roles
         /// ÊÇ·ñÆôÓÃ
         /// </summary>
         public bool IsActive { get; set; }
+        /// <summary>
+        /// ÃèÊö
+        /// </summary>
+        public string Description { get; set; }
     }
 }

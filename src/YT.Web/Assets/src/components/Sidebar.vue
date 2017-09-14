@@ -38,13 +38,13 @@ export default {
           path: '', name: '客户管理', icon: 'person-stalker',
           children: [
             {
-              path: 'customer/user',
+              path: 'customer/client',
               name: '用户',
               icon: 'person',
               hidden: false
             },
             {
-              path: 'customer/account',
+              path: 'customer/charge',
               name: '账户',
               icon: 'person-add'
             }
@@ -112,42 +112,42 @@ export default {
           path: '', name: '报表管理', icon: 'person-stalker',
           children: [
             {
-              path: 'statics/a',
+              path: 'statistics/a',
               name: '销售明细表',
               icon: 'person'
             },
              {
-              path: 'statics/b',
+              path: 'statistics/b',
               name: '销售汇总',
               icon: 'person'
             },
              {
-              path: 'statics/c',
+              path: 'statistics/c',
               name: '顾客取货报表',
               icon: 'person'
             },
               {
-              path: 'statics/d',
+              path: 'statistics/d',
               name: '顾客消费',
               icon: 'person'
             },
               {
-              path: 'statics/e',
+              path: 'statistics/e',
               name: '商品销售数量',
               icon: 'person'
             },
               {
-              path: 'statics/f',
+              path: 'statistics/f',
               name: '充值记录',
               icon: 'person'
             },
                {
-              path: 'statics/g',
+              path: 'statistics/g',
               name: '订单管理',
               icon: 'person'
             },
                {
-              path: 'statics/f',
+              path: 'statistics/h',
               name: '待补货记录',
               icon: 'person'
             },

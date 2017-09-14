@@ -24,8 +24,8 @@ namespace YT.Authorization.Roles
     /// <summary>
     /// 角色管理 application
     /// </summary>
-     // [AbpAuthorize(StaticPermissionsName.Page_Role)]
-      [AbpAuthorize]
+    // [AbpAuthorize(StaticPermissionsName.Page_Role)]
+    [AbpAuthorize]
     public class RoleAppService : YtAppServiceBase, IRoleAppService
     {
         private readonly RoleManager _roleManager;
@@ -43,19 +43,14 @@ namespace YT.Authorization.Roles
         /// <summary>
         /// 
         /// </summary>
-        public async Task<ListResultDto<RoleListDto>> GetRoles(GetRolesInput input)
+        public async Task<ListResultDto<RoleListDto>> GetRoles()
         {
             var roles = await _roleManager
                 .Roles
-                .WhereIf(
-                    !input.Permission.IsNullOrWhiteSpace(),
-                    r => r.Permissions.Any(rp => rp.Name == input.Permission && rp.IsGranted)
-                )
                 .ToListAsync();
-
             return new ListResultDto<RoleListDto>(roles.MapTo<List<RoleListDto>>());
         }
-       
+
 
         /// <summary>
         /// 分页获取角色列表
@@ -80,13 +75,13 @@ namespace YT.Authorization.Roles
         /// </summary>
         public async Task<GetRoleForEditOutput> GetRoleForEdit(NullableIdDto input)
         {
-           // var permissions =await _permissionRepository.GetAllListAsync();
+            // var permissions =await _permissionRepository.GetAllListAsync();
             var grantedPermissions = new List<string>();
             RoleEditDto roleEditDto;
             if (input.Id.HasValue) //Editing existing role?
             {
                 var role = await _roleManager.GetRoleByIdAsync(input.Id.Value);
-                grantedPermissions = role.Permissions.Where(c=>c.IsGranted).Select(c=>c.Name).ToList();
+                grantedPermissions = role.Permissions.Where(c => c.IsGranted).Select(c => c.Name).ToList();
                 roleEditDto = role.MapTo<RoleEditDto>();
             }
             else
@@ -96,7 +91,7 @@ namespace YT.Authorization.Roles
             return new GetRoleForEditOutput
             {
                 Role = roleEditDto,
-              //  Permissions = permissions.MapTo<List<FlatPermissionWithLevelDto>>().OrderBy(p => p.DisplayName).ToList(),
+                //  Permissions = permissions.MapTo<List<FlatPermissionWithLevelDto>>().OrderBy(p => p.DisplayName).ToList(),
                 GrantedPermissionNames = grantedPermissions
             };
         }
@@ -133,6 +128,7 @@ namespace YT.Authorization.Roles
             role.DisplayName = input.Role.DisplayName;
             role.IsDefault = input.Role.IsDefault;
             role.IsActive = input.Role.IsActive;
+            role.Description = input.Role.Description;
             await UpdateGrantedPermissionsAsync(role, input.GrantedPermissionNames);
         }
         /// <summary>
@@ -143,7 +139,12 @@ namespace YT.Authorization.Roles
 
         protected virtual async Task CreateRoleAsync(CreateOrUpdateRoleInput input)
         {
-            var role = new Role(AbpSession.TenantId, input.Role.DisplayName) { IsDefault = input.Role.IsDefault,IsActive = input.Role.IsActive};
+            var role = new Role(AbpSession.TenantId, input.Role.DisplayName)
+            {
+                IsDefault = input.Role.IsDefault,
+                IsActive = input.Role.IsActive,
+                Description = input.Role.Description
+            };
             CheckErrors(await _roleManager.CreateAsync(role));
             await CurrentUnitOfWork.SaveChangesAsync(); //It's done to get Id of the role.
             await UpdateGrantedPermissionsAsync(role, input.GrantedPermissionNames);
@@ -151,10 +152,10 @@ namespace YT.Authorization.Roles
 
         private async Task UpdateGrantedPermissionsAsync(Role role, List<string> grantedPermissionNames)
         {
-            var permissions =await 
+            var permissions = await
                 _permissionRepository.GetAllListAsync(c => grantedPermissionNames.Any(e => e.Equals(c.Name)));
             await _roleManager.SetRoleGrantedPermissionsAsync(role, permissions);
-         await   _cacheManager.ClearCache(new EntityDto<string>(CacheName.PermissionCache));
+            await _cacheManager.ClearCache(new EntityDto<string>(CacheName.PermissionCache));
         }
 
     }

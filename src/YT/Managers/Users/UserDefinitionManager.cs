@@ -68,14 +68,13 @@ namespace YT.Managers.Users
                 var roles = _roleRepository.GetAllList();
                 if (user.Id == default(int))
                 {
-                    var defaultactive = 
-                         _settingManager.GetSettingValueForApplication<bool>(YtSettings.General.UserDefaultActive);
+                 
                     user.Roles = roles.Select(c => new UserRole()
                     {
                         TenantId = null,
                         RoleId = c.Id
                     }).ToList();
-                    user.IsActive = defaultactive;
+                    user.IsActive = true;
                   await  _userRepository.InsertAsync(user);
                 }
                 else

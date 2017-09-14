@@ -70,8 +70,7 @@ namespace YT.Managers.Roles
              
                 if (role.Id == default(int))
                 {
-                    var defaultactive =  _settingManager.GetSettingValueForApplication<bool>(YtSettings.General.RoleDefaultActive);
-                    role.IsActive = defaultactive;
+                    role.IsActive = true;
                     if (role.Name.Equals(StaticNames.Role.Admin))
                     {
                         var p = temp.Where(c=>c.PermissionType==PermissionType.Common||c.PermissionType==PermissionType.Control)

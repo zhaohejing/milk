@@ -118,17 +118,17 @@ export const asyncRouterMap = [
         },
         children: [
           {
-            path: 'customer/user',
+            path: 'customer/client',
             name: '用户',
             icon: 'person',
             hidden: false,
-            component: r => require(['views/customer/User'], r)
+            component: r => require(['views/customer/client'], r)
           },
           {
-            path: 'customer/account',
+            path: 'customer/charge',
             name: '账户',
             icon: 'person-add',
-            component: r => require(['views/customer/User'], r)
+            component: r => require(['views/customer/charge'], r)
           }
         ]
       },
@@ -163,7 +163,7 @@ export const asyncRouterMap = [
         children: [
           {
             path: 'generalize/user',
-            name: '退管员',
+            name: '推广员',
             icon: 'person',
             hidden: false,
             component: r => require(['views/customer/User'], r)
@@ -237,49 +237,49 @@ export const asyncRouterMap = [
         },
         children: [
           {
-            path: 'statics/a',
+            path: 'statistics/a',
             name: '销售明细表',
             icon: 'person',
             component: r => require(['views/customer/User'], r)
           },
           {
-            path: 'statics/b',
+            path: 'statistics/b',
             name: '销售汇总',
             icon: 'person',
             component: r => require(['views/customer/User'], r)
           },
           {
-            path: 'statics/c',
+            path: 'statistics/c',
             name: '顾客取货报表',
             icon: 'person',
             component: r => require(['views/customer/User'], r)
           },
           {
-            path: 'statics/d',
+            path: 'statistics/d',
             name: '顾客消费',
             icon: 'person',
             component: r => require(['views/customer/User'], r)
           },
           {
-            path: 'statics/e',
+            path: 'statistics/e',
             name: '商品销售数量',
             icon: 'person',
             component: r => require(['views/customer/User'], r)
           },
           {
-            path: 'statics/f',
+            path: 'statistics/f',
             name: '充值记录',
             icon: 'person',
             component: r => require(['views/customer/User'], r)
           },
           {
-            path: 'statics/g',
+            path: 'statistics/g',
             name: '订单管理',
             icon: 'person',
             component: r => require(['views/customer/User'], r)
           },
           {
-            path: 'statics/f',
+            path: 'statistics/h',
             name: '待补货记录',
             icon: 'person',
             component: r => require(['views/customer/User'], r)

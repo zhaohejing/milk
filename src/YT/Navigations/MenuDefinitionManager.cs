@@ -76,10 +76,10 @@ namespace YT.Navigations
                 menu.RequiredPermissions = definition.RequiredPermissions;
                 menu.RequiresAuthentication = definition.RequiresAuthentication;
                 menu.IsStatic = true;
+                menu.IsActive = true;
+
                 if (menu.Id == default(int))
                 {
-                    var defaultactive = _settingManager.GetSettingValueForApplication<bool>(YtSettings.General.MenuDefaultActive);
-                    menu.IsActive = defaultactive;
                     _levelEntityHandler.Create(menu);
                 }
                 else

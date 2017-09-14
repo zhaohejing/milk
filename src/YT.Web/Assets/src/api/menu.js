@@ -1,29 +1,43 @@
 import fetch from 'utils/fetch';
 export function userMenus() {
   return fetch({
-    url: '/api/Account/Authenticate',
+    url: '/api/services/app/menu/GetUserMenusAsync',
     method: 'post'
   });
 }
 
-export function allMenus() {
+export function getMenus(data) {
   return fetch({
-    url: '/login/logout',
-    method: 'post'
+    url: '/api/services/app/menu/GetPagedMenusAsync',
+    method: 'post',
+    data
   });
 }
-
-export function editMenus(menuDto) {
+export function detailMenu(data) {
   return fetch({
-    url: '/api/services/app/session/GetCurrentLoginInformations',
+    url: '/api/services/app/menu/GetPagedMenusAsync',
     method: 'post',
-    data: menuDto
+    data
   });
 }
-export function addMenus(menuDto) {
+export function modifyMenus(data) {
   return fetch({
-    url: '/api/services/app/session/GetCurrentLoginInformations',
+    url: '/api/services/app/menu/CreateOrUpdateMenuAsync',
     method: 'post',
-    data: menuDto
+    data
+  });
+}
+export function deleteMenu(data) {
+  return fetch({
+    url: '/api/services/app/menu/DeleteMenuAsync',
+    method: 'post',
+    data
+  });
+}
+export function deleteMenus(data) {
+  return fetch({
+    url: '/api/services/app/menu/BatchDeleteMenuAsync',
+    method: 'post',
+    data
   });
 }

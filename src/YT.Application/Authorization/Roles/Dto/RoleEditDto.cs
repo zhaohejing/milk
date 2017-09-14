@@ -25,5 +25,9 @@ namespace YT.Authorization.Roles.Dto
         ///  «∑Ò∆Ù”√
         /// </summary>
         public bool IsActive { get; set; }
+        /// <summary>
+        /// √Ë ˆ
+        /// </summary>
+        public string Description { get; set; }
     }
 }
