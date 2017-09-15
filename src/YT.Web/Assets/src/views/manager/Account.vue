@@ -11,8 +11,8 @@
                             <Input v-model="params.phone" placeholder="请输入手机号码"></Input>
                         </FormItem>
                         <FormItem label="权限角色">
-                            <Select v-model="params.roleId">
-                                <Option v-for="c in roles" :value="c.displayName" :key="c.id">{{c.displayName}}</Option>
+                            <Select v-model="params.role">
+                                <Option v-for="c in roles" :value="c.id" :key="c.id">{{c.displayName}}</Option>
                             </Select>
                         </FormItem>
                     </Form>
@@ -24,7 +24,7 @@
         </Row>
         <!-- 添加和编辑窗口 -->
         <Modal v-model="modal.isEdit" :title="modal.title" :mask-closable="false" @on-ok="save" @on-cancel="cancel">
-            <modify-account @submit-complete="cancel" ref="tree" :role="modal.current" v-if="modal.isEdit">
+            <modify-account @submit-complete="cancel" ref="account" :user="modal.current" v-if="modal.isEdit">
             </modify-account>
         </Modal>
 
@@ -32,8 +32,9 @@
 </template>
 
 <script>
-import { getUsers, getRoles } from 'api/manage';
+import { getUsers, getRoles, getUserForEdit, deleteUser } from 'api/manage';
 import modifyAccount from './modifyaccount';
+import { bus } from  'event/eventbus';
 export default {
     name: 'account',
     data() {
@@ -120,12 +121,11 @@ export default {
                 }
             ],
             searchApi: getUsers,
-            params: { name: '', phone: '', roleId: null },
+            params: { name: '', phone: '', role: null },
             modal: {
                 isEdit: false, title: '添加', current: null
             },
             roles: []
-
         }
     },
     components: {
@@ -133,16 +133,19 @@ export default {
     },
     created() {
         this.initRoles();
+        bus.$on("call",function(){
+            this.cancel();
+        })
     },
     methods: {
         //删除
         delete(model) {
             var table = this.$refs.list;
             this.$Modal.confirm({
-                title: '删除提示', content: "确定要删除当前角色么?",
+                title: '删除提示', content: "确定要删除当前用户么?",
                 onOk: () => {
                     const parms = { id: model.id }
-                    deleteRole(parms).then(c => {
+                    deleteUser(parms).then(c => {
                         if (c.data.result.success) {
                             table.initData();
                         }
@@ -152,19 +155,19 @@ export default {
         },
         add() {
             this.modal.isEdit = true;
-            this.modal.title = "添加角色";
+            this.modal.title = "添加用户";
         },
         edit(row) {
             this.modal.current = row.id;
             this.modal.isEdit = true;
-            this.modal.title = "编辑角色:" + row.displayName;
+            this.modal.title = "编辑用户:" + row.name;
         },
         save() {
-            this.$refs.tree.commit();
+            this.$refs.account.commit();
         },
         cancel() {
             this.modal.isEdit = false;
-            this.modal.title = "添加角色";
+            this.modal.title = "添加用户";
             this.modal.current = null;
             this.$refs.list.initData();
         },

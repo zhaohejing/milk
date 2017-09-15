@@ -62,7 +62,27 @@ export function getUsers(data) {
     data
   });
 }
-
+export function getUserForEdit(data) {
+  return fetch({
+    url: '/api/services/app/user/GetUserForEdit',
+    method: 'post',
+    data
+  });
+}
+export function deleteUser(data) {
+  return fetch({
+    url: '/api/services/app/user/DeleteUser',
+    method: 'post',
+    data
+  });
+}
+export function modifyUser(data) {
+  return fetch({
+    url: '/api/services/app/user/CreateOrUpdateUser',
+    method: 'post',
+    data
+  });
+}
 export function getInfo() {
   return fetch({
     url: '/api/services/app/session/GetCurrentLoginInformations',

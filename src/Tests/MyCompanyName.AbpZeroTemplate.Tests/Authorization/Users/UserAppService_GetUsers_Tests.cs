@@ -52,7 +52,7 @@ namespace YT.Tests.Authorization.Users
             var output = await UserAppService.GetUsers(
                 new GetUsersInput
                 {
-                    Filter = "Adam"
+                    Name = "Adam"
                 });
 
             //Assert

@@ -19,6 +19,12 @@ export function validateLowerCase(str) {
   return reg.test(str);
 }
 
+/* 小写字母*/
+export function validatePhone(str) {
+  const reg = /^1[3|4|5|7|8][0-9]\d{4,8}$/;
+  return reg.test(str);
+}
+
 /* 验证key*/
 // export function validateKey(str) {
 //     var reg = /^[a-z_\-:]+$/;

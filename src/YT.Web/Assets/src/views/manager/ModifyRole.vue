@@ -3,7 +3,7 @@
         <TabPane label="角色信息" name="role">
             <Row>
                 <Col :md="22">
-                <Form :model="current.role" :rules="ruleValidate" :label-width="100">
+                <Form ref="role" :model="current.role" :rules="ruleValidate" :label-width="100">
                     <FormItem label="角色名称" prop="displayName">
                         <Input v-model="current.role.displayName" placeholder="请输入角色名称"></Input>
                     </FormItem>
@@ -42,7 +42,7 @@
 <script>
 import { saveRole, getRoleForEdit } from 'api/manage';
 import { allPermissions } from 'api/menu';
-
+import { bus } from  'event/eventbus';
 export default {
     props: {
         role: {
@@ -100,42 +100,47 @@ export default {
         },
         getCheckedNode() {
             var checkedKeys = this.$refs.tree.getCheckedNodes()
-            if(!checkedKeys){
+            if (!checkedKeys) {
                 return null;
             }
-            let temp=[];
-            checkedKeys.forEach(c=>{
+            let temp = [];
+            checkedKeys.forEach(c => {
                 temp.push(c.name);
             })
             /*级联获取父节点id*/
             let getCheckedParentKeys = (treeData, checkedKeys, keyName) => {
                 var fdata = treeData.filter(node => {
-                    var hasKey = checkedKeys.findIndex(key => key.name == node[keyName]) >= 0
+                    var hasKey = checkedKeys.findIndex(key => key == node[keyName]) >= 0;
                     if (!hasKey) {
-                        let childChecked = node.children && getCheckedParentKeys(node.children, checkedKeys, keyName)
+                        let childChecked = node.children && getCheckedParentKeys(node.children, checkedKeys, keyName);
                         if (childChecked) {
                             checkedKeys.push(node[keyName])
                         }
-                        return childChecked
+                        return childChecked;
                     }
-                    return hasKey
+                    return hasKey;
                 })
-                return fdata && fdata.length
+                return fdata && fdata.length;
             }
             getCheckedParentKeys(this.permissionTrees, temp, 'name')
-            return temp
+            return temp;
         },
         commit() {
-            debugger;
-            var nodes = this.getCheckedNode();
-            this.current.grantedPermissionNames = nodes;
-            saveRole(this.current).then(r => {
-                if (r.data.success) {
-                    this.$emit('submit-complete');
+            this.$refs.role.validate((valid) => {
+                if (valid) {
+                    var nodes = this.getCheckedNode();
+                    this.current.grantedPermissionNames = nodes;
+                    saveRole(this.current).then(r => {
+                        if (r.data.success) {
+                           bus.$emit('call');
+                        }
+                    });
+                } else {
+                    this.$Message.error('表单验证失败!');
+                   bus.$emit('call');
                 }
-            });
+            })
         }
-
     }
 }
 </script>

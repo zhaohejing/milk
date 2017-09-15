@@ -16,7 +16,7 @@
         </Row>
         <!-- 添加和编辑窗口 -->
         <Modal v-model="modal.isEdit" :title="modal.title"  :mask-closable="false" @on-ok="save" @on-cancel="cancel">
-            <modifyRole @submit-complete="cancel" ref="tree" :role="modal.current" v-if="modal.isEdit">
+            <modifyRole @submit-complete="cancel" ref="role" :role="modal.current" v-if="modal.isEdit">
             </modifyRole>
         </Modal>
 
@@ -26,6 +26,7 @@
 <script>
 import { getRoles, getRolesByPage, deleteRole, getRoleForEdit } from 'api/manage';
 import modifyRole from './modifyrole';
+import { bus } from  'event/eventbus';
 export default {
     name: 'role',
     data() {
@@ -105,7 +106,9 @@ export default {
         modifyRole
     },
     created() {
-
+     bus.$on("call",function(){
+            this.cancel();
+        })
     },
     methods: {
         //删除
@@ -116,7 +119,7 @@ export default {
                 onOk: () => {
                     const parms = { id: model.id }
                     deleteRole(parms).then(c => {
-                        if (c.data.result.success) {
+                        if (c.data.success) {
                             table.initData();
                         }
                     })
@@ -133,13 +136,13 @@ export default {
             this.modal.title = "编辑角色:" + row.displayName;
         },
         save(){
-            this.$refs.tree.commit();
+            this.$refs.role.commit();
         },
         cancel() {
             this.modal.isEdit = false;
             this.modal.title = "添加角色";
             this.modal.current=null;
-              this.$refs.list.initData();
+            this.$refs.list.initData();
         }
       
     },
