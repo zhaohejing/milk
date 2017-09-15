@@ -3,7 +3,7 @@
         <TabPane label="用户信息" name="user">
             <Row>
                 <Col :md="22">
-                <Form ref="account" :model="current.user" :rules="ruleValidate" :label-width="100">
+                <Form ref="user" :model="current.user" :rules="ruleValidate" :label-width="100">
                     <FormItem label="用户名" prop="userName">
                         <Input v-model="current.user.userName" placeholder="请输入用户名"></Input>
                     </FormItem>
@@ -51,7 +51,6 @@
 import { modifyUser, getUserForEdit, getRoles } from 'api/manage';
 import { allPermissions } from 'api/menu';
 import { validatePhone } from 'utils/validate';
-import { bus } from  'event/eventbus';
 export default {
     props: {
         user: {
@@ -107,19 +106,23 @@ export default {
             })
         },
         commit() {
-            this.$refs.account.validate((valid) => {
+              this.$refs.user.validate((valid) => {
                 if (valid) {
+                     debugger;
                     modifyUser(this.current).then(r => {
                         if (r.data.success) {
-                            bus.$emit('call');
+                            this.$emit('callhome');
+                        } else {
+                            this.$emit('callhome');
                         }
+                    }).catch(e => {
+                        this.$emit('callhome');
                     });
                 } else {
                     this.$Message.error('表单验证失败!');
+                    this.$emit('callhome');
                 }
-                  bus.$emit('call');
             })
-
         },
         genderRoles() {
             this.current.assignedRoleNames = [];

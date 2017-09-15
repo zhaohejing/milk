@@ -24,7 +24,7 @@
         </Row>
         <!-- 添加和编辑窗口 -->
         <Modal v-model="modal.isEdit" :title="modal.title" :mask-closable="false" @on-ok="save" @on-cancel="cancel">
-            <modify-account @submit-complete="cancel" ref="account" :user="modal.current" v-if="modal.isEdit">
+            <modify-account @callhome="cancel" ref="account" :user="modal.current" v-if="modal.isEdit">
             </modify-account>
         </Modal>
 
@@ -34,7 +34,6 @@
 <script>
 import { getUsers, getRoles, getUserForEdit, deleteUser } from 'api/manage';
 import modifyAccount from './modifyaccount';
-import { bus } from  'event/eventbus';
 export default {
     name: 'account',
     data() {
@@ -133,9 +132,7 @@ export default {
     },
     created() {
         this.initRoles();
-        bus.$on("call",function(){
-            this.cancel();
-        })
+     
     },
     methods: {
         //删除

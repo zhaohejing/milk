@@ -42,7 +42,6 @@
 <script>
 import { saveRole, getRoleForEdit } from 'api/manage';
 import { allPermissions } from 'api/menu';
-import { bus } from  'event/eventbus';
 export default {
     props: {
         role: {
@@ -132,12 +131,15 @@ export default {
                     this.current.grantedPermissionNames = nodes;
                     saveRole(this.current).then(r => {
                         if (r.data.success) {
-                           bus.$emit('call');
+                            debugger;
+                            this.$emit('callhome');
+                        } else {
+                            this.$emit('callhome');
                         }
                     });
                 } else {
                     this.$Message.error('表单验证失败!');
-                   bus.$emit('call');
+                    this.$emit('callhome');
                 }
             })
         }

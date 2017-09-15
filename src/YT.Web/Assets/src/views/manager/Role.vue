@@ -15,8 +15,8 @@
             </milk-table>
         </Row>
         <!-- 添加和编辑窗口 -->
-        <Modal v-model="modal.isEdit" :title="modal.title"  :mask-closable="false" @on-ok="save" @on-cancel="cancel">
-            <modifyRole @submit-complete="cancel" ref="role" :role="modal.current" v-if="modal.isEdit">
+        <Modal v-model="modal.isEdit" :title="modal.title" :mask-closable="false" @on-ok="save" @on-cancel="cancel">
+            <modifyRole @callhome="cancel" ref="role" :role="modal.current" v-if="modal.isEdit">
             </modifyRole>
         </Modal>
 
@@ -26,7 +26,6 @@
 <script>
 import { getRoles, getRolesByPage, deleteRole, getRoleForEdit } from 'api/manage';
 import modifyRole from './modifyrole';
-import { bus } from  'event/eventbus';
 export default {
     name: 'role',
     data() {
@@ -106,9 +105,6 @@ export default {
         modifyRole
     },
     created() {
-     bus.$on("call",function(){
-            this.cancel();
-        })
     },
     methods: {
         //删除
@@ -135,18 +131,17 @@ export default {
             this.modal.isEdit = true;
             this.modal.title = "编辑角色:" + row.displayName;
         },
-        save(){
+        save() {
             this.$refs.role.commit();
         },
         cancel() {
+            debugger;
             this.modal.isEdit = false;
             this.modal.title = "添加角色";
-            this.modal.current=null;
+            this.modal.current = null;
             this.$refs.list.initData();
         }
-      
     },
-
     mounted() {
     }
 }
