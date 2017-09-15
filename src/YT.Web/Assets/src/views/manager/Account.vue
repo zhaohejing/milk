@@ -1,39 +1,39 @@
 <template>
     <div class="animated fadeIn">
         <Row>
-            <Col :md="20">
-            <Form ref="params" :model="params" inline :label-width="60">
-                <FormItem label="用户名">
-                    <Input v-model="params.name" placeholder="请输入用户名"></Input>
-                </FormItem>
-                <FormItem label="手机">
-                    <Input v-model="params.mobile" placeholder="请输入手机">
-                    </Input>
-                </FormItem>
-                <FormItem label="角色">
-                    <Select v-model="params.role" placeholder="请选择">
-                        <Option value="beijing">北京市</Option>
-                        <Option value="shanghai">上海市</Option>
-                        <Option value="shenzhen">深圳市</Option>
-                    </Select>
-                </FormItem>
-                <FormItem>
-                    <Button type="primary" shape="circle" icon="ios-search" @click="searchApi">查询</Button>
-                </FormItem>
-            </Form>
-            </Col>
-            <Col :md="2" :offset="2">
-            <Button type="primary">添加</Button>
-            </Col>
+            <milk-table ref="list" :columns="cols" :search-api="searchApi" :params="params">
+                <template slot="search">
+                    <Form ref="params" :model="params" inline :label-width="80">
+                        <FormItem label="用户姓名">
+                            <Input v-model="params.name" placeholder="请输入用户姓名"></Input>
+                        </FormItem>
+                        <FormItem label="手机号码">
+                            <Input v-model="params.phone" placeholder="请输入手机号码"></Input>
+                        </FormItem>
+                        <FormItem label="权限角色">
+                            <Select v-model="params.roleId">
+                                <Option v-for="c in roles" :value="c.displayName" :key="c.id">{{c.displayName}}</Option>
+                            </Select>
+                        </FormItem>
+                    </Form>
+                </template>
+                <template slot="actions">
+                    <Button @click="add" type="primary">添加</Button>
+                </template>
+            </milk-table>
         </Row>
-        <Row>
-            <milk-table :columns="cols" :search-api="searchApi" :params="params" />
-        </Row>
+        <!-- 添加和编辑窗口 -->
+        <Modal v-model="modal.isEdit" :title="modal.title" :mask-closable="false" @on-ok="save" @on-cancel="cancel">
+            <modify-account @submit-complete="cancel" ref="tree" :role="modal.current" v-if="modal.isEdit">
+            </modify-account>
+        </Modal>
+
     </div>
 </template>
 
 <script>
-import { getRoles,getUsers } from 'api/manage';
+import { getUsers, getRoles } from 'api/manage';
+import modifyAccount from './modifyaccount';
 export default {
     name: 'account',
     data() {
@@ -41,19 +41,48 @@ export default {
             cols: [
                 {
                     type: 'selection',
-                    align: 'center'
+                    align: 'center',
+                    width: '70px'
                 },
                 {
-                    title: '用户名',
+                    title: '账户',
+                    key: 'userName'
+                },
+
+                {
+                    title: '用户姓名',
                     key: 'name'
                 },
                 {
-                    title: '角色',
-                    key: 'age'
+                    title: '手机号',
+                    key: 'phoneNumber'
                 },
                 {
-                    title: '注册时间',
-                    key: 'address'
+                    title: '角色',
+                    key: 'roles',
+                    render: (h, params) => {
+                        let names = "";
+                        if (params.row.roles) {
+                            params.row.roles.forEach(c => {
+                                names += c.roleName + ',';
+                            })
+                        }
+                        return names;
+                    }
+                },
+                {
+                    title: '状态',
+                    key: 'isActive',
+                    render: (h, params) => {
+                        return params.row.isActive ? '启用' : '禁用';
+                    }
+                },
+                {
+                    title: '创建时间',
+                    key: 'creationTime',
+                    render: (h, params) => {
+                        return this.$fmtTime(params.row.creationTime);
+                    }
                 },
                 {
                     title: '操作',
@@ -82,7 +111,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.remove(params.row)
+                                        this.delete(params.row)
                                     }
                                 }
                             }, '删除')
@@ -90,26 +119,65 @@ export default {
                     }
                 }
             ],
-            searchApi:getUsers,
-            params: { name: '', role: null, mobile: null },
+            searchApi: getUsers,
+            params: { name: '', phone: '', roleId: null },
+            modal: {
+                isEdit: false, title: '添加', current: null
+            },
             roles: []
+
         }
     },
+    components: {
+        modifyAccount
+    },
     created() {
-        this.getRoles();
+        this.initRoles();
     },
     methods: {
-        getRoles() {
-            const params={
-                maxResultCount: 99,
-                skipCount: 0
-            };
-            getRoles(params).then(c => {
-                this.roles = c.result;
+        //删除
+        delete(model) {
+            var table = this.$refs.list;
+            this.$Modal.confirm({
+                title: '删除提示', content: "确定要删除当前角色么?",
+                onOk: () => {
+                    const parms = { id: model.id }
+                    deleteRole(parms).then(c => {
+                        if (c.data.result.success) {
+                            table.initData();
+                        }
+                    })
+                }
+            })
+        },
+        add() {
+            this.modal.isEdit = true;
+            this.modal.title = "添加角色";
+        },
+        edit(row) {
+            this.modal.current = row.id;
+            this.modal.isEdit = true;
+            this.modal.title = "编辑角色:" + row.displayName;
+        },
+        save() {
+            this.$refs.tree.commit();
+        },
+        cancel() {
+            this.modal.isEdit = false;
+            this.modal.title = "添加角色";
+            this.modal.current = null;
+            this.$refs.list.initData();
+        },
+        initRoles() {
+            getRoles().then(c => {
+                if (c.data.success) {
+                    this.roles = c.data.result.items;
+                }
             })
         }
 
     },
+
     mounted() {
     }
 }

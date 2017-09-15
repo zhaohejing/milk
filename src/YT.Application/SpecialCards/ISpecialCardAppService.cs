@@ -1,5 +1,5 @@
-﻿                           
- 
+﻿
+
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -10,7 +10,7 @@ using YT.SpecialCards.Dtos;
 
 namespace YT.SpecialCards
 {
-	/// <summary>
+    /// <summary>
     /// 奶鲜卡服务接口
     /// </summary>
     public interface ISpecialCardAppService : IApplicationService
@@ -27,10 +27,10 @@ namespace YT.SpecialCards
         /// </summary>
         Task<GetSpecialCardForEditOutput> GetSpecialCardForEditAsync(NullableIdDto<int> input);
 
-		  /// <summary>
+        /// <summary>
         /// 通过指定id获取奶鲜卡ListDto信息
         /// </summary>
-		Task<SpecialCardListDto> GetSpecialCardByIdAsync(EntityDto<int> input);
+        Task<SpecialCardListDto> GetSpecialCardByIdAsync(EntityDto<int> input);
 
 
 
@@ -51,14 +51,14 @@ namespace YT.SpecialCards
 
         #endregion
 
-#region Excel导出功能
-         /// <summary>
+        #region Excel导出功能
+        /// <summary>
         /// 获取奶鲜卡信息转换为Excel
         /// </summary>
         /// <returns></returns>
         Task<FileDto> GetSpecialCardToExcel();
 
-#endregion
+        #endregion
 
 
 

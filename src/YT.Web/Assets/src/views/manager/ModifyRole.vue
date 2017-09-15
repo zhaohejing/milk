@@ -98,18 +98,37 @@ export default {
                 }
             })
         },
+        getCheckedNode() {
+            var checkedKeys = this.$refs.tree.getCheckedNodes()
+            if(!checkedKeys){
+                return null;
+            }
+            let temp=[];
+            checkedKeys.forEach(c=>{
+                temp.push(c.name);
+            })
+            /*级联获取父节点id*/
+            let getCheckedParentKeys = (treeData, checkedKeys, keyName) => {
+                var fdata = treeData.filter(node => {
+                    var hasKey = checkedKeys.findIndex(key => key.name == node[keyName]) >= 0
+                    if (!hasKey) {
+                        let childChecked = node.children && getCheckedParentKeys(node.children, checkedKeys, keyName)
+                        if (childChecked) {
+                            checkedKeys.push(node[keyName])
+                        }
+                        return childChecked
+                    }
+                    return hasKey
+                })
+                return fdata && fdata.length
+            }
+            getCheckedParentKeys(this.permissionTrees, temp, 'name')
+            return temp
+        },
         commit() {
             debugger;
-            var nodes = this.$refs.tree.getCheckedNodes();
-            if (nodes) {
-                let temp = [];
-                nodes.forEach(c => {
-                    temp.push(c.name);
-                })
-                this.current.grantedPermissionNames = temp;
-            } else {
-                this.current.grantedPermissionNames = null;
-            }
+            var nodes = this.getCheckedNode();
+            this.current.grantedPermissionNames = nodes;
             saveRole(this.current).then(r => {
                 if (r.data.success) {
                     this.$emit('submit-complete');

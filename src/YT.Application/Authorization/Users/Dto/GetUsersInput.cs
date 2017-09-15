@@ -10,11 +10,11 @@ namespace YT.Authorization.Users.Dto
         /// <summary>
         /// 过滤条件
         /// </summary>
-        public string Filter { get; set; }
+        public string Name { get; set; }
         /// <summary>
         /// 权限过滤
         /// </summary>
-        public string Permission { get; set; }
+        public string Phone { get; set; }
         /// <summary>
         /// 角色过滤
         /// </summary>

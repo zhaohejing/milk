@@ -76,27 +76,16 @@ namespace YT.Authorization.Users
                 .Include(u => u.Roles)
                 .WhereIf(input.Role.HasValue, u => u.Roles.Any(r => r.RoleId == input.Role.Value))
                 .WhereIf(
-                    !input.Filter.IsNullOrWhiteSpace(),
+                    !input.Name.IsNullOrWhiteSpace(),
                     u =>
-                        u.Name.Contains(input.Filter) ||
-                        u.Surname.Contains(input.Filter) ||
-                        u.UserName.Contains(input.Filter)
-                // ||  u.EmailAddress.Contains(input.Filter)
-                );
-
-            if (!input.Permission.IsNullOrWhiteSpace())
-            {
-                query = (from user in query
-                         join ur in _userRoleRepository.GetAll() on user.Id equals ur.UserId into urJoined
-                         from ur in urJoined.DefaultIfEmpty()
-                         join up in _userPermissionRepository.GetAll() on new { UserId = user.Id, Name = input.Permission } equals new { up.UserId, up.Name } into upJoined
-                         from up in upJoined.DefaultIfEmpty()
-                         join rp in _rolePermissionRepository.GetAll() on new { RoleId = ur.RoleId, Name = input.Permission } equals new { rp.RoleId, rp.Name } into rpJoined
-                         from rp in rpJoined.DefaultIfEmpty()
-                         where (up != null && up.IsGranted) || (up == null && rp != null)
-                         group user by user into userGrouped
-                         select userGrouped.Key);
-            }
+                        u.Name.Contains(input.Name) 
+                )
+                 .WhereIf(
+                    !input.Phone.IsNullOrWhiteSpace(),
+                    u =>
+                        u.PhoneNumber.Contains(input.Phone)
+                )
+                ;
 
             var userCount = await query.CountAsync();
             var users = await query
