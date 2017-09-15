@@ -15,9 +15,8 @@
             </milk-table>
         </Row>
         <!-- 添加和编辑窗口 -->
-        <Modal v-model="modal.isEdit" :title="modal.title" :mask-closable="false" @on-ok="save" @on-cancel="cancel">
-            <modifyRole @callhome="cancel" ref="role" :role="modal.current" v-if="modal.isEdit">
-            </modifyRole>
+        <Modal :transfer="false" v-model="modal.isEdit" :title="modal.title" :mask-closable="false" @on-ok="save" @on-cancel="cancel">
+            <modify-role @home="cancel" ref="role" :role="modal.current" v-if="modal.isEdit"/>
         </Modal>
 
     </div>
@@ -134,12 +133,14 @@ export default {
         save() {
             this.$refs.role.commit();
         },
-        cancel() {
-            debugger;
+        cancel(result) {
             this.modal.isEdit = false;
             this.modal.title = "添加角色";
             this.modal.current = null;
-            this.$refs.list.initData();
+            if (result) {
+                this.$refs.list.initData();
+
+            }
         }
     },
     mounted() {

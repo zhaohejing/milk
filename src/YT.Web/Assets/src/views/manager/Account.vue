@@ -23,9 +23,8 @@
             </milk-table>
         </Row>
         <!-- 添加和编辑窗口 -->
-        <Modal v-model="modal.isEdit" :title="modal.title" :mask-closable="false" @on-ok="save" @on-cancel="cancel">
-            <modify-account @callhome="cancel" ref="account" :user="modal.current" v-if="modal.isEdit">
-            </modify-account>
+        <Modal :transfer="false" v-model="modal.isEdit" :title="modal.title" :mask-closable="false" @on-ok="save" @on-cancel="cancel">
+            <modify-account @submit-complete="cancel" ref="account" :user="modal.current" v-if="modal.isEdit" />
         </Modal>
 
     </div>
@@ -132,7 +131,7 @@ export default {
     },
     created() {
         this.initRoles();
-     
+
     },
     methods: {
         //删除
@@ -143,7 +142,7 @@ export default {
                 onOk: () => {
                     const parms = { id: model.id }
                     deleteUser(parms).then(c => {
-                        if (c.data.result.success) {
+                        if (c.data.success) {
                             table.initData();
                         }
                     })
@@ -162,11 +161,13 @@ export default {
         save() {
             this.$refs.account.commit();
         },
-        cancel() {
+        cancel(result) {
             this.modal.isEdit = false;
             this.modal.title = "添加用户";
             this.modal.current = null;
-            this.$refs.list.initData();
+            if (result) {
+                this.$refs.list.initData();
+            }
         },
         initRoles() {
             getRoles().then(c => {

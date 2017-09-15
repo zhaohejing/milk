@@ -28,12 +28,9 @@
                     <FormItem v-if="!current.setDefaultPassword" label="密码">
                         <Input type="password" v-model="current.user.password" placeholder="请输入密码"></Input>
                     </FormItem>
-
                 </Form>
                 </Col>
-
             </Row>
-
         </TabPane>
         <TabPane label="角色信息" name="role">
             <Row>
@@ -42,7 +39,6 @@
                     <Checkbox v-for="role in roles" :label="role.roleName" :key="role.roleName">{{role.roleDisplayName}}</Checkbox>
                 </CheckboxGroup>
                 </Col>
-
             </Row>
         </TabPane>
     </Tabs>
@@ -50,8 +46,8 @@
 <script>
 import { modifyUser, getUserForEdit, getRoles } from 'api/manage';
 import { allPermissions } from 'api/menu';
-import { validatePhone } from 'utils/validate';
 export default {
+    name: 'account',
     props: {
         user: {
             type: Number,
@@ -83,7 +79,7 @@ export default {
                     { required: true, message: '用户名不可为空', trigger: 'blur' }
                 ],
                 phoneNumber: [
-                    { required: false, message: '手机不合法', trigger: 'blur', validator: validatePhone }
+                    { required: false, message: '手机不合法', trigger: 'blur' }
                 ]
 
             }
@@ -105,22 +101,24 @@ export default {
                 }
             })
         },
+     
         commit() {
-              this.$refs.user.validate((valid) => {
+
+            this.$refs.user.validate((valid) => {
                 if (valid) {
-                     debugger;
-                    modifyUser(this.current).then(r => {
-                        if (r.data.success) {
-                            this.$emit('callhome');
+                    modifyUser(this.current).then((response) => {
+                        if (response.data.success) {
+                            this.$emit('submit-complete', true);
                         } else {
-                            this.$emit('callhome');
+                            this.$emit('submit-complete', false);
                         }
-                    }).catch(e => {
-                        this.$emit('callhome');
+                    }).catch(erroe => {
+                        this.$emit('submit-complete', false);
                     });
+
                 } else {
                     this.$Message.error('表单验证失败!');
-                    this.$emit('callhome');
+                    this.$emit('submit-complete', false);
                 }
             })
         },

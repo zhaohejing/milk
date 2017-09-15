@@ -1,108 +1,71 @@
 <template>
     <div class="animated fadeIn">
-        <Row>
-            <Col :md="20">
-            <Form ref="params" :model="params" inline :label-width="60">
-                <FormItem label="角色名">
-                    <Input v-model="params.name" placeholder="请输入角色名"></Input>
-                </FormItem>
-                <FormItem>
-                    <Button type="primary" shape="circle" icon="ios-search" @click="searchApi">查询</Button>
-                </FormItem>
-            </Form>
-            </Col>
-            <Col :md="2" :offset="2">
-            <Button type="primary">添加</Button>
-            </Col>
-        </Row>
-        <Row>
-            <milk-table :columns="cols" :search-api="searchApi" :params="params" />
-        </Row>
+        <Button @cilck="add">测试</Button>
+        <!-- 添加和编辑窗口 -->
+        <Modal :transfer="false" v-model="modal.isEdit" :title="modal.title" :mask-closable="false"
+         @on-ok="save"
+          @on-cancel="cancel">
+            <modifyMenu @submit-complete="cancel" ref="menu" :user="modal.current" v-if="modal.isEdit" />
+        </Modal>
+
     </div>
 </template>
 
 <script>
-import { getRoles,getUsers } from 'api/manage';
+import { getUsers, getRoles, getUserForEdit, deleteUser } from 'api/manage';
+import modifyMenu from './modifymenu';
 export default {
     name: 'menu',
     data() {
         return {
-            cols: [
-                {
-                    type: 'selection',
-                    align: 'center'
-                },
-                {
-                    title: '角色名',
-                    key: 'name'
-                },
-                {
-                    title: '描述',
-                    key: 'age'
-                },
-                {
-                    title: '创建人',
-                    key: 'address'
-                },
-                 {
-                    title: '创建时间',
-                    key: 'address'
-                },
-                {
-                    title: '操作',
-                    key: 'action',
-                    align: 'center',
-                    render: (h, params) => {
-                        return h('div', [
-                            h('Button', {
-                                props: {
-                                    type: 'primary',
-                                    size: 'small'
-                                },
-                                style: {
-                                    marginRight: '5px'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.edit(params.row)
-                                    }
-                                }
-                            }, '编辑'),
-                            h('Button', {
-                                props: {
-                                    type: 'error',
-                                    size: 'small'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.remove(params.row)
-                                    }
-                                }
-                            }, '删除')
-                        ]);
-                    }
-                }
-            ],
-            searchApi:getUsers,
-            params: { name: '', role: null, mobile: null },
-            roles: []
+            modal: {
+                isEdit: false, title: '添加', current: null
+            }
         }
+    },
+    components: {
+        modifyMenu
     },
     created() {
-        this.getRoles();
     },
     methods: {
-        getRoles() {
-            const params={
-                maxResultCount: 99,
-                skipCount: 0
-            };
-            getRoles(params).then(c => {
-                this.roles = c.result;
+        //删除
+        delete(model) {
+            var table = this.$refs.list;
+            this.$Modal.confirm({
+                title: '删除提示', content: "确定要删除当前用户么?",
+                onOk: () => {
+                    const parms = { id: model.id }
+                    deleteUser(parms).then(c => {
+                        if (c.data.success) {
+                            table.initData();
+                        }
+                    })
+                }
             })
+        },
+        add() {
+            this.modal.isEdit = true;
+            this.modal.title = "添加用户";
+        },
+        edit(row) {
+            this.modal.current = row.id;
+            this.modal.isEdit = true;
+            this.modal.title = "编辑用户:" + row.name;
+        },
+        save() {
+            this.$refs.menu.commit();
+        },
+        cancel(result) {
+            this.modal.isEdit = false;
+            this.modal.title = "添加用户";
+            this.modal.current = null;
+            if (result) {
+                this.$refs.list.initData();
+            }
         }
-
     },
+
     mounted() {
     }
 }
