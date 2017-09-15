@@ -41,3 +41,10 @@ export function deleteMenus(data) {
     data
   });
 }
+
+export function allPermissions() {
+  return fetch({
+    url: '/api/services/app/permission/GetAllPermissions',
+    method: 'post'
+  });
+}

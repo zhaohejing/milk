@@ -147,7 +147,7 @@ export const asyncRouterMap = [
             name: '卡片管理',
             icon: '',
             hidden: false,
-            component: r => require(['views/customer/User'], r)
+            component: r => require(['views/customer/client'], r)
           }
         ]
       },
@@ -166,13 +166,13 @@ export const asyncRouterMap = [
             name: '推广员',
             icon: 'person',
             hidden: false,
-            component: r => require(['views/customer/User'], r)
+            component: r => require(['views/customer/client'], r)
           },
           {
             path: 'generalize/wechat',
             name: '群发',
             icon: 'person-add',
-            component: r => require(['views/customer/User'], r)
+            component: r => require(['views/customer/client'], r)
           }
         ]
       },
@@ -222,7 +222,7 @@ export const asyncRouterMap = [
             name: '日志',
             icon: 'person',
             hidden: false,
-            component: r => require(['views/customer/User'], r)
+            component: r => require(['views/customer/client'], r)
           }
         ]
       },
@@ -240,49 +240,49 @@ export const asyncRouterMap = [
             path: 'statistics/a',
             name: '销售明细表',
             icon: 'person',
-            component: r => require(['views/customer/User'], r)
+            component: r => require(['views/customer/client'], r)
           },
           {
             path: 'statistics/b',
             name: '销售汇总',
             icon: 'person',
-            component: r => require(['views/customer/User'], r)
+            component: r => require(['views/customer/client'], r)
           },
           {
             path: 'statistics/c',
             name: '顾客取货报表',
             icon: 'person',
-            component: r => require(['views/customer/User'], r)
+            component: r => require(['views/customer/client'], r)
           },
           {
             path: 'statistics/d',
             name: '顾客消费',
             icon: 'person',
-            component: r => require(['views/customer/User'], r)
+            component: r => require(['views/customer/client'], r)
           },
           {
             path: 'statistics/e',
             name: '商品销售数量',
             icon: 'person',
-            component: r => require(['views/customer/User'], r)
+            component: r => require(['views/customer/client'], r)
           },
           {
             path: 'statistics/f',
             name: '充值记录',
             icon: 'person',
-            component: r => require(['views/customer/User'], r)
+            component: r => require(['views/customer/client'], r)
           },
           {
             path: 'statistics/g',
             name: '订单管理',
             icon: 'person',
-            component: r => require(['views/customer/User'], r)
+            component: r => require(['views/customer/client'], r)
           },
           {
             path: 'statistics/h',
             name: '待补货记录',
             icon: 'person',
-            component: r => require(['views/customer/User'], r)
+            component: r => require(['views/customer/client'], r)
           }
         ]
       }
