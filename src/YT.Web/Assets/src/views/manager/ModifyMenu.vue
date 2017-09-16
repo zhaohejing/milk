@@ -5,7 +5,6 @@
 <script>
 import { modifyUser, getUserForEdit, getRoles } from 'api/manage';
 export default {
-    name: 'modifyAccount',
     props: {
         user: {
             type: Number,

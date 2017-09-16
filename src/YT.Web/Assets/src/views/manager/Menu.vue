@@ -15,7 +15,6 @@
 import { getUsers, getRoles, getUserForEdit, deleteUser } from 'api/manage';
 import modifyMenu from './modifymenu';
 export default {
-    name: 'menu',
     data() {
         return {
             modal: {

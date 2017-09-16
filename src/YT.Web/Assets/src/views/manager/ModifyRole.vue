@@ -43,7 +43,7 @@
 import { saveRole, getRoleForEdit } from 'api/manage';
 import { allPermissions } from 'api/menu';
 export default {
-    name: 'role',
+    name: 'modifyRole',
     props: {
         role: {
             type: Number,
@@ -130,16 +130,15 @@ export default {
                 if (valid) {
                     this.current.grantedPermissionNames = this.getCheckedNode();
                     saveRole(this.current).then(r => {
-                        debugger;
                         if (r.data.success) {
-                            this.$emit('home', true);
+                            this.$root.eventHub.$emit('init');
                         } else {
-                            this.$emit('home', false);
+                           this.$root.eventHub.$emit('init');
                         }
                     });
                 } else {
                     this.$Message.error('表单验证失败!');
-                    this.$emit('home', false);
+                   this.$root.eventHub.$emit('init');
                 }
             })
         }

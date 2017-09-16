@@ -458,6 +458,7 @@
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
     <None Include="Properties\PublishProfiles\gl.pubxml" />
+    <None Include="Properties\PublishProfiles\settings.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -503,7 +504,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>6234</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

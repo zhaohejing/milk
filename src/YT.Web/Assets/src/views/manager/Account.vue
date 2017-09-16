@@ -34,7 +34,6 @@
 import { getUsers, getRoles, getUserForEdit, deleteUser } from 'api/manage';
 import modifyAccount from './modifyaccount';
 export default {
-    name: 'account',
     data() {
         return {
             cols: [
@@ -131,7 +130,12 @@ export default {
     },
     created() {
         this.initRoles();
-
+        this.$root.eventHub.$on('init', () => {
+            this.cancel();
+        });
+    },
+    destroyed() {
+        this.$root.eventHub.$off('init');
     },
     methods: {
         //删除

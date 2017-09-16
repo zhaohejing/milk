@@ -18,10 +18,10 @@ Vue.prototype.$fmtTime = (date, format) => {
   return dtime(date).format(format || 'YYYY-MM-DD HH:mm:ss');
 };
 /* 列表格式转换成树格式
-		 * @param data 数组
-		 * @param parentId 父节点id
-		 * @param pidField 父节点字段名
-		 */
+ * @param data 数组
+ * @param parentId 父节点id
+ * @param pidField 父节点字段名
+ */
 const converToTreedata = (data, parentId, pidField, grants) => {
   const list = [];
   data.forEach(item => {
@@ -45,6 +45,9 @@ new Vue({
   router,
   store,
   template: '<App/>',
+  data: {
+    eventHub: new Vue()
+  },
   components: {
     App
   }

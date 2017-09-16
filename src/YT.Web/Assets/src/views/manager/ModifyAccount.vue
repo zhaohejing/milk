@@ -47,7 +47,6 @@
 import { modifyUser, getUserForEdit, getRoles } from 'api/manage';
 import { allPermissions } from 'api/menu';
 export default {
-    name: 'account',
     props: {
         user: {
             type: Number,
@@ -108,17 +107,18 @@ export default {
                 if (valid) {
                     modifyUser(this.current).then((response) => {
                         if (response.data.success) {
-                            this.$emit('submit-complete', true);
+                            this.$root.eventHub.$emit('init');
                         } else {
-                            this.$emit('submit-complete', false);
+                            this.$root.eventHub.$emit('init');
                         }
                     }).catch(erroe => {
-                        this.$emit('submit-complete', false);
+                         this.$Message.error(erroe.error);
+                        this.$root.eventHub.$emit('init');
                     });
 
                 } else {
                     this.$Message.error('表单验证失败!');
-                    this.$emit('submit-complete', false);
+                    this.$root.eventHub.$emit('init');
                 }
             })
         },
