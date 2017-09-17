@@ -28,7 +28,7 @@ namespace YT.Authorizations
             _permissionRepository = permissionRepository;
             _levelEntityHandler = levelEntityHandler;
         }
-        public async Task Initialize()
+        public  void Initialize()
         {
             var context = new PermissionDefinitionProviderContext(this);
             foreach (var providerType in _permissionConfiguration.Providers)
@@ -45,12 +45,12 @@ namespace YT.Authorizations
                         }
                         newList.Add(definition);
                     }
-                   await AddOrUpdate(newList);
+                    AddOrUpdate(newList);
                 }
             }
         }
 
-        private async Task AddOrUpdate(IEnumerable<PermissionDefinition> definitions)
+        private  void AddOrUpdate(IEnumerable<PermissionDefinition> definitions)
         {
             foreach (var definition in definitions)
             {
@@ -71,7 +71,7 @@ namespace YT.Authorizations
                 else
                 {
                     if (per.ParentId == definition.ParentId)
-                      await  _levelEntityHandler.UpdateAsync(per);
+                        _levelEntityHandler.UpdateAsync(per);
                     else
                         _levelEntityHandler.UpdateParent(per);
                 }
@@ -80,7 +80,7 @@ namespace YT.Authorizations
                 if (!definition.Childs.Any()) continue;
                 foreach (var t in definition.Childs)
                     t.ParentId = per.Id;
-               await AddOrUpdate(definition.Childs);
+                AddOrUpdate(definition.Childs);
             }
         }
 

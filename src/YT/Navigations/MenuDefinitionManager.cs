@@ -36,7 +36,7 @@ namespace YT.Navigations
           _levelEntityHandler = levelEntityHandler;
           _settingManager = settingManager;
       }
-        public async Task Initialize()
+        public  void Initialize()
         {
             var context = new MenuDefinitionProviderContext(this);
 
@@ -54,14 +54,14 @@ namespace YT.Navigations
                         }
                         newList.Add(definition);
                     }
-                     await AddOrUpdate(newList);
+                      AddOrUpdate(newList);
                 }
             }
         }
 
     
 
-      private async Task AddOrUpdate(IEnumerable<MenuDefinition> definitions)
+      private  void AddOrUpdate(IEnumerable<MenuDefinition> definitions)
         {
             foreach (MenuDefinition definition in definitions)
             {
@@ -84,14 +84,14 @@ namespace YT.Navigations
                 }
                 else
                 {
-                  await  _levelEntityHandler.UpdateAsync(menu);
+                    _levelEntityHandler.UpdateAsync(menu);
                 }
            
                 //插入子集
                 if (!definition.Childs.Any()) continue;
                 foreach (var t in definition.Childs)
                     t.ParentId = menu.Id;
-               await AddOrUpdate(definition.Childs);
+                AddOrUpdate(definition.Childs);
             }
         }
 

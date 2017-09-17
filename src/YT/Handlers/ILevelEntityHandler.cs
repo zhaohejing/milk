@@ -10,7 +10,7 @@ namespace YT.Handlers
         void Create(T t);
 
 
-       Task UpdateAsync(T t);
+       void UpdateAsync(T t);
 
           Task DeleteAsync(T t);
 

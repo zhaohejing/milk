@@ -11,6 +11,6 @@ namespace YT.Navigations
     /// </summary>
   public  interface IMenuDefinitionManager
     {
-         Task Initialize();
+         void Initialize();
     }
 }

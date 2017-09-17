@@ -9,6 +9,6 @@ namespace YT.Authorizations
     /// </summary>
     public  interface IPermissionDefinitionManager
     {
-        Task Initialize();
+        void Initialize();
     }
 }

@@ -31,7 +31,7 @@ namespace YT.Managers.Users
             _roleRepository = roleRepository;
         }
 
-        public async Task Initialize()
+        public  void Initialize()
         {
             var context = new UserDefinitionProviderContext(this);
             foreach (var providerType in _userConfiguration.Providers)
@@ -48,16 +48,16 @@ namespace YT.Managers.Users
                         }
                         newList.Add(definition);
                     }
-                  await  AddOrUpdate(newList);
+                    AddOrUpdate(newList);
                 }
             }
         }
 
-        private async  Task AddOrUpdate(IEnumerable<UserDefinition> definitions)
+        private   void AddOrUpdate(IEnumerable<UserDefinition> definitions)
         {
             foreach (var definition in definitions)
             {
-                var user =await _userRepository.FirstOrDefaultAsync(t => t.UserName == definition.UserName);
+                var user = _userRepository.FirstOrDefault(t => t.UserName == definition.UserName);
                 user = user ?? new User();
                 user.UserName = definition.UserName;
                 user.Name = definition.Name;
@@ -75,11 +75,11 @@ namespace YT.Managers.Users
                         RoleId = c.Id
                     }).ToList();
                     user.IsActive = true;
-                  await  _userRepository.InsertAsync(user);
+                    _userRepository.Insert(user);
                 }
                 else
                 {
-                  await  _userRepository.UpdateAsync(user);
+                    _userRepository.Update(user);
                 }
                
             }
@@ -94,6 +94,6 @@ namespace YT.Managers.Users
 
     public interface IUserDefinitionManager
     {
-        Task Initialize();
+        void Initialize();
     }
 }

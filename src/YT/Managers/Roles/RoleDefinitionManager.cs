@@ -32,7 +32,7 @@ namespace YT.Managers.Roles
            _permissionRepository = permissionRepository;
        }
 
-       public async Task Initialize()
+       public  void Initialize()
         {
             var context = new RoleDefinitionProviderContext(this);
             foreach (var providerType in _roleConfiguration.Providers)
@@ -49,14 +49,14 @@ namespace YT.Managers.Roles
                         }
                         newList.Add(definition);
                     }
-                  await  AddOrUpdate(newList);
+                    AddOrUpdate(newList);
                 }
             }
         }
 
-        private async  Task AddOrUpdate(IEnumerable<RoleDefinition> definitions)
+        private   void AddOrUpdate(IEnumerable<RoleDefinition> definitions)
         {
-            var temp =await _permissionRepository.GetAllListAsync();
+            var temp = _permissionRepository.GetAllList();
 
             foreach (var definition in definitions)
             {
@@ -94,11 +94,11 @@ namespace YT.Managers.Roles
                           }).ToList();
                         role.Permissions = p;
                     }
-                  await  _roleRepository.InsertAsync(role);
+                    _roleRepository.Insert(role);
                 }
                 else
                 {
-                  await  _roleRepository.UpdateAsync(role);
+                    _roleRepository.Update(role);
                 }
             
             }
@@ -113,6 +113,6 @@ namespace YT.Managers.Roles
 
     public interface IRoleDefinitionManager
     {
-        Task Initialize();
+        void Initialize();
     }
 }

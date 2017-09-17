@@ -71,9 +71,9 @@ namespace YT.Handlers
             return Guid.NewGuid().ToString("D").Split('-')[0];
         }
     
-        public virtual async Task UpdateAsync(T t)
+        public virtual  void UpdateAsync(T t)
         {
-          await  Repository.UpdateAsync(t);
+            Repository.Update(t);
         }
 
         public virtual async Task DeleteAsync(T t)
