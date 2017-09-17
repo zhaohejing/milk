@@ -21,31 +21,44 @@ namespace YT.Navigations.MenuDefault
             return new List<MenuDefinition>()
            {
                 new MenuDefinition("控制台","/dashboard","speedometer",true,StaticPermissionsName.Page_Dashboard),
-                new MenuDefinition("客户管理","","person-stalker",new List<MenuDefinition>()
+
+                new MenuDefinition("客户管理","","person-stalker",true,StaticPermissionsName.Page_Customer) {
+                    Childs=new List<MenuDefinition>()
                 {
                     new MenuDefinition(N(),"用户信息","customer/client",true,StaticPermissionsName.Page_Customer_Client),
                     new MenuDefinition(N(),"用户代充","customer/charge",true,StaticPermissionsName.Page_Customer_Charge),
-                }),
-                   new MenuDefinition("充值卡管理","","card",new List<MenuDefinition>()
+                }
+                }
+                ,
+                   new MenuDefinition("充值卡管理","","card",true,StaticPermissionsName.Page_Card) {
+                    Childs=   new List<MenuDefinition>()
                 {
                     new MenuDefinition(N(),"卡片管理","card/charge",true,StaticPermissionsName.Page_Card_Charge)
-                }),
-                new MenuDefinition("推广管理","","person-stalker",new List<MenuDefinition>()
+                }
+                   },
+                new MenuDefinition("推广管理","","person-stalker",true,StaticPermissionsName.Page_Generalize) {
+                    Childs=new List<MenuDefinition>()
                 {
                     new MenuDefinition(N(),"推广员","generalize/promoters",true,StaticPermissionsName.Page_Generalize_Promoters),
                     new MenuDefinition(N(),"消息群发","generalize/wechat",true,StaticPermissionsName.Page_Generalize_Wechat)
-                }),
-                 new MenuDefinition("权限管理","","person-stalker",new List<MenuDefinition>()
+                }
+                },
+                 new MenuDefinition("权限管理","","person-stalker",true,StaticPermissionsName.Page_System) {
+                     Childs=new List<MenuDefinition>()
                 {
                     new MenuDefinition(N(),"角色管理","system/role",true,StaticPermissionsName.Page_System_Role),
                     new MenuDefinition(N(),"用户管理","system/account",true,StaticPermissionsName.Page_System_User),
                     new MenuDefinition(N(),"菜单管理","system/menu",true,StaticPermissionsName.Page_System_Menu)
-                }),
-                    new MenuDefinition("操作记录","","person-stalker",new List<MenuDefinition>()
+                }
+                 },
+                    new MenuDefinition("操作记录","","person-stalker",true,StaticPermissionsName.Page_Log) {
+                        Childs=new List<MenuDefinition>()
                 {
                     new MenuDefinition(N(),"日志查看","log/audit",true,StaticPermissionsName.Page_Log_Audit)
-                }),
-                   new MenuDefinition("报表管理","","person-stalker",new List<MenuDefinition>()
+                }
+                    },
+                   new MenuDefinition("报表管理","","person-stalker",true,StaticPermissionsName.Page_Statistics) {
+                       Childs=new List<MenuDefinition>()
                 {
                     new MenuDefinition(N(),"销售明细表","statics/a",true,StaticPermissionsName.Page_Statistics_A),
                     new MenuDefinition(N(),"销售汇总","statics/b",true,StaticPermissionsName.Page_Statistics_B),
@@ -55,7 +68,8 @@ namespace YT.Navigations.MenuDefault
                     new MenuDefinition(N(),"充值记录","statics/f",true,StaticPermissionsName.Page_Statistics_F),
                     new MenuDefinition(N(),"订单管理","statics/g",true,StaticPermissionsName.Page_Statistics_G),
                     new MenuDefinition(N(),"待补货记录","statics/h",true,StaticPermissionsName.Page_Statistics_H),
-                })
+                }
+                   }
            };
         }
 

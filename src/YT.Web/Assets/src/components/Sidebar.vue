@@ -154,6 +154,12 @@ export default {
           ]
         },
       ]
+      userMenus().then(r=>{
+        if(r.data.success){
+          var temp=r.data.result.items;
+        }
+      });
+
     }
   }
 }

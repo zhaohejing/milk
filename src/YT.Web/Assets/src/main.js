@@ -17,6 +17,8 @@ Vue.component('milk-table', MilkTable);
 Vue.prototype.$fmtTime = (date, format) => {
   return dtime(date).format(format || 'YYYY-MM-DD HH:mm:ss');
 };
+
+
 /* 列表格式转换成树格式
  * @param data 数组
  * @param parentId 父节点id
