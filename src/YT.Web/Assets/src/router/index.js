@@ -6,8 +6,11 @@ import Full from '@/containers/Full';
 const Login = _import('login/index');
 Vue.use(Router);
 
-export const constantRouterMap = [
-  { path: '/login', component: Login, hidden: true },
+export const constantRouterMap = [{
+    path: '/login',
+    component: Login,
+    hidden: true
+  },
   {
     path: '/pages',
     redirect: '/pages/p404',
@@ -18,26 +21,27 @@ export const constantRouterMap = [
       }
       // Full,
     },
-    children: [
-      {
+    children: [{
         path: '404',
         name: 'Page404',
         component: _import('errorPages/Page404')
       },
-      { path: '500', name: 'Page500', component: _import('errorPages/Page404') }
+      {
+        path: '500',
+        name: 'Page500',
+        component: _import('errorPages/Page404')
+      }
     ]
   }
 ];
 
-export const asyncRouterMap = [
-  {
+export const asyncRouterMap = [{
     path: '/',
     redirect: '/dashboard',
     name: '首页',
     component: Full,
     hidden: false,
-    children: [
-      {
+    children: [{
         path: '/dashboard',
         name: '介绍',
         icon: 'speedometer',
@@ -106,7 +110,11 @@ export const asyncRouterMap = [
       //   icon: 'android-list',
       //   component: _import('Markdown')
       // },
-      { path: '/dashboard', name: '控制台', icon: 'person' },
+      {
+        path: '/dashboard',
+        name: '控制台',
+        icon: 'person'
+      },
       {
         path: '',
         name: '客户管理',
@@ -116,8 +124,7 @@ export const asyncRouterMap = [
             return c('router-view');
           }
         },
-        children: [
-          {
+        children: [{
             path: 'customer/client',
             name: '用户',
             icon: 'person',
@@ -141,15 +148,13 @@ export const asyncRouterMap = [
             return c('router-view');
           }
         },
-        children: [
-          {
-            path: 'card/charge',
-            name: '卡片管理',
-            icon: '',
-            hidden: false,
-            component: r => require(['views/customer/client'], r)
-          }
-        ]
+        children: [{
+          path: 'card/charge',
+          name: '卡片管理',
+          icon: '',
+          hidden: false,
+          component: r => require(['views/customer/client'], r)
+        }]
       },
       {
         path: '',
@@ -160,8 +165,7 @@ export const asyncRouterMap = [
             return c('router-view');
           }
         },
-        children: [
-          {
+        children: [{
             path: 'generalize/user',
             name: '推广员',
             icon: 'person',
@@ -185,8 +189,7 @@ export const asyncRouterMap = [
             return c('router-view');
           }
         },
-        children: [
-          {
+        children: [{
             path: 'system/role',
             name: '角色管理',
             icon: 'person',
@@ -216,15 +219,13 @@ export const asyncRouterMap = [
             return c('router-view');
           }
         },
-        children: [
-          {
-            path: 'log/audit',
-            name: '日志',
-            icon: 'person',
-            hidden: false,
-            component: r => require(['views/customer/client'], r)
-          }
-        ]
+        children: [{
+          path: 'log/audit',
+          name: '日志',
+          icon: 'person',
+          hidden: false,
+          component: r => require(['views/customer/client'], r)
+        }]
       },
       {
         path: '',
@@ -235,8 +236,7 @@ export const asyncRouterMap = [
             return c('router-view');
           }
         },
-        children: [
-          {
+        children: [{
             path: 'statistics/a',
             name: '销售明细表',
             icon: 'person',
@@ -288,13 +288,19 @@ export const asyncRouterMap = [
       }
     ]
   },
-  { path: '*', redirect: '/pages/404', hidden: true }
+  {
+    path: '*',
+    redirect: '/pages/404',
+    hidden: true
+  }
 ];
 
 const temp = constantRouterMap.concat(asyncRouterMap);
 export default new Router({
   mode: 'hash',
   linkActiveClass: 'open active',
-  scrollBehavior: () => ({ y: 0 }),
+  scrollBehavior: () => ({
+    y: 0
+  }),
   routes: temp
 });

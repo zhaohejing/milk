@@ -57,7 +57,7 @@ module.exports = {
         'dot-location': ['error', 'property'],
 
         // enforce dot notation whenever possible
-        'dot-notation': 'error',
+        'dot-notation': 'warn',
 
         // require the use of === and !==
         'eqeqeq': ['error', 'smart'],
@@ -177,7 +177,7 @@ module.exports = {
         'func-call-spacing': 'error',
 
         // enforce consistent indentation
-        indent: ['error', 2, {SwitchCase: 1}],
+        indent: ['off', 2, {SwitchCase: 1}],
 
         // enforce the consistent use of either double or single quotes in JSX attributes
         'jsx-quotes': 'error',
