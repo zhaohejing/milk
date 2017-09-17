@@ -21,7 +21,6 @@ namespace YT.Navigations.MenuDefault
             return new List<MenuDefinition>()
            {
                 new MenuDefinition("控制台","/dashboard","speedometer",true,StaticPermissionsName.Page_Dashboard),
-
                 new MenuDefinition("客户管理","","person-stalker",true,StaticPermissionsName.Page_Customer) {
                     Childs=new List<MenuDefinition>()
                 {

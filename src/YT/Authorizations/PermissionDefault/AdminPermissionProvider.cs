@@ -23,6 +23,7 @@ namespace YT.Authorizations.PermissionDefault
                {
                    Childs = new List<PermissionDefinition>()
                    {
+                       new PermissionDefinition(StaticPermissionsName.Page_Dashboard,"控制台","整体概述",PermissionType.Control),
                        new PermissionDefinition(StaticPermissionsName.Page_Customer,"客户管理","客户管理",PermissionType.Control)
                        {
                            Childs = new List<PermissionDefinition>()
@@ -66,14 +67,14 @@ namespace YT.Authorizations.PermissionDefault
                        {
                            Childs = new List<PermissionDefinition>()
                            {
-                               new PermissionDefinition(StaticPermissionsName.Page_Statistics_A,"A","A",PermissionType.Control),
-                               new PermissionDefinition(StaticPermissionsName.Page_Statistics_B,"B","B",PermissionType.Control),
-                               new PermissionDefinition(StaticPermissionsName.Page_Statistics_C,"C","C",PermissionType.Control),
-                               new PermissionDefinition(StaticPermissionsName.Page_Statistics_D,"D","D",PermissionType.Control),
-                               new PermissionDefinition(StaticPermissionsName.Page_Statistics_E,"E","E",PermissionType.Control),
-                               new PermissionDefinition(StaticPermissionsName.Page_Statistics_F,"F","F",PermissionType.Control),
-                               new PermissionDefinition(StaticPermissionsName.Page_Statistics_G,"G","G",PermissionType.Control),
-                               new PermissionDefinition(StaticPermissionsName.Page_Statistics_H,"H","H",PermissionType.Control),
+                               new PermissionDefinition(StaticPermissionsName.Page_Statistics_A,"Statistics_A","Statistics_A",PermissionType.Control),
+                               new PermissionDefinition(StaticPermissionsName.Page_Statistics_B,"Statistics_B","Statistics_B",PermissionType.Control),
+                               new PermissionDefinition(StaticPermissionsName.Page_Statistics_C,"Statistics_C","Statistics_C",PermissionType.Control),
+                               new PermissionDefinition(StaticPermissionsName.Page_Statistics_D,"Statistics_D","Statistics_D",PermissionType.Control),
+                               new PermissionDefinition(StaticPermissionsName.Page_Statistics_E,"Statistics_E","Statistics_E",PermissionType.Control),
+                               new PermissionDefinition(StaticPermissionsName.Page_Statistics_F,"Statistics_F","Statistics_F",PermissionType.Control),
+                               new PermissionDefinition(StaticPermissionsName.Page_Statistics_G,"Statistics_G","Statistics_G",PermissionType.Control),
+                               new PermissionDefinition(StaticPermissionsName.Page_Statistics_H,"Statistics_H","Statistics_H",PermissionType.Control),
                            }
                        }
 

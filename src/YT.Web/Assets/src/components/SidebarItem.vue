@@ -3,23 +3,24 @@
     <nav class="sidebar-nav">
       <ul class="nav">
         <template v-for="item in routes">
-          <router-link :key="item.url" tag="li" class="nav-item nav-dropdown" 
-          v-if="item.children&&item.children.length>0" :to="item.children[0].path" disabled>
+          <router-link :key="item.name" tag="li" class="nav-item nav-dropdown" v-if="item.children&&item.children.length>0" :to="item.url" disabled>
+
             <div class="nav-link nav-dropdown-toggle" @click="handleClick">
-              <Icon :type="item.icon" />{{ item.name}} </div>
+              <Icon :type="item.icon" />{{ item.displayName}} </div>
+
             <ul class="nav-dropdown-items">
-              <li class="nav-item" :key="child.url" v-for="child in item.children" v-if='!child.hidden' @click="addActive">
-                <router-link :to="child.children[0].path" class="nav-link" v-if="child.children">
-                  <Icon :type="child.icon" />{{ child.name}} </router-link>
-                <router-link :to="item.path+'/'+child.path" class="nav-link" v-else>
-                  <Icon :type="child.icon" /> {{ child.name}} </router-link>
+
+              <li class="nav-item" :key="child.name" v-for="child in item.children" @click="addActive">
+                <router-link :to="child.url" class="nav-link">
+                  <Icon :type="child.icon" />{{ child.displayName}} </router-link>
               </li>
             </ul>
           </router-link>
-          <li class="nav-item" :key="item.url" v-if="!item.children">
-            <router-link :to="item.path" class="nav-link" exact>
-              <Icon :type="item.icon" />{{ item.name}} </router-link>
+          <li class="nav-item" :key="item.name" v-if="!item.children||item.children.length<=0">
+            <router-link :to="item.url" class="nav-link" exact>
+              <Icon :type="item.icon" />{{ item.displayName}} </router-link>
           </li>
+
         </template>
       </ul>
     </nav>
@@ -35,6 +36,11 @@ export default {
       type: Array
     }
   },
+  data() {
+    return {
+
+    }
+  },
   methods: {
     handleClick(e) {
       e.preventDefault()
@@ -44,6 +50,9 @@ export default {
       e.preventDefault()
       e.target.parentElement.parentElement.parentElement.classList.add('open')
     }
+  },
+  created() {
+
   },
   mounted() {
   }
