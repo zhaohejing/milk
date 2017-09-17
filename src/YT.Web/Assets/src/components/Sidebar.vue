@@ -34,7 +34,6 @@ export default {
     getUserMenus() {
       userMenus().then(r=>{
         if(r.data.success){
-          debugger;
            /*转换树结构*/
                     this.menus = this.$converToTreedata(r.data.result.items,
                         null,

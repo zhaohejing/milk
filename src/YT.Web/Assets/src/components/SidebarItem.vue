@@ -4,7 +4,7 @@
       <ul class="nav">
         <template v-for="item in routes">
           <router-link :key="item.name" tag="li" class="nav-item nav-dropdown" v-if="item.children&&item.children.length>0"
-             to="" disabled>
+             to="" disabled exact>
             <div class="nav-link nav-dropdown-toggle" @click="handleClick">
               <Icon :type="item.icon" />{{ item.displayName}} </div>
             <ul class="nav-dropdown-items">

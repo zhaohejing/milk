@@ -90,7 +90,7 @@ export default {
             try {
                 this.getApiData();
             } catch (err) {
-                this.$message.error('获取数据失败');
+                this.$Message.error('对方不想说话，并且向你抛出了一个异常');
             }
         },
         /*获取数据*/
