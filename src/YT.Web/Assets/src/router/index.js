@@ -47,74 +47,6 @@ export const asyncRouterMap = [{
         icon: 'speedometer',
         component: _import('Dashboard')
       },
-      // {
-      //   path: '/components',
-      //   name: '组件',
-      //   redirect: '/components/buttons',
-      //   icon: 'bookmark',
-      //   component: {
-      //     render(c) {
-      //       return c('router-view');
-      //     }
-      //   },
-      //   children: [
-      //     {
-      //       path: 'buttons',
-      //       name: '按钮',
-      //       icon: 'social-youtube',
-      //       component: _import('components/Buttons'),
-      //       hidden: false
-      //     },
-      //     {
-      //       path: 'hoverbuttons',
-      //       name: '悬停特效按钮',
-      //       icon: 'wand',
-      //       component: _import('components/HoverButtons')
-      //     }
-      //   ]
-      // },
-      // {
-      //   path: '/charts',
-      //   name: '图表',
-      //   icon: 'pie-graph',
-      //   component: _import('Charts')
-      // },
-      // {
-      //   path: '/table',
-      //   name: '表格',
-      //   icon: 'ios-paper',
-      //   component: _import('Table'),
-      //   meta: { role: ['admin'] }
-      // },
-      // {
-      //   path: '/jsontree',
-      //   name: 'JSON视图',
-      //   icon: 'merge',
-      //   component: _import('JsonTree')
-      // },
-      // {
-      //   path: '/tabledetail/:id',
-      //   name: 'TableDetail',
-      //   hidden: true,
-      //   component: _import('TableDetail')
-      // },
-      // {
-      //   path: '/tinymce',
-      //   name: 'Tinymce编辑器',
-      //   icon: 'android-document',
-      //   component: _import('Tinymce')
-      // },
-      // {
-      //   path: '/markdown',
-      //   name: 'Markdown',
-      //   icon: 'android-list',
-      //   component: _import('Markdown')
-      // },
-      {
-        path: '/dashboard',
-        name: '控制台',
-        icon: 'person'
-      },
       {
         path: '',
         name: '客户管理',
@@ -193,7 +125,6 @@ export const asyncRouterMap = [{
             path: 'system/role',
             name: '角色管理',
             icon: 'person',
-            hidden: false,
             component: r => require(['views/manager/role'], r)
           },
           {

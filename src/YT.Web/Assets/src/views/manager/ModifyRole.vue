@@ -131,14 +131,14 @@ export default {
                     this.current.grantedPermissionNames = this.getCheckedNode();
                     saveRole(this.current).then(r => {
                         if (r.data.success) {
-                            this.$root.eventHub.$emit('init');
+                            this.$root.eventHub.$emit('role');
                         } else {
-                           this.$root.eventHub.$emit('init');
+                           this.$root.eventHub.$emit('role');
                         }
                     });
                 } else {
                     this.$Message.error('表单验证失败!');
-                   this.$root.eventHub.$emit('init');
+                   this.$root.eventHub.$emit('role');
                 }
             })
         }

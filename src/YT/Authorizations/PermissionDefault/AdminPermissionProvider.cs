@@ -29,7 +29,7 @@ namespace YT.Authorizations.PermissionDefault
                            Childs = new List<PermissionDefinition>()
                            {
                                new PermissionDefinition(StaticPermissionsName.Page_Customer_Client,"客户信息","客户信息管理",PermissionType.Control),
-                               new PermissionDefinition(StaticPermissionsName.Page_Customer_Charge,"客户代充","客户代充",PermissionType.Control),
+                               new PermissionDefinition(StaticPermissionsName.Page_Customer_ForCharge,"客户代充","客户代充",PermissionType.Control),
                            }
                        },
                           new PermissionDefinition(StaticPermissionsName.Page_Card,"卡片管理","卡片管理",PermissionType.Control)
@@ -95,7 +95,7 @@ namespace YT.Authorizations.PermissionDefault
 
         public const string Page_Customer = "page.customer";
         public const string Page_Customer_Client = "page.customer.client";
-        public const string Page_Customer_Charge = "page.customer.charge";
+        public const string Page_Customer_ForCharge = "page.customer.forcharge";
 
         public const string Page_Card = "page.card";
         public const string Page_Card_Charge = "page.card.charge";

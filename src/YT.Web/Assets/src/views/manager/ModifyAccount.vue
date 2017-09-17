@@ -47,6 +47,7 @@
 import { modifyUser, getUserForEdit, getRoles } from 'api/manage';
 import { allPermissions } from 'api/menu';
 export default {
+    nmae:'modifyAccount',
     props: {
         user: {
             type: Number,
@@ -102,23 +103,22 @@ export default {
         },
      
         commit() {
-
             this.$refs.user.validate((valid) => {
                 if (valid) {
                     modifyUser(this.current).then((response) => {
                         if (response.data.success) {
-                            this.$root.eventHub.$emit('init');
+                            this.$root.eventHub.$emit('account');
                         } else {
-                            this.$root.eventHub.$emit('init');
+                            this.$root.eventHub.$emit('account');
                         }
                     }).catch(erroe => {
                          this.$Message.error(erroe.error);
-                        this.$root.eventHub.$emit('init');
+                        this.$root.eventHub.$emit('account');
                     });
 
                 } else {
                     this.$Message.error('表单验证失败!');
-                    this.$root.eventHub.$emit('init');
+                    this.$root.eventHub.$emit('account');
                 }
             })
         },

@@ -16,7 +16,7 @@
         </Row>
         <!-- 添加和编辑窗口 -->
         <Modal :transfer="false" v-model="modal.isEdit" :title="modal.title" :mask-closable="false" @on-ok="save" @on-cancel="cancel">
-            <modify-role v-on:callfather="cancel" ref="role" :role="modal.current" v-if="modal.isEdit" />
+            <modify-role  ref="role" :role="modal.current" v-if="modal.isEdit" />
         </Modal>
 
     </div>
@@ -104,12 +104,12 @@ export default {
         modifyRole
     },
     created() {
-        this.$root.eventHub.$on('init', () => {
+        this.$root.eventHub.$on('role', () => {
             this.cancel();
         });
     },
     destroyed() {
-        this.$root.eventHub.$off('init');
+        this.$root.eventHub.$off('role');
     },
     methods: {
         //删除

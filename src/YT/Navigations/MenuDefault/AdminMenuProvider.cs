@@ -15,7 +15,6 @@ namespace YT.Navigations.MenuDefault
 
     public class AdminMenuProvider : BaseMenuProvider
     {
-        private int _seed = 0;
         public override IEnumerable<MenuDefinition> GetMenuDefinitions(MenuDefinitionProviderContext context)
         {
             return new List<MenuDefinition>()
@@ -25,7 +24,7 @@ namespace YT.Navigations.MenuDefault
                     Childs=new List<MenuDefinition>()
                     {
                         new MenuDefinition("用户信息","/customer/client","",true,StaticPermissionsName.Page_Customer_Client),
-                        new MenuDefinition( "用户代充","/customer/charge","",true,StaticPermissionsName.Page_Customer_Charge),
+                        new MenuDefinition( "用户代充","/customer/charge","",true,StaticPermissionsName.Page_Customer_ForCharge),
                     }
                 }
                 ,

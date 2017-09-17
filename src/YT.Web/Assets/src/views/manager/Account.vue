@@ -24,7 +24,7 @@
         </Row>
         <!-- 添加和编辑窗口 -->
         <Modal :transfer="false" v-model="modal.isEdit" :title="modal.title" :mask-closable="false" @on-ok="save" @on-cancel="cancel">
-            <modify-account @submit-complete="cancel" ref="account" :user="modal.current" v-if="modal.isEdit" />
+            <modify-account ref="account" :user="modal.current" v-if="modal.isEdit" />
         </Modal>
 
     </div>
@@ -34,6 +34,7 @@
 import { getUsers, getRoles, getUserForEdit, deleteUser } from 'api/manage';
 import modifyAccount from './modifyaccount';
 export default {
+    name: 'account',
     data() {
         return {
             cols: [
@@ -129,13 +130,14 @@ export default {
         modifyAccount
     },
     created() {
-        this.initRoles();
-        this.$root.eventHub.$on('init', () => {
-            this.cancel();
+        var self=this;
+        self.$root.eventHub.$on('account', () => {
+            self.cancel();
         });
+        self.initRoles();
     },
     destroyed() {
-        this.$root.eventHub.$off('init');
+        this.$root.eventHub.$off('account');
     },
     methods: {
         //删除
@@ -165,13 +167,11 @@ export default {
         save() {
             this.$refs.account.commit();
         },
-        cancel(result) {
+        cancel() {
             this.modal.isEdit = false;
             this.modal.title = "添加用户";
             this.modal.current = null;
-            if (result) {
-                this.$refs.list.initData();
-            }
+            this.$refs.list.initData();
         },
         initRoles() {
             getRoles().then(c => {
@@ -180,9 +180,7 @@ export default {
                 }
             })
         }
-
     },
-
     mounted() {
     }
 }
