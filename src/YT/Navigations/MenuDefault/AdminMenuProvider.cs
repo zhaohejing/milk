@@ -23,10 +23,10 @@ namespace YT.Navigations.MenuDefault
                 new MenuDefinition("控制台","/dashboard","speedometer",true,StaticPermissionsName.Page_Dashboard),
                 new MenuDefinition("客户管理","","person-stalker",true,StaticPermissionsName.Page_Customer) {
                     Childs=new List<MenuDefinition>()
-                {
-                    new MenuDefinition("用户信息","customer/client","",true,StaticPermissionsName.Page_Customer_Client),
-                    new MenuDefinition( "用户代充","customer/charge","",true,StaticPermissionsName.Page_Customer_Charge),
-                }
+                    {
+                        new MenuDefinition("用户信息","customer/client","",true,StaticPermissionsName.Page_Customer_Client),
+                        new MenuDefinition( "用户代充","customer/charge","",true,StaticPermissionsName.Page_Customer_Charge),
+                    }
                 }
                 ,
                    new MenuDefinition("充值卡管理","","card",true,StaticPermissionsName.Page_Card) {

@@ -43,7 +43,7 @@ namespace YT.Authorizations.PermissionDefault
                        {
                            Childs = new List<PermissionDefinition>()
                            {
-                               new PermissionDefinition(StaticPermissionsName.Page_Card_Charge,"推广员管理","推广员管理",PermissionType.Control),
+                               new PermissionDefinition(StaticPermissionsName.Page_Generalize_Promoters,"推广员管理","推广员管理",PermissionType.Control),
                                new PermissionDefinition(StaticPermissionsName.Page_Generalize_Wechat,"群发管理","群发管理",PermissionType.Control),
                            }
                        },
