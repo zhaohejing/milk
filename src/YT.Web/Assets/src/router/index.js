@@ -2,13 +2,11 @@ import Vue from 'vue';
 import Router from 'vue-router';
 const _import = require('./_import_' + process.env.NODE_ENV);
 import Full from '@/containers/Full';
-/* login */
-const Login = _import('login/index');
 Vue.use(Router);
-
-export const constantRouterMap = [{
+export const constantRouterMap = [
+  {
     path: '/login',
-    component: Login,
+    component: _import('login/index'),
     hidden: true
   },
   {
@@ -21,7 +19,8 @@ export const constantRouterMap = [{
       }
       // Full,
     },
-    children: [{
+    children: [
+      {
         path: '404',
         name: 'Page404',
         component: _import('errorPages/Page404')
@@ -35,13 +34,15 @@ export const constantRouterMap = [{
   }
 ];
 
-export const asyncRouterMap = [{
+export const asyncRouterMap = [
+  {
     path: '/',
     redirect: '/dashboard',
     name: '首页',
     component: Full,
     hidden: false,
-    children: [{
+    children: [
+      {
         path: '/dashboard',
         name: '介绍',
         icon: 'speedometer',
@@ -56,7 +57,8 @@ export const asyncRouterMap = [{
             return c('router-view');
           }
         },
-        children: [{
+        children: [
+          {
             path: 'customer/client',
             name: '用户',
             icon: 'person',
@@ -80,13 +82,15 @@ export const asyncRouterMap = [{
             return c('router-view');
           }
         },
-        children: [{
-          path: 'card/charge',
-          name: '卡片管理',
-          icon: '',
-          hidden: false,
-          component: r => require(['views/customer/client'], r)
-        }]
+        children: [
+          {
+            path: 'card/charge',
+            name: '卡片管理',
+            icon: '',
+            hidden: false,
+            component: r => require(['views/card/card'], r)
+          }
+        ]
       },
       {
         path: '',
@@ -97,18 +101,19 @@ export const asyncRouterMap = [{
             return c('router-view');
           }
         },
-        children: [{
-            path: 'generalize/user',
+        children: [
+          {
+            path: 'generalize/promoters',
             name: '推广员',
             icon: 'person',
             hidden: false,
-            component: r => require(['views/customer/client'], r)
+            component: r => require(['views/generalize/promoters'], r)
           },
           {
             path: 'generalize/wechat',
             name: '群发',
             icon: 'person-add',
-            component: r => require(['views/customer/client'], r)
+            component: r => require(['views/generalize/wechat'], r)
           }
         ]
       },
@@ -121,7 +126,8 @@ export const asyncRouterMap = [{
             return c('router-view');
           }
         },
-        children: [{
+        children: [
+          {
             path: 'system/role',
             name: '角色管理',
             icon: 'person',
@@ -150,13 +156,15 @@ export const asyncRouterMap = [{
             return c('router-view');
           }
         },
-        children: [{
-          path: 'log/audit',
-          name: '日志',
-          icon: 'person',
-          hidden: false,
-          component: r => require(['views/customer/client'], r)
-        }]
+        children: [
+          {
+            path: 'log/audit',
+            name: '日志',
+            icon: 'person',
+            hidden: false,
+            component: r => require(['views/operation/audit'], r)
+          }
+        ]
       },
       {
         path: '',
@@ -167,53 +175,54 @@ export const asyncRouterMap = [{
             return c('router-view');
           }
         },
-        children: [{
-            path: 'statistics/a',
+        children: [
+          {
+            path: 'statics/a',
             name: '销售明细表',
             icon: 'person',
-            component: r => require(['views/customer/client'], r)
+            component: r => require(['views/statics/a'], r)
           },
           {
-            path: 'statistics/b',
+            path: 'statics/b',
             name: '销售汇总',
             icon: 'person',
-            component: r => require(['views/customer/client'], r)
+            component: r => require(['views/statics/b'], r)
           },
           {
-            path: 'statistics/c',
+            path: 'statics/c',
             name: '顾客取货报表',
             icon: 'person',
-            component: r => require(['views/customer/client'], r)
+            component: r => require(['views/statics/c'], r)
           },
           {
-            path: 'statistics/d',
+            path: 'statics/d',
             name: '顾客消费',
             icon: 'person',
-            component: r => require(['views/customer/client'], r)
+            component: r => require(['views/statics/d'], r)
           },
           {
-            path: 'statistics/e',
+            path: 'statics/e',
             name: '商品销售数量',
             icon: 'person',
-            component: r => require(['views/customer/client'], r)
+            component: r => require(['views/statics/e'], r)
           },
           {
-            path: 'statistics/f',
+            path: 'statics/f',
             name: '充值记录',
             icon: 'person',
-            component: r => require(['views/customer/client'], r)
+            component: r => require(['views/statics/f'], r)
           },
           {
-            path: 'statistics/g',
+            path: 'statics/g',
             name: '订单管理',
             icon: 'person',
-            component: r => require(['views/customer/client'], r)
+            component: r => require(['views/statics/g'], r)
           },
           {
-            path: 'statistics/h',
+            path: 'statics/h',
             name: '待补货记录',
             icon: 'person',
-            component: r => require(['views/customer/client'], r)
+            component: r => require(['views/statics/h'], r)
           }
         ]
       }

@@ -24,9 +24,7 @@
                     </FormItem>
                 </Form>
                 </Col>
-
             </Row>
-
         </TabPane>
         <TabPane label="权限信息" name="permissions">
             <Row>

@@ -24,7 +24,7 @@
 
 <script>
 import { getRoles, getRolesByPage, deleteRole, getRoleForEdit } from 'api/manage';
-import modifyRole from './modifyrole';
+import modifyRole from './modify-role';
 export default {
     name: 'role',
     data() {

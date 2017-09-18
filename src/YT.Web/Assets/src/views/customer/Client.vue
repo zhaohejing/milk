@@ -3,9 +3,15 @@
         <Row>
             <milk-table ref="list" :columns="cols" :search-api="searchApi" :params="params">
                 <template slot="search">
-                    <Form ref="params" :model="params" inline :label-width="60">
-                        <FormItem label="角色名">
-                            <Input v-model="params.filter" placeholder="请输入角色名"></Input>
+                    <Form ref="params" :model="params" inline :label-width="70">
+                        <FormItem label="客户昵称">
+                            <Input v-model="params.name" placeholder="客户昵称"></Input>
+                        </FormItem>
+                        <FormItem label="客户手机">
+                            <Input v-model="params.phone" placeholder="客户手机"></Input>
+                        </FormItem>
+                        <FormItem label="推广专员">
+                            <Input v-model="params.generalize" placeholder="推广专员"></Input>
                         </FormItem>
                     </Form>
                 </template>
@@ -15,8 +21,8 @@
             </milk-table>
         </Row>
         <!-- 添加和编辑窗口 -->
-        <Modal :transfer="false" v-model="modal.isEdit" :title="modal.title" :mask-closable="false" @on-ok="save" @on-cancel="cancel">
-            <modify-client  ref="client" :role="modal.current" v-if="modal.isEdit" />
+        <Modal :width="1000" :transfer="false" v-model="modal.isEdit" :title="modal.title" :mask-closable="false" @on-ok="save" @on-cancel="cancel">
+            <modify-client ref="client" :role="modal.current" v-if="modal.isEdit" />
         </Modal>
 
     </div>
@@ -24,7 +30,7 @@
 
 <script>
 import { getClients, deleteClient, getClientForEdit, updateClient } from 'api/client';
-import modifyClient from './modifyclient';
+import modifyClient from './modify-client';
 export default {
     name: 'role',
     data() {
@@ -93,7 +99,7 @@ export default {
                 }
             ],
             searchApi: getClients,
-            params: { filter: '' },
+            params: { name: '',phone:'',generalize:'' },
             modal: {
                 isEdit: false, title: '添加', current: null
             },
@@ -104,19 +110,19 @@ export default {
         modifyClient
     },
     created() {
-        this.$root.eventHub.$on('role', () => {
+        this.$root.eventHub.$on('client', () => {
             this.cancel();
         });
     },
     destroyed() {
-        this.$root.eventHub.$off('role');
+        this.$root.eventHub.$off('client');
     },
     methods: {
         //删除
         delete(model) {
             var table = this.$refs.list;
             this.$Modal.confirm({
-                title: '删除提示', content: "确定要删除当前角色么?",
+                title: '删除提示', content: "确定要删除当前客户么?",
                 onOk: () => {
                     const parms = { id: model.id }
                     deleteClient(parms).then(c => {
@@ -129,19 +135,19 @@ export default {
         },
         add() {
             this.modal.isEdit = true;
-            this.modal.title = "添加角色";
+            this.modal.title = "添加客户";
         },
         edit(row) {
             this.modal.current = row.id;
             this.modal.isEdit = true;
-            this.modal.title = "编辑角色:" + row.displayName;
+            this.modal.title = "编辑客户:" + row.displayName;
         },
         save() {
             this.$refs.role.commit();
         },
         cancel() {
             this.modal.isEdit = false;
-            this.modal.title = "添加角色";
+            this.modal.title = "添加客户";
             this.modal.current = null;
             this.$refs.list.initData();
         }
@@ -153,4 +159,5 @@ export default {
 
 
 <style type="text/css" scoped>
+
 </style>

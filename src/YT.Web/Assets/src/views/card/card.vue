@@ -3,18 +3,27 @@
         <Row>
             <milk-table ref="list" :columns="cols" :search-api="searchApi" :params="params">
                 <template slot="search">
-                    <Form ref="params" :model="params" inline :label-width="80">
-                        <FormItem label="用户姓名">
-                            <Input v-model="params.name" placeholder="请输入用户姓名"></Input>
+                    <Form ref="params" :model="params" inline :label-width="70">
+                        <FormItem label="充值卡">
+                            <Input v-model="params.name" placeholder="客户昵称"></Input>
                         </FormItem>
-                        <FormItem label="手机号码">
-                            <Input v-model="params.phone" placeholder="请输入手机号码"></Input>
-                        </FormItem>
-                        <FormItem label="权限角色">
-                            <Select v-model="params.role">
-                                <Option v-for="c in roles" :value="c.id" :key="c.id">{{c.displayName}}</Option>
+                        <FormItem label="状态">
+                            <Select v-model="params.name" style="width:200px">
+                                <Option value="beijing" label="北京市">
+                                    <span>北京</span>
+                                    <span style="float:right;color:#ccc">Beiing</span>
+                                </Option>
+                                <Option value="shanghai" label="上海市">
+                                    <span>上海</span>
+                                    <span style="float:right;color:#ccc">ShangHai</span>
+                                </Option>
+                                <Option value="shenzhen" label="深圳市">
+                                    <span>深圳</span>
+                                    <span style="float:right;color:#ccc">ShenZhen</span>
+                                </Option>
                             </Select>
                         </FormItem>
+
                     </Form>
                 </template>
                 <template slot="actions">
@@ -23,18 +32,17 @@
             </milk-table>
         </Row>
         <!-- 添加和编辑窗口 -->
-        <Modal :transfer="false" v-model="modal.isEdit" :title="modal.title" :mask-closable="false" @on-ok="save" @on-cancel="cancel">
-            <modify-account ref="account" :user="modal.current" v-if="modal.isEdit" />
+        <Modal  :transfer="false" v-model="modal.isEdit" :title="modal.title" :mask-closable="false" @on-ok="save" @on-cancel="cancel">
+      添加充值卡
         </Modal>
 
     </div>
 </template>
 
 <script>
-import { getUsers, getRoles, getUserForEdit, deleteUser } from 'api/manage';
-import modifyAccount from './modify-account';
+import { getClients, deleteClient, getClientForEdit, updateClient } from 'api/client';
 export default {
-    name: 'account',
+    name: 'card',
     data() {
         return {
             cols: [
@@ -44,30 +52,12 @@ export default {
                     width: '70px'
                 },
                 {
-                    title: '账户',
-                    key: 'userName'
-                },
-
-                {
-                    title: '用户姓名',
-                    key: 'name'
+                    title: '角色名',
+                    key: 'displayName'
                 },
                 {
-                    title: '手机号',
-                    key: 'phoneNumber'
-                },
-                {
-                    title: '角色',
-                    key: 'roles',
-                    render: (h, params) => {
-                        let names = "";
-                        if (params.row.roles) {
-                            params.row.roles.forEach(c => {
-                                names += c.roleName + ',';
-                            })
-                        }
-                        return names;
-                    }
+                    title: '描述',
+                    key: 'description'
                 },
                 {
                     title: '状态',
@@ -118,36 +108,31 @@ export default {
                     }
                 }
             ],
-            searchApi: getUsers,
-            params: { name: '', phone: '', role: null },
+            searchApi: getClients,
+            params: { name: '', phone: '', generalize: '' },
             modal: {
                 isEdit: false, title: '添加', current: null
             },
-            roles: []
+
         }
     },
-    components: {
-        modifyAccount
-    },
     created() {
-        var self=this;
-        self.$root.eventHub.$on('account', () => {
-            self.cancel();
+        this.$root.eventHub.$on('client', () => {
+            this.cancel();
         });
-        self.initRoles();
     },
     destroyed() {
-        this.$root.eventHub.$off('account');
+        this.$root.eventHub.$off('client');
     },
     methods: {
         //删除
         delete(model) {
             var table = this.$refs.list;
             this.$Modal.confirm({
-                title: '删除提示', content: "确定要删除当前用户么?",
+                title: '删除提示', content: "确定要删除当前客户么?",
                 onOk: () => {
                     const parms = { id: model.id }
-                    deleteUser(parms).then(c => {
+                    deleteClient(parms).then(c => {
                         if (c.data.success) {
                             table.initData();
                         }
@@ -157,28 +142,21 @@ export default {
         },
         add() {
             this.modal.isEdit = true;
-            this.modal.title = "添加用户";
+            this.modal.title = "添加客户";
         },
         edit(row) {
             this.modal.current = row.id;
             this.modal.isEdit = true;
-            this.modal.title = "编辑用户:" + row.name;
+            this.modal.title = "编辑客户:" + row.displayName;
         },
         save() {
-            this.$refs.account.commit();
+            this.$refs.role.commit();
         },
         cancel() {
             this.modal.isEdit = false;
-            this.modal.title = "添加用户";
+            this.modal.title = "添加客户";
             this.modal.current = null;
             this.$refs.list.initData();
-        },
-        initRoles() {
-            getRoles().then(c => {
-                if (c.data.success) {
-                    this.roles = c.data.result.items;
-                }
-            })
         }
     },
     mounted() {

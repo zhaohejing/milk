@@ -5,7 +5,7 @@
         <Modal :transfer="false" v-model="modal.isEdit" :title="modal.title" :mask-closable="false"
          @on-ok="save"
           @on-cancel="cancel">
-            <modifyMenu @submit-complete="cancel" ref="menu" :user="modal.current" v-if="modal.isEdit" />
+            <modify-menu @submit-complete="cancel" ref="menu" :user="modal.current" v-if="modal.isEdit" />
         </Modal>
 
     </div>
@@ -13,7 +13,7 @@
 
 <script>
 import { getUsers, getRoles, getUserForEdit, deleteUser } from 'api/manage';
-import modifyMenu from './modifymenu';
+import modifyMenu from './modify-menu';
 export default {
     data() {
         return {
