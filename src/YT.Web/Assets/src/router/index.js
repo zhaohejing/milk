@@ -40,13 +40,12 @@ export const asyncRouterMap = [
     redirect: '/dashboard',
     name: '首页',
     component: Full,
-    hidden: false,
     children: [
       {
         path: '/dashboard',
         name: '介绍',
         icon: 'speedometer',
-        component: _import('Dashboard')
+        component: r => require(['views/dashboard'], r)
       },
       {
         path: '',

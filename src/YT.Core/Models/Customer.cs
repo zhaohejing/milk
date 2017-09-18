@@ -67,7 +67,10 @@ namespace YT.Models
         /// 是否启用
         /// </summary>
         public bool IsActive { get; set; }
-
+        /// <summary>
+        /// 余额
+        /// </summary>
+        public decimal Balance { get; set; } = 0.00M;
         public int? ProveId { get; set; }
         public virtual Area Prove { get; set; }
         public int? CityId { get; set; }
@@ -101,6 +104,7 @@ namespace YT.Models
 
         public bool IsDeleted { get; set; }
         public bool IsActive { get; set; }
+  
     }
 
     /// <summary>

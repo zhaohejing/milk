@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Dynamic;
@@ -7,6 +8,7 @@ using Abp.Application.Services.Dto;
 using Abp.Authorization;
 using Abp.AutoMapper;
 using Abp.Domain.Repositories;
+using Abp.Extensions;
 using Abp.Linq.Extensions;
 using YT.Authorizations.PermissionDefault;
 using YT.Cards.Dtos;
@@ -56,20 +58,21 @@ namespace YT.Cards
         {
 
             var query = CardRepositoryAsNoTrack;
-            //TODO:根据传入的参数添加过滤条件
+
+            query = query.WhereIf(!input.Code.IsNullOrWhiteSpace(), c => c.CardCode.Contains(input.Code))
+                .WhereIf(input.State.HasValue, c => c.IsUsed == input.State.Value)
+                .WhereIf(input.Rmb.HasValue, c => c.Money<=input.Rmb.Value);
             var cardCount = await query.CountAsync();
             var cards = await query
             .OrderBy(input.Sorting)
             .PageBy(input)
             .ToListAsync();
-
             var cardListDtos = cards.MapTo<List<CardListDto>>();
             return new PagedResultDto<CardListDto>(
             cardCount,
             cardListDtos
             );
         }
-
         /// <summary>
         /// 通过Id获取充值卡信息进行编辑或修改 
         /// </summary>
@@ -89,8 +92,6 @@ namespace YT.Cards
             output.Card = cardEditDto;
             return output;
         }
-
-
         /// <summary>
         /// 通过指定id获取充值卡ListDto信息
         /// </summary>
@@ -99,13 +100,6 @@ namespace YT.Cards
             var entity = await _cardRepository.GetAsync(input.Id);
             return entity.MapTo<CardListDto>();
         }
-
-
-
-
-
-
-
         /// <summary>
         /// 新增或更改充值卡
         /// </summary>
@@ -120,14 +114,13 @@ namespace YT.Cards
                 await CreateCardAsync(input.CardEditDto);
             }
         }
-
         /// <summary>
         /// 新增充值卡
         /// </summary>
         protected virtual async Task<CardEditDto> CreateCardAsync(CardEditDto input)
         {
-            //TODO:新增前的逻辑判断，是否允许新增
             var entity = input.MapTo<Card>();
+            entity.CardCode = Guid.NewGuid().ToString("N");
             entity = await _cardRepository.InsertAsync(entity);
             return entity.MapTo<CardEditDto>();
         }
@@ -137,12 +130,12 @@ namespace YT.Cards
         /// </summary>
         protected virtual async Task UpdateCardAsync(CardEditDto input)
         {
-            //TODO:更新前的逻辑判断，是否允许更新
-
-            var entity = await _cardRepository.GetAsync(input.Id.Value);
-            input.MapTo(entity);
-
-            await _cardRepository.UpdateAsync(entity);
+            if (input.Id != null)
+            {
+                var entity = await _cardRepository.GetAsync(input.Id.Value);
+                input.MapTo(entity);
+                await _cardRepository.UpdateAsync(entity);
+            }
         }
 
         /// <summary>
@@ -150,7 +143,6 @@ namespace YT.Cards
         /// </summary>
         public async Task DeleteCardAsync(EntityDto<int> input)
         {
-            //TODO:删除前的逻辑判断，是否允许删除
             await _cardRepository.DeleteAsync(input.Id);
         }
 
@@ -159,13 +151,11 @@ namespace YT.Cards
         /// </summary>
         public async Task BatchDeleteCardAsync(List<int> input)
         {
-            //TODO:批量删除前的逻辑判断，是否允许删除
             await _cardRepository.DeleteAsync(s => input.Contains(s.Id));
         }
 
         #endregion
         #region 充值卡的Excel导出功能
-
         /// <summary>
         /// 导出
         /// </summary>
@@ -173,13 +163,8 @@ namespace YT.Cards
         public async Task<FileDto> GetCardToExcel()
         {
             var entities = await _cardRepository.GetAll().ToListAsync();
-
             var dtos = entities.MapTo<List<CardListDto>>();
-
             var fileDto = _cardListExcelExporter.ExportCardToFile(dtos);
-
-
-
             return fileDto;
         }
 

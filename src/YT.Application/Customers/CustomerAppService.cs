@@ -1,15 +1,7 @@
-﻿
-
-
-
-
-
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Dynamic;
-using System.Text;
 using System.Threading.Tasks;
 using Abp;
 using Abp.Application.Services.Dto;
@@ -23,8 +15,7 @@ using YT.Customers.Dtos;
 using YT.Customers.Exporting;
 using YT.Dto;
 using YT.Models;
-
-
+using YT.Promoters.Dtos;
 
 namespace YT.Customers
 {
@@ -32,22 +23,26 @@ namespace YT.Customers
     /// 客户表服务实现
     /// </summary>
     [AbpAuthorize]
-
-
     public class CustomerAppService : YtAppServiceBase, ICustomerAppService
     {
         private readonly IRepository<Customer, int> _customerRepository;
         private readonly ICustomerListExcelExporter _customerListExcelExporter;
-
+        private readonly IRepository<Promoter> _promoteRepository;
+        private readonly IRepository<Card> _cardRepository;
         /// <summary>
-        /// 构造方法
+        /// ctor
         /// </summary>
+        /// <param name="customerRepository"></param>
+        /// <param name="customerListExcelExporter"></param>
+        /// <param name="promoteRepository"></param>
+        /// <param name="cardRepository"></param>
         public CustomerAppService(IRepository<Customer, int> customerRepository
-      , ICustomerListExcelExporter customerListExcelExporter
-  )
+      , ICustomerListExcelExporter customerListExcelExporter, IRepository<Promoter> promoteRepository, IRepository<Card> cardRepository)
         {
             _customerRepository = customerRepository;
             _customerListExcelExporter = customerListExcelExporter;
+            _promoteRepository = promoteRepository;
+            _cardRepository = cardRepository;
         }
 
 
@@ -56,22 +51,19 @@ namespace YT.Customers
         /// 
         /// </summary>
         private IQueryable<Customer> CustomerRepositoryAsNoTrack => _customerRepository.GetAll().AsNoTracking();
-
-
         #endregion
-
-
         #region 客户表管理
-
         /// <summary>
         /// 根据查询条件获取客户表分页列表
         /// </summary>
         public async Task<PagedResultDto<CustomerListDto>> GetPagedCustomersAsync(GetCustomerInput input)
         {
 
-            var query = CustomerRepositoryAsNoTrack;
-            //TODO:根据传入的参数添加过滤条件
-
+            var query = _customerRepository.GetAllIncluding(c => c.Promoter);
+            query = query.WhereIf(!input.Name.IsNullOrWhiteSpace(), c => c.CustomerName.Contains(input.Name))
+                .WhereIf(!input.Mobile.IsNullOrWhiteSpace(), c => c.Mobile.Contains(input.Mobile))
+                .WhereIf(!input.PromoterName.IsNullOrWhiteSpace(),
+                    c => c.Promoter != null && c.Promoter.PromoterName.Contains(input.PromoterName));
             var customerCount = await query.CountAsync();
 
             var customers = await query
@@ -92,7 +84,7 @@ namespace YT.Customers
         public async Task<GetCustomerForEditOutput> GetCustomerForEditAsync(NullableIdDto<int> input)
         {
             var output = new GetCustomerForEditOutput();
-
+            var protomers = await _promoteRepository.GetAllListAsync(c => c.IsActive);
             CustomerEditDto customerEditDto;
 
             if (input.Id.HasValue)
@@ -106,6 +98,10 @@ namespace YT.Customers
             }
 
             output.Customer = customerEditDto;
+            if (protomers.Any())
+            {
+                output.Promoters = protomers.MapTo<List<PromoterListDto>>();
+            }
             return output;
         }
 
@@ -146,10 +142,22 @@ namespace YT.Customers
         /// </summary>
         protected virtual async Task<CustomerEditDto> CreateCustomerAsync(CustomerEditDto input)
         {
-            //TODO:新增前的逻辑判断，是否允许新增
+            var count = await _customerRepository.CountAsync(c => c.Account.Equals(input.Account));
+            if (count > 0)
+            {
+                throw new AbpException("用户账号已存在");
+            }
 
             var entity = input.MapTo<Customer>();
-
+            if (!input.Card.IsNullOrWhiteSpace())
+            {
+                var card = await _cardRepository.FirstOrDefaultAsync(c => c.CardCode.Equals(input.Card));
+                if (!card.IsUsed)
+                {
+                    entity.Balance = card.Money;
+                    card.IsUsed = true;
+                }
+            }
             entity = await _customerRepository.InsertAsync(entity);
             return entity.MapTo<CustomerEditDto>();
         }
@@ -159,12 +167,29 @@ namespace YT.Customers
         /// </summary>
         protected virtual async Task UpdateCustomerAsync(CustomerEditDto input)
         {
-            //TODO:更新前的逻辑判断，是否允许更新
 
             if (input.Id != null)
             {
                 var entity = await _customerRepository.GetAsync(input.Id.Value);
+                var count =
+                   await _customerRepository.CountAsync(
+                        c => c.Account.Equals(input.Account) && input.Account != entity.Account);
+                if (count > 0)
+                {
+                    throw new AbpException("用户账号已存在");
+                }
                 input.MapTo(entity);
+
+                if (!input.Card.IsNullOrWhiteSpace())
+                {
+                    var card = await _cardRepository.FirstOrDefaultAsync(c => c.CardCode.Equals(input.Card));
+                    if (!card.IsUsed)
+                    {
+                        entity.Balance = card.Money;
+                        card.IsUsed = true;
+                    }
+                }
+
 
                 await _customerRepository.UpdateAsync(entity);
             }
@@ -175,8 +200,12 @@ namespace YT.Customers
         /// </summary>
         public async Task DeleteCustomerAsync(EntityDto<int> input)
         {
-            //TODO:删除前的逻辑判断，是否允许删除
-            await _customerRepository.DeleteAsync(input.Id);
+            var customer =await _customerRepository.FirstOrDefaultAsync(c => c.Id == input.Id);
+            if (customer.Balance>0)
+            {
+                    throw new AbpException("用户余额有值,无法删除");
+            }
+            customer.IsDeleted = true;
         }
 
         /// <summary>
@@ -184,8 +213,16 @@ namespace YT.Customers
         /// </summary>
         public async Task BatchDeleteCustomerAsync(List<int> input)
         {
-            //TODO:批量删除前的逻辑判断，是否允许删除
-            await _customerRepository.DeleteAsync(s => input.Contains(s.Id));
+            var customers = await _customerRepository.GetAllListAsync(s => input.Contains(s.Id));
+            foreach (var customer in customers)
+            {
+                if (customer.Balance>0)
+                {
+                    continue;
+                    
+                }
+                customer.IsDeleted = true;
+            }
         }
 
         #endregion

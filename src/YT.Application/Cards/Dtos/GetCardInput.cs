@@ -19,11 +19,18 @@ namespace YT.Cards.Dtos
 		/// <summary>
 	    /// 模糊查询参数
 		/// </summary>
-		public string FilterText { get; set; }
-
-		/// <summary>
-	    /// 用于排序的默认值
-		/// </summary>
+		public string Code { get; set; }
+        /// <summary>
+        /// 状态
+        /// </summary>
+		public bool? State { get; set; }
+        /// <summary>
+        /// 金额
+        /// </summary>
+        public decimal? Rmb { get; set; }
+        /// <summary>
+        /// 用于排序的默认值
+        /// </summary>
         public void Normalize()
         {
             if (string.IsNullOrEmpty(Sorting))

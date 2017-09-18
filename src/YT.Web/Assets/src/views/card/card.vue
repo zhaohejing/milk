@@ -9,18 +9,13 @@
                         </FormItem>
                         <FormItem label="状态">
                             <Select v-model="params.name" style="width:200px">
-                                <Option value="beijing" label="北京市">
-                                    <span>北京</span>
-                                    <span style="float:right;color:#ccc">Beiing</span>
+                                <Option value="1" label="已使用">
+                                    <span>已使用</span>
                                 </Option>
-                                <Option value="shanghai" label="上海市">
-                                    <span>上海</span>
-                                    <span style="float:right;color:#ccc">ShangHai</span>
+                                <Option value="0" label="未使用">
+                                    <span>未使用</span>
                                 </Option>
-                                <Option value="shenzhen" label="深圳市">
-                                    <span>深圳</span>
-                                    <span style="float:right;color:#ccc">ShenZhen</span>
-                                </Option>
+
                             </Select>
                         </FormItem>
 
@@ -32,15 +27,19 @@
             </milk-table>
         </Row>
         <!-- 添加和编辑窗口 -->
-        <Modal  :transfer="false" v-model="modal.isEdit" :title="modal.title" :mask-closable="false" @on-ok="save" @on-cancel="cancel">
-      添加充值卡
+        <Modal :transfer="false" v-model="modal.isEdit" :title="modal.title" :mask-closable="false" @on-ok="save" @on-cancel="cancel">
+            <Form ref="card" :model="current.cardEditDto" inline :label-width="70">
+                <FormItem label="金额" prop="money">
+                    <InputNumber v-model="current.cardEditDto.money" style="width:200px;" :min="1" :step="0.01" placeholder="请输入金额"></InputNumber>
+                </FormItem>
+            </Form>
         </Modal>
 
     </div>
 </template>
 
 <script>
-import { getClients, deleteClient, getClientForEdit, updateClient } from 'api/client';
+import { getCards, updateCard, getCardForEdit, deleteCard } from 'api/card';
 export default {
     name: 'card',
     data() {
@@ -52,18 +51,18 @@ export default {
                     width: '70px'
                 },
                 {
-                    title: '角色名',
-                    key: 'displayName'
+                    title: '充值卡号码',
+                    key: 'cardCode'
                 },
                 {
-                    title: '描述',
-                    key: 'description'
+                    title: '金额',
+                    key: 'money'
                 },
                 {
                     title: '状态',
-                    key: 'isActive',
+                    key: 'isUsed',
                     render: (h, params) => {
-                        return params.row.isActive ? '启用' : '禁用';
+                        return params.row.isUsed ? '已使用' : '未使用';
                     }
                 },
                 {
@@ -81,20 +80,6 @@ export default {
                         return h('div', [
                             h('Button', {
                                 props: {
-                                    type: 'primary',
-                                    size: 'small'
-                                },
-                                style: {
-                                    marginRight: '5px'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.edit(params.row)
-                                    }
-                                }
-                            }, '编辑'),
-                            h('Button', {
-                                props: {
                                     type: 'error',
                                     size: 'small'
                                 },
@@ -108,31 +93,36 @@ export default {
                     }
                 }
             ],
-            searchApi: getClients,
-            params: { name: '', phone: '', generalize: '' },
+            searchApi: getCards,
+            params: { code: '', state: null },
             modal: {
-                isEdit: false, title: '添加', current: null
+                isEdit: false,
+                title: '添加',
             },
+            current: {
+                cardEditDto: {
+                    money: 0,
+                    isUsed: false
+                }
+            }
 
         }
     },
     created() {
-        this.$root.eventHub.$on('client', () => {
-            this.cancel();
-        });
+
     },
     destroyed() {
-        this.$root.eventHub.$off('client');
     },
     methods: {
         //删除
         delete(model) {
             var table = this.$refs.list;
+            let content=`确定要删除当前${model.isUsed?'已使用':'未使用' }的充值卡么。`
             this.$Modal.confirm({
-                title: '删除提示', content: "确定要删除当前客户么?",
+                title: '删除提示', content:content,
                 onOk: () => {
                     const parms = { id: model.id }
-                    deleteClient(parms).then(c => {
+                    deleteCard(parms).then(c => {
                         if (c.data.success) {
                             table.initData();
                         }
@@ -142,20 +132,33 @@ export default {
         },
         add() {
             this.modal.isEdit = true;
-            this.modal.title = "添加客户";
-        },
-        edit(row) {
-            this.modal.current = row.id;
-            this.modal.isEdit = true;
-            this.modal.title = "编辑客户:" + row.displayName;
+            this.modal.title = "添加充值卡";
         },
         save() {
-            this.$refs.role.commit();
+            var table = this.$refs.list;
+            if (!this.current.cardEditDto.money) {
+                this.$Message.error({
+                    message: '金额不可为空',
+                    duration: 5 * 1000,
+                    closable: true
+                });
+                return;
+            }
+            updateCard(this.current).then(r => {
+                if (r.data.success) {
+                    table.initData();
+                } else {
+                    table.initData();
+                }
+            });
         },
         cancel() {
             this.modal.isEdit = false;
-            this.modal.title = "添加客户";
-            this.modal.current = null;
+            this.modal.title = "添加充值卡";
+            this.current.cardEditDto = {
+                money: 0,
+                isUsed: false
+            };
             this.$refs.list.initData();
         }
     },

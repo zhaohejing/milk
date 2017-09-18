@@ -23,6 +23,11 @@ namespace YT.Customers.Dtos
 	public int? Id{get;set;}
 
         /// <summary>
+        /// 余额
+        /// </summary>
+        [DisplayName("余额")]
+        public decimal Balance { get; set; } = 0.00M;
+        /// <summary>
         /// 账户
         /// </summary>
         [DisplayName("账户")]
@@ -82,17 +87,26 @@ namespace YT.Customers.Dtos
         /// </summary>
         [DisplayName("用户微信认证")]
         public   string  UserKey { get; set; }
-
+        /// <summary>
+        /// 充值卡
+        /// </summary>
+        public string Card { get; set; }
         /// <summary>
         /// 是否启用
         /// </summary>
         [DisplayName("是否启用")]
         public   bool  IsActive { get; set; }
-
+        /// <summary>
+        /// 
+        /// </summary>
         public   int?  ProveId { get; set; }
-
+        /// <summary>
+        /// 
+        /// </summary>
         public   int?  CityId { get; set; }
-
+        /// <summary>
+        /// 
+        /// </summary>
         public   int?  AreaId { get; set; }
 
     }

@@ -13,7 +13,7 @@
             <slot name="actions"></slot>
             </Col>
         </Row>
-        <Table ref="list" :stripe="stripe" :show-header="showHeader" :columns="columns" :data="items" :no-data-text="emptyContent" @on-select="selectOne" @on-select-cancel="cancelSelect" @on-select-all="selectAll">
+        <Table   highlight-row ref="list" :stripe="stripe" :show-header="showHeader" :columns="columns" :data="items" :no-data-text="emptyContent" @on-select="selectOne" @on-select-cancel="cancelSelect" @on-current-change="changeCurrent" @on-select-all="selectAll">
         </Table>
         <Page :total="total" :current="pageModel.current" show-total show-sizer show-elevator @on-change="pageChange" @on-page-size-change="pageSizeChange" style="text-align:right;margin-top:50px">
         </Page>
@@ -42,16 +42,17 @@ export default {
             required: false,
             default: true
         },
+
         /*是否分页，默认分页*/
         pagination: {
             type: Boolean,
             default: true,
             required: false
         },
-        layout:{
-            type:Array,
-            default:()=> [16,2,6],
-            required:false
+        layout: {
+            type: Array,
+            default: () => [16, 2, 6],
+            required: false
         },
         /*查询Api,方法*/
         searchApi: {
@@ -73,6 +74,7 @@ export default {
             items: [],
             total: 0,
             selects: [],
+            current: {},
             emptyContent: '暂无数据',
             pageModel: {
                 current: 1,
@@ -108,14 +110,20 @@ export default {
         selectOne(selection, row) {
             this.selects = selection;
         },
+        changeCurrent(currentRow, oldCurrentRow) {
+            this.current = currentRow;
+        },
         cancelSelect(selection, row) {
             this.selects = selection;
-        }, selectAll(all, sels) {
-            this.selects = selection;
-        }, pageChange(current) {
+        },
+        selectAll(all, sels) {
+            this.selects = all;
+        },
+        pageChange(current) {
             this.pageModel.current = current;
             this.getApiData();
-        }, pageSizeChange(size) {
+        },
+        pageSizeChange(size) {
             this.pageModel.maxResultCount = size;
             this.getApiData();
         }
@@ -135,5 +143,6 @@ export default {
     display: block;
     text-indent: 10px;
 }
+
 </style>
 

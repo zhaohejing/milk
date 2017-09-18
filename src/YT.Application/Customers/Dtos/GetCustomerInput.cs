@@ -17,11 +17,19 @@ namespace YT.Customers.Dtos
 		/// <summary>
 	    /// 模糊查询参数
 		/// </summary>
-		public string FilterText { get; set; }
+		public string Name { get; set; }
+        /// <summary>
+        /// 手机
+        /// </summary>
+        public string Mobile { get; set; }
+        /// <summary>
+        /// 推广员姓名
+        /// </summary>
+        public string PromoterName { get; set; }
 
-		/// <summary>
-	    /// 用于排序的默认值
-		/// </summary>
+        /// <summary>
+        /// 用于排序的默认值
+        /// </summary>
         public void Normalize()
         {
             if (string.IsNullOrEmpty(Sorting))

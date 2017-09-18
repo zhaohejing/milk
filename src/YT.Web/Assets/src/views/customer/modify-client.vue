@@ -3,38 +3,31 @@
         <Form ref="client" :model="client.customerEditDto" :rules="ruleValidate" :label-width="100">
             <Row>
                 <Col :md="8">
-                <FormItem label="客户账户" prop="displayName">
+                <FormItem label="客户账户" prop="account">
                     <Input v-model="client.customerEditDto.account" placeholder="客户账户"></Input>
                 </FormItem>
                 </Col>
 
                 <Col :md="8">
-                <FormItem label="密码" prop="displayName">
-                    <Input v-model="client.customerEditDto.password" placeholder="密码"></Input>
+                <FormItem label="密码" prop="password">
+                    <Input type="password" v-model="client.customerEditDto.password" placeholder="密码"></Input>
                 </FormItem>
                 </Col>
                 <Col :md="8">
                 <FormItem label="推广专员" prop="displayName">
                     <Select v-model="client.customerEditDto.promoterId" style="width:200px">
-                        <Option value="beijing" label="北京市">
-                            <span>北京</span>
-                            <span style="float:right;color:#ccc">Beiing</span>
+                        <Option :key="index" v-for="(pro,index) in promoters" :value="pro.id" :label="pro.promoterName">
+                            <span>{{pro.promoterName}}</span>
+                            <span style="float:right;color:#ccc">{{pro.mobile}}</span>
                         </Option>
-                        <Option value="shanghai" label="上海市">
-                            <span>上海</span>
-                            <span style="float:right;color:#ccc">ShangHai</span>
-                        </Option>
-                        <Option value="shenzhen" label="深圳市">
-                            <span>深圳</span>
-                            <span style="float:right;color:#ccc">ShenZhen</span>
-                        </Option>
+
                     </Select>
                 </FormItem>
                 </Col>
             </Row>
             <Row>
                 <Col :md="8">
-                <FormItem label="昵称" prop="displayName">
+                <FormItem label="昵称" prop="customerName">
                     <Input v-model="client.customerEditDto.customerName" placeholder="昵称"></Input>
                 </FormItem>
                 </Col>
@@ -60,7 +53,7 @@
                     <template slot="search">
                         <Form ref="params" :model="params" inline :label-width="70">
                             <FormItem label="金额">
-                                <Input v-model="params.rmb" placeholder="金额"></Input>
+                                <InputNumber v-model="params.rmb" style="width:200px;" placeholder="请输入金额"></InputNumber>
                             </FormItem>
                         </Form>
                     </template>
@@ -93,32 +86,39 @@ export default {
                     mobile: "",
                     gender: true,
                     password: "",
-                    promoterId: 0,
+                    promoterId: null,
                 }
-            },
-            generalizeList: [],
+            }
+            ,
+            promoters: [],
             ruleValidate: {
-                displayName: [
-                    { required: true, message: '角色名不能为空', trigger: 'blur' }
+                account: [
+                    { required: true, message: '账户不能为空', trigger: 'blur' }
+                ],
+                password: [
+                    { required: true, message: '密码不能为空', trigger: 'blur' }
+                ],
+                customerName: [
+                    { required: true, message: '昵称不能为空', trigger: 'blur' }
                 ]
             },
             cols: [
                 {
-                    type: 'selection',
+                    type: 'index',
                     align: 'center',
                     width: '70px'
                 },
                 {
                     title: '充值卡卡号',
-                    key: 'displayName'
+                    key: 'cardCode'
                 },
                 {
                     title: '金额',
-                    key: 'description'
+                    key: 'money'
                 }
             ],
             searchApi: getCards,
-            params: { rmb: '' },
+            params: { rmb: null, state: false },
         }
     },
     created() {
@@ -131,7 +131,9 @@ export default {
         async init() {
             getClientForEdit({ id: this.client.customerEditDto.id }).then(c => {
                 if (c.data.success) {
-                    this.client = c.data.result;
+                    this.client.customerEditDto = c.data.result.customer;
+                    this.client.customerEditDto.gender = this.client.customerEditDto.gender != 0;
+                    this.promoters = c.data.result.promoters;
                 }
             })
         },
@@ -139,6 +141,11 @@ export default {
         commit() {
             this.$refs.client.validate((valid) => {
                 if (valid) {
+                    debugger;
+                    let card = this.$refs.list.current;
+                    if (card) {
+                        this.client.customerEditDto.card = card.cardCode;
+                    }
                     updateClient(this.client).then(r => {
                         if (r.data.success) {
                             this.$root.eventHub.$emit('client');

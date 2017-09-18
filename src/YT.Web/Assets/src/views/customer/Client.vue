@@ -22,7 +22,7 @@
         </Row>
         <!-- 添加和编辑窗口 -->
         <Modal :width="1000" :transfer="false" v-model="modal.isEdit" :title="modal.title" :mask-closable="false" @on-ok="save" @on-cancel="cancel">
-            <modify-client ref="client" :role="modal.current" v-if="modal.isEdit" />
+            <modify-client ref="client" :clientId="modal.current" v-if="modal.isEdit" />
         </Modal>
 
     </div>
@@ -42,11 +42,19 @@ export default {
                     width: '70px'
                 },
                 {
-                    title: '角色名',
-                    key: 'displayName'
+                    title: '客户账户',
+                    key: 'account'
                 },
                 {
-                    title: '描述',
+                    title: '昵称',
+                    key: 'customerName'
+                },
+                {
+                    title: '手机',
+                    key: 'mobile'
+                },
+                {
+                    title: '推广专员',
                     key: 'description'
                 },
                 {
@@ -93,13 +101,24 @@ export default {
                                         this.delete(params.row)
                                     }
                                 }
-                            }, '删除')
+                            }, '删除'),
+                             h('Button', {
+                                props: {
+                                    type: 'info',
+                                    size: 'small'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.delete(params.row)
+                                    }
+                                }
+                            }, '添加吸管')
                         ]);
                     }
                 }
             ],
             searchApi: getClients,
-            params: { name: '',phone:'',generalize:'' },
+            params: { name: '', phone: '', generalize: '' },
             modal: {
                 isEdit: false, title: '添加', current: null
             },
@@ -143,7 +162,7 @@ export default {
             this.modal.title = "编辑客户:" + row.displayName;
         },
         save() {
-            this.$refs.role.commit();
+            this.$refs.client.commit();
         },
         cancel() {
             this.modal.isEdit = false;
