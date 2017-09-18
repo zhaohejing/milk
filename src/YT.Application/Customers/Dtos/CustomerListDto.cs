@@ -36,19 +36,20 @@ namespace YT.Customers.Dtos
         /// 性别
         /// </summary>
         [DisplayName("性别")]
-        public      Gender Gender { get; set; }
-		/// <summary>
-        /// 性别(枚举描述)
+        public     Gender Gender { get; set; }
+        /// <summary>
+        /// 推广员姓名
         /// </summary>
-        public string GenderName { get; set; }
+        public string PromoterName { get; set; }
+        /// <summary>
+        /// 余额
+        /// </summary>
+        public decimal Balance { get; set; } = 0.00M;
         /// <summary>
         /// 是否启用
         /// </summary>
         [DisplayName("是否启用")]
         public      bool IsActive { get; set; }
-        public      int? ProveId { get; set; }
-        public      int? CityId { get; set; }
-        public      int? AreaId { get; set; }
         /// <summary>
         /// 创建时间
         /// </summary>

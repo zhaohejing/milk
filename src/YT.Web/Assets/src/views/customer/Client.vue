@@ -11,7 +11,7 @@
                             <Input v-model="params.phone" placeholder="客户手机"></Input>
                         </FormItem>
                         <FormItem label="推广专员">
-                            <Input v-model="params.generalize" placeholder="推广专员"></Input>
+                            <Input v-model="params.promoterName" placeholder="推广专员"></Input>
                         </FormItem>
                     </Form>
                 </template>
@@ -55,7 +55,7 @@ export default {
                 },
                 {
                     title: '推广专员',
-                    key: 'description'
+                    key: 'promoterName'
                 },
                 {
                     title: '状态',
@@ -118,7 +118,7 @@ export default {
                 }
             ],
             searchApi: getClients,
-            params: { name: '', phone: '', generalize: '' },
+            params: { name: '', phone: '', promoterName: '' },
             modal: {
                 isEdit: false, title: '添加', current: null
             },

@@ -79,15 +79,7 @@ var sheet=excelPackage.Workbook.Worksheets.Add(L("Customer"));
        
  _ =>_timeZoneConverter.Convert( _.BirthDay,_abpSession.TenantId, _abpSession.GetUserId()),          
       _ => _.Gender,   
-       
       _ => _.IsActive,   
-       
-      _ => _.ProveId,   
-       
-      _ => _.CityId,   
-       
-      _ => _.AreaId,   
-       
  _ =>_timeZoneConverter.Convert( _.CreationTime,_abpSession.TenantId, _abpSession.GetUserId())
 );
                     //写个时间转换的吧

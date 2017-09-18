@@ -22,6 +22,15 @@ export function getClientForEdit(data) {
     data
   });
 }
+
+export function charge(data) {
+  return fetch({
+    url: '/api/services/app/customer/CustomerCharge',
+    method: 'post',
+    data
+  });
+}
+
 export function deleteClient(data) {
   return fetch({
     url: '/api/services/app/customer/DeleteCustomerAsync',

@@ -117,7 +117,22 @@ namespace YT.Customers
         }
 
 
+        /// <summary>
+        /// 用户充值
+        /// </summary>
+        public async Task CustomerCharge(CustomerChargeInput input)
+        {
+            var entity = await _customerRepository.GetAsync(input.Id);
+            if (input.Money!=0)
+            {
+            entity.Balance += input.Money;
 
+            }
+            else
+            {
+                entity.Balance = 0;
+            }
+        }
 
 
 

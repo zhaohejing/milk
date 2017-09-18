@@ -39,6 +39,10 @@ namespace YT.Customers
         Task CreateOrUpdateCustomerAsync(CreateOrUpdateCustomerInput input);
 
         /// <summary>
+        /// 用户充值
+        /// </summary>
+        Task CustomerCharge(CustomerChargeInput input);
+        /// <summary>
         /// 删除客户表
         /// </summary>
         Task DeleteCustomerAsync(EntityDto<int> input);

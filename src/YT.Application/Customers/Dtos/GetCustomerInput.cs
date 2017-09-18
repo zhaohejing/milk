@@ -40,4 +40,19 @@ namespace YT.Customers.Dtos
             }
         }
     }
+
+    /// <summary>
+    /// 充值input
+    /// </summary>
+    public class CustomerChargeInput
+    {
+        /// <summary>
+        /// id
+        /// </summary>
+        public int Id { get; set; }
+        /// <summary>
+        /// 金钱
+        /// </summary>
+        public decimal Money { get; set; }
+    }
 }

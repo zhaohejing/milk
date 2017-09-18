@@ -1,7 +1,9 @@
 using AutoMapper;
 using YT.Authorization.Users;
 using YT.Authorization.Users.Dto;
+using YT.Customers.Dtos;
 using YT.Managers.Users;
+using YT.Models;
 
 namespace YT
 {
@@ -34,6 +36,9 @@ namespace YT
                 .ForMember(dto => dto.Password, options => options.Ignore())
                 .ReverseMap()
                 .ForMember(user => user.Password, options => options.Ignore());
+            mapper.CreateMap<Customer, CustomerListDto>()
+                .ForMember(dto => dto.PromoterName, options => options.MapFrom(c => c.Promoter.PromoterName));
+
         }
     }
 }
