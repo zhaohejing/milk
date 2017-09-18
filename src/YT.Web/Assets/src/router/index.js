@@ -28,7 +28,7 @@ export const constantRouterMap = [
       {
         path: '500',
         name: 'Page500',
-        component: _import('errorPages/Page404')
+        component: _import('errorPages/Page500')
       }
     ]
   }
