@@ -18,7 +18,6 @@ Vue.prototype.$fmtTime = (date, format) => {
   return dtime(date).format(format || 'YYYY-MM-DD HH:mm:ss');
 };
 
-
 /* 列表格式转换成树格式
  * @param data 数组
  * @param parentId 父节点id
@@ -31,7 +30,7 @@ const converToTreedata = (data, parentId, pidField, grants) => {
       item.children = converToTreedata(data, item.id, pidField, grants);
       item.title = item.displayName;
       if (grants) {
-        const has = grants.findIndex(key => key === item.name) >= 0
+        const has = grants.findIndex(key => key === item.name) >= 0;
         item.checked = has;
         item.expand = has;
       }
@@ -42,6 +41,27 @@ const converToTreedata = (data, parentId, pidField, grants) => {
 };
 Vue.prototype.$converToTreedata = converToTreedata;
 Vue.config.productionTip = false;
+const token = localStorage.getItem('Milk-Token');
+router.beforeEach((to, from, next) => {
+  if (!token) {
+    if (to.path !== '/login') {
+      next({ path: '/login' });
+    } else {
+      next();
+    }
+    return;
+  } else {
+    next();
+  }
+  // if (!token) {
+  //   // next({
+  //   //   path: '/login',
+  //   //   query: { redirect: to.fullPath } // 将跳转的路由path作为参数，登录成功后跳转到该路由
+  //   // });
+  // } else {
+  //   next();
+  // }
+});
 new Vue({
   el: '#app',
   router,

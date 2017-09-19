@@ -5,6 +5,7 @@ using System.Linq.Dynamic;
 using System.Threading.Tasks;
 using Abp;
 using Abp.Application.Services.Dto;
+using Abp.Auditing;
 using Abp.Authorization;
 using Abp.AutoMapper;
 using Abp.Configuration;
@@ -23,6 +24,7 @@ namespace YT.Customers
     /// 客户表服务实现
     /// </summary>
     [AbpAuthorize]
+   
     public class CustomerAppService : YtAppServiceBase, ICustomerAppService
     {
         private readonly IRepository<Customer, int> _customerRepository;
@@ -122,11 +124,16 @@ namespace YT.Customers
         /// </summary>
         public async Task CustomerCharge(CustomerChargeInput input)
         {
-            var entity = await _customerRepository.GetAsync(input.Id);
-            if (input.Money!=0)
+            var card =await _cardRepository.FirstOrDefaultAsync(c => c.CardCode.Equals(input.CardCode));
+            if (card!=null&&card.IsUsed)
             {
-            entity.Balance += input.Money;
-
+                throw  new AbpException("该充值卡已被使用");
+            }
+            var entity = await _customerRepository.GetAsync(input.Id);
+            if (input.Money != 0)
+            {
+                entity.Balance += input.Money;
+                if (card != null) card.IsUsed = true;
             }
             else
             {
@@ -215,10 +222,10 @@ namespace YT.Customers
         /// </summary>
         public async Task DeleteCustomerAsync(EntityDto<int> input)
         {
-            var customer =await _customerRepository.FirstOrDefaultAsync(c => c.Id == input.Id);
-            if (customer.Balance>0)
+            var customer = await _customerRepository.FirstOrDefaultAsync(c => c.Id == input.Id);
+            if (customer.Balance > 0)
             {
-                    throw new AbpException("用户余额有值,无法删除");
+                throw new AbpException("用户余额有值,无法删除");
             }
             customer.IsDeleted = true;
         }
@@ -231,10 +238,10 @@ namespace YT.Customers
             var customers = await _customerRepository.GetAllListAsync(s => input.Contains(s.Id));
             foreach (var customer in customers)
             {
-                if (customer.Balance>0)
+                if (customer.Balance > 0)
                 {
                     continue;
-                    
+
                 }
                 customer.IsDeleted = true;
             }

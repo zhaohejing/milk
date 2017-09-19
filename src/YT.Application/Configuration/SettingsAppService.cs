@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Abp.Auditing;
 using Abp.AutoMapper;
 using Abp.Configuration;
 using Abp.Domain.Repositories;
@@ -11,6 +12,7 @@ namespace YT.Configuration
 {/// <summary>
  /// 设置项管理
  /// </summary>
+    [DisableAuditing]
     public class SettingsAppService : YtAppServiceBase, ISettingsAppService
     {
         private readonly IRepository<Setting, long> _settingRepository;

@@ -17,6 +17,7 @@ namespace YT.Notifications
     /// ֪ͨϵͳ
     /// </summary>
     [AbpAuthorize]
+    [DisableAuditing]
     public class NotificationAppService : YtAppServiceBase, INotificationAppService
     {
         private readonly INotificationDefinitionManager _notificationDefinitionManager;

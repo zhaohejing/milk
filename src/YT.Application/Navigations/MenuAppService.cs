@@ -6,6 +6,7 @@ using System.Linq.Dynamic;
 using System.Threading.Tasks;
 using Abp;
 using Abp.Application.Services.Dto;
+using Abp.Auditing;
 using Abp.Authorization;
 using Abp.Authorization.Roles;
 using Abp.AutoMapper;
@@ -26,6 +27,7 @@ namespace YT.Navigations
     /// 菜单服务实现
     /// </summary>
     [AbpAuthorize]
+    [DisableAuditing]
     public class MenuAppService : YtAppServiceBase, IMenuAppService
     {
         private readonly IRepository<Menu, int> _menuRepository;

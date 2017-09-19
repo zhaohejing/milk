@@ -31,7 +31,6 @@ namespace YT.SpecialCards
     /// </summary>
     [AbpAuthorize]
 
-
     public class SpecialCardAppService : YtAppServiceBase, ISpecialCardAppService
     {
         private readonly IRepository<SpecialCard, int> _specialCardRepository;

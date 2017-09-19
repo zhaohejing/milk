@@ -7,8 +7,8 @@ using System.Linq.Dynamic;
 using System.Threading.Tasks;
 using Abp;
 using Abp.Application.Services.Dto;
+using Abp.Auditing;
 using Abp.Authorization;
-using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
 using Abp.AutoMapper;
 using Abp.Domain.Repositories;
@@ -35,9 +35,7 @@ namespace YT.Authorization.Users
         private readonly RoleManager _roleManager;
         private readonly IUserListExcelExporter _userListExcelExporter;
         private readonly IAppNotifier _appNotifier;
-        private readonly IRepository<RolePermissionSetting, long> _rolePermissionRepository;
         private readonly IRepository<UserPermissionSetting, long> _userPermissionRepository;
-        private readonly IRepository<UserRole, long> _userRoleRepository;
         private readonly IRepository<User, long> _userRepository;
       /// <summary>
       /// ctor
@@ -45,24 +43,18 @@ namespace YT.Authorization.Users
       /// <param name="roleManager"></param>
       /// <param name="userListExcelExporter"></param>
       /// <param name="appNotifier"></param>
-      /// <param name="rolePermissionRepository"></param>
       /// <param name="userPermissionRepository"></param>
-      /// <param name="userRoleRepository"></param>
       /// <param name="userRepository"></param>
         public UserAppService(
             RoleManager roleManager,
             IUserListExcelExporter userListExcelExporter,
             IAppNotifier appNotifier,
-            IRepository<RolePermissionSetting, long> rolePermissionRepository,
-            IRepository<UserPermissionSetting, long> userPermissionRepository,
-            IRepository<UserRole, long> userRoleRepository, IRepository<User, long> userRepository)
+            IRepository<UserPermissionSetting, long> userPermissionRepository,IRepository<User, long> userRepository)
         {
             _roleManager = roleManager;
             _userListExcelExporter = userListExcelExporter;
             _appNotifier = appNotifier;
-            _rolePermissionRepository = rolePermissionRepository;
             _userPermissionRepository = userPermissionRepository;
-            _userRoleRepository = userRoleRepository;
             _userRepository = userRepository;
         }
         /// <summary>

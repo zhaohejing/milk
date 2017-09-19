@@ -5,6 +5,7 @@ using System.Linq.Dynamic;
 using System.Threading.Tasks;
 using Abp;
 using Abp.Application.Services.Dto;
+using Abp.Auditing;
 using Abp.Authorization;
 using Abp.AutoMapper;
 using Abp.Domain.Uow;
@@ -20,6 +21,8 @@ namespace YT.MultiTenancy
 {/// <summary>
  /// 
  /// </summary>
+
+[DisableAuditing]
     public class TenantAppService : YtAppServiceBase, ITenantAppService
     {/// <summary>
      /// 

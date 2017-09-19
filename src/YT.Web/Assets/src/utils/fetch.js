@@ -56,11 +56,9 @@ service.interceptors.response.use(
   //       return response.data;
   //     }
   error => {
-    vue.$Message.error({
-      message: error.error,
-      duration: 5 * 1000,
-      closable: true
-    });
+    if (error.response.data.unAuthorizedRequest) {
+      store.dispatch('FedLogOut');
+    }
     return Promise.reject(error);
   }
 );

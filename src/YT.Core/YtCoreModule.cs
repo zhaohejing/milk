@@ -52,10 +52,10 @@ namespace YT
             //是否开启多租户信息
             Configuration.MultiTenancy.IsEnabled = YtConsts.MultiTenancyEnabled;
             //Enable LDAP authentication (It can be enabled only if MultiTenancy is disabled!)
-          //  Configuration.Modules.ZeroLdap().Enable(typeof(AppLdapAuthenticationSource));
-          //当前用户未登陆 是否记录日志 默认false
+            //  Configuration.Modules.ZeroLdap().Enable(typeof(AppLdapAuthenticationSource));
+            //当前用户未登陆 是否记录日志 默认false
+            Configuration.Auditing.IsEnabled = true;
             Configuration.Auditing.IsEnabledForAnonymousUsers = true;
-
             //Declare entity types
             Configuration.Modules.Zero().EntityTypes.Tenant = typeof(Tenant);
             Configuration.Modules.Zero().EntityTypes.Role = typeof(Role);

@@ -5,14 +5,14 @@
                 <template slot="search">
                     <Form ref="params" :model="params" inline :label-width="70">
                         <FormItem label="充值卡">
-                            <Input v-model="params.name" placeholder="客户昵称"></Input>
+                            <Input v-model="params.code" placeholder="充值卡"></Input>
                         </FormItem>
                         <FormItem label="状态">
-                            <Select v-model="params.name" style="width:200px">
-                                <Option value="1" label="已使用">
+                            <Select v-model="params.state" style="width:200px" clearable>
+                                <Option value="true" label="已使用">
                                     <span>已使用</span>
                                 </Option>
-                                <Option value="0" label="未使用">
+                                <Option value="false" label="未使用">
                                     <span>未使用</span>
                                 </Option>
 

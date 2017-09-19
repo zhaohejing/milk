@@ -11,11 +11,13 @@ using Abp.Organizations;
 using YT.Authorization;
 using YT.Organizations.Dto;
 using System.Linq.Dynamic;
+using Abp.Auditing;
 
 namespace YT.Organizations
 {/// <summary>
  /// 
  /// </summary>
+ [DisableAuditing]
     public class OrganizationUnitAppService : YtAppServiceBase, IOrganizationUnitAppService
     {
         private readonly OrganizationUnitManager _organizationUnitManager;

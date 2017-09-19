@@ -123,7 +123,7 @@ export default {
             this.$Modal.confirm({
                 title: '清空警告', content: "确定要清空当前客户的余额么?",
                 onOk: () => {
-                    const parms = { id: model.id,money:0 }
+                    const parms = { id: model.id,money:0,cardCode:'' }
                     charge(parms).then(c => {
                         if (c.data.success) {
                             table.initData();
@@ -138,7 +138,7 @@ export default {
             this.modal.title = "编辑客户:" + row.customerName;
         },
         save() {
-            this.$refs.client.commit();
+            this.$refs.chargefor.commit();
         },
         cancel() {
             this.modal.isEdit = false;

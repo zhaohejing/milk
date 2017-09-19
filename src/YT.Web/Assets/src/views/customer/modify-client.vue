@@ -15,7 +15,7 @@
                 </Col>
                 <Col :md="8">
                 <FormItem label="推广专员" prop="displayName">
-                    <Select v-model="client.customerEditDto.promoterId" style="width:200px">
+                    <Select v-model="client.customerEditDto.promoterId" style="width:200px" clearable filterable>
                         <Option :key="index" v-for="(pro,index) in promoters" :value="pro.id" :label="pro.promoterName">
                             <span>{{pro.promoterName}}</span>
                             <span style="float:right;color:#ccc">{{pro.mobile}}</span>

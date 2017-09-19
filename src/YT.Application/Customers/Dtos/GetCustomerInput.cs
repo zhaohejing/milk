@@ -54,5 +54,9 @@ namespace YT.Customers.Dtos
         /// 金钱
         /// </summary>
         public decimal Money { get; set; }
+        /// <summary>
+        /// 卡编号
+        /// </summary>
+        public string CardCode { get; set; }
     }
 }

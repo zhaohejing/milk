@@ -1,7 +1,4 @@
-import {
-  Authenticate,
-  getInfo
-} from 'api/login';
+import { Authenticate, getInfo } from 'api/login';
 // import Cookies from 'js-cookie';
 
 const user = {
@@ -36,12 +33,9 @@ const user = {
       state.user = '';
     }
   },
-
   actions: {
     // 邮箱登录
-    LoginByEmail({
-      commit
-    }, userInfo) {
+    LoginByEmail({ commit }, userInfo) {
       const email = userInfo.email.trim();
       return new Promise((resolve, reject) => {
         Authenticate(email, userInfo.password)
@@ -59,9 +53,7 @@ const user = {
       });
     },
     // 获取用户信息
-    GetInfo({
-      commit
-    }) {
+    GetInfo({ commit }) {
       return new Promise((resolve, reject) => {
         getInfo()
           .then(response => {
@@ -78,9 +70,7 @@ const user = {
       });
     },
     // 登出
-    LogOut({
-      commit
-    }) {
+    LogOut({ commit }) {
       return new Promise(resolve => {
         commit('SET_TOKEN', '');
         localStorage.clear();
@@ -88,9 +78,7 @@ const user = {
       });
     },
     // 前端 登出
-    FedLogOut({
-      commit
-    }) {
+    FedLogOut({ commit }) {
       return new Promise(resolve => {
         commit('SET_TOKEN', '');
         localStorage.clear();

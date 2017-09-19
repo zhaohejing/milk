@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
+using Abp.Auditing;
 using Abp.Authorization;
 using Abp.AutoMapper;
 using Abp.Domain.Repositories;
@@ -17,6 +18,8 @@ namespace YT.Caching
 {/// <summary>
  /// 缓存集中管理
  /// </summary>
+    [DisableAuditing]
+
     public class CachingAppService : YtAppServiceBase, ICachingAppService
     {
         private readonly ICacheManager _cacheManager;

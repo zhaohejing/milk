@@ -25,26 +25,7 @@ namespace YT.Auditing.Dto
         /// 
         /// </summary>
         public string ServiceName { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public string MethodName { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public string BrowserInfo { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool? HasException { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public int? MinExecutionDuration { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public int? MaxExecutionDuration { get; set; }
+       
         /// <summary>
         /// 
         /// </summary>
