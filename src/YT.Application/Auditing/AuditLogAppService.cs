@@ -151,6 +151,7 @@ namespace YT.Auditing
                     temp.ServiceName = model.Show;
                     var t = model.Child.FirstOrDefault(c => temp.MethodName.Contains(c.Name));
                     temp.MethodName = t?.Show;
+                    //todo 参数转化 
                 }
                 else
                 {
