@@ -181,6 +181,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="WebApi\Controllers\FileController.cs" />
+    <Compile Include="WebApi\Controllers\WeChatController.cs" />
+    <Compile Include="WebApi\Models\HttpHelper.cs" />
     <Compile Include="WebApi\Models\RegisterViewModel.cs" />
     <Compile Include="WebApi\Models\ResetPasswordFormViewModel.cs" />
     <Compile Include="WebApi\Models\ResetPasswordViewModel.cs" />
@@ -206,10 +208,6 @@
     <ProjectReference Include="..\YT.Core\YT.Core.csproj">
       <Project>{17298ea0-af73-4f30-b6f1-2066100d7d74}</Project>
       <Name>YT.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\YT.MobileApp\YT.MobileApp.csproj">
-      <Project>{908a338b-b08d-42d3-965c-0d28ac765ad5}</Project>
-      <Name>YT.MobileApp</Name>
     </ProjectReference>
     <ProjectReference Include="..\YT\YT.csproj">
       <Project>{6f11169f-136e-4b21-a03b-95696c0bce89}</Project>

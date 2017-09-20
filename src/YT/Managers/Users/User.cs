@@ -10,8 +10,8 @@ namespace YT.Managers.Users
     /// <summary>
     /// 用户表
     /// </summary>
-   [Table("yt_users")]
-    public sealed class User : AbpUser<User>
+   [Table("milk_users")]
+    public  class User : AbpUser<User>
     {
         #region 静态限制
         /// <summary>
@@ -57,8 +57,10 @@ namespace YT.Managers.Users
         // 摘要:
         //     Is two factor auth enabled.
         private new bool IsTwoFactorEnabled { get; set; }
+        private  new string AuthenticationSource { get; set; }
+        private  new string EmailConfirmationCode { get; set; }
+        private new DateTime LockoutEndDateUtc { get; set; }
         #endregion
-
 
         #region ctors
         /// <summary>
@@ -102,6 +104,6 @@ namespace YT.Managers.Users
         {
         }
         #endregion
-
+      
     }
 }

@@ -12,7 +12,6 @@ using Abp.Modules;
 using Abp.WebApi;
 using Swashbuckle.Application;
 using Swashbuckle.Swagger;
-using YT.MobileApp;
 using YT.MultiTenancy;
 
 namespace YT.WebApi
@@ -20,7 +19,7 @@ namespace YT.WebApi
     /// <summary>
     /// Web API layer of the application.
     /// </summary>
-    [DependsOn(typeof(AbpWebApiModule), typeof(YtApplicationModule), typeof(MobileModule))]
+    [DependsOn(typeof(AbpWebApiModule), typeof(YtApplicationModule))]
     public class YtWebApiModule : AbpModule
     {
         public override void Initialize()
@@ -32,14 +31,8 @@ namespace YT.WebApi
                 .ForAll<IApplicationService>(typeof(YtApplicationModule).Assembly, "app")
                 .Build();
             Configuration.Modules.AbpWebApi().DynamicApiControllerBuilder
-              .ForAll<IApplicationService>(typeof(MobileModule).Assembly, "mobile")
-              .Build();
-
-            Configuration.Modules.AbpWebApi().DynamicApiControllerBuilder
           .For<ITenantAppService>("app/tenant").WithApiExplorer(false).Build();
-
             Configuration.Modules.AbpWebApi().HttpConfiguration.Filters.Add(new HostAuthenticationFilter("Bearer"));
-
             ConfigureSwaggerUi(); //Remove this line to disable swagger UI.
         }
 

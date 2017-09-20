@@ -11,4 +11,15 @@ namespace YT.WebApi.Models
         [Required]
         public string Password { get; set; }
     }
+    /// <summary>
+    /// ÊÖ»úµÇÂ¼
+    /// </summary>
+    public class MobileLoginModel
+    {
+        [Required]
+        public string Mobile { get; set; }
+
+        [Required]
+        public string Password { get; set; }
+    }
 }

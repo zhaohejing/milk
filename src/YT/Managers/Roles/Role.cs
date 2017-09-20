@@ -8,7 +8,7 @@ namespace YT.Managers.Roles
     /// <summary>
     /// 角色信息表
     /// </summary>
-    [Table("yt_roles")]
+    [Table("milk_roles")]
     public class Role : AbpRole<User>, IPassivable
     {
         //Can add application specific role properties here

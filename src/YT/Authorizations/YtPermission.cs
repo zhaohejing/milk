@@ -11,7 +11,7 @@ namespace YT.Authorizations
     /// <summary>
     /// 权限表
     /// </summary>
-    [Table("yt_permission")]
+    [Table("milk_permission")]
     public class YtPermission : Entity, ITreeLevel
     {
         public YtPermission()

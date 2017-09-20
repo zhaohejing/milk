@@ -6,6 +6,7 @@ using Abp.Localization.Dictionaries;
 using Abp.Localization.Dictionaries.Xml;
 using Abp.Modules;
 using Abp.Net.Mail;
+using Abp.Runtime.Caching;
 using Abp.Zero;
 using Abp.Zero.Configuration;
 using Abp.Zero.Ldap;
@@ -71,11 +72,11 @@ namespace YT
                         )
                     )
                 );
-            ////ÅäÖÃ»º´æÖÜÆÚ
-            //Configuration.Caching.Configure(FriendCacheItem.CacheName, cache =>
-            //{
-            //    cache.DefaultSlidingExpireTime = TimeSpan.FromMinutes(30);
-            //});
+            //ÅäÖÃ»º´æÖÜÆÚ
+            Configuration.Caching.Configure("Milk.WeChat.ACCESS_TOKEN", cache =>
+            {
+                cache.DefaultSlidingExpireTime = TimeSpan.FromHours(2);
+            });
             //Configure roles
             //  AppRoleConfig.Configure(Configuration.Modules.Zero().RoleManagement);
 

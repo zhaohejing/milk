@@ -4,21 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace YT.Models
+namespace YT.Customers.MobileDtos
 {
     /// <summary>
-    /// 性别
+    /// 客户手机登录验证
     /// </summary>
-   public enum Gender
+  public  class LoginByMobileInput
     {
         /// <summary>
-        /// 男
+        /// 
         /// </summary>
-        Male=1,
+        public string Mobile { get; set; }
         /// <summary>
-        /// 女
+        /// 
         /// </summary>
-        Female =0
+        public string Password { get; set; }
     }
-
 }

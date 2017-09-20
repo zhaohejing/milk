@@ -40,10 +40,14 @@ namespace YT
         /// <summary>
         /// 菜单权限
         /// </summary>
-        public const string MenuCache = "Yt.Cache.Menu";
+        public const string MenuCache = "Milk.Cache.Menu";
+        /// <summary>
+        /// 微信token
+        /// </summary>
+        public const string WeChatToken = "Milk.WeChat.ACCESS_TOKEN";
         /// <summary>
         /// 权限const
         /// </summary>
-        public const string PermissionCache = "Yt.Cache.Permission";
+        public const string PermissionCache = "Milk.Cache.Permission";
     }
 }

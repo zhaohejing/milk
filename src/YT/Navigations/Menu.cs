@@ -13,7 +13,7 @@ namespace YT.Navigations
     /// <summary>
     /// 菜单
     /// </summary>
-    [Table("yt_menu")]
+    [Table("milk_menu")]
     public class Menu :Entity,ITreeLevel
     {
         /// <summary>

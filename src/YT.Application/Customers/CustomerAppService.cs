@@ -5,10 +5,8 @@ using System.Linq.Dynamic;
 using System.Threading.Tasks;
 using Abp;
 using Abp.Application.Services.Dto;
-using Abp.Auditing;
 using Abp.Authorization;
 using Abp.AutoMapper;
-using Abp.Configuration;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.Linq.Extensions;
@@ -107,6 +105,7 @@ namespace YT.Customers
             return output;
         }
 
+     
 
         /// <summary>
         /// 通过指定id获取客户表ListDto信息
@@ -271,7 +270,13 @@ namespace YT.Customers
         #endregion
 
 
+        #region 手机端接口
 
+        public async Task<CustomerListDto> LoginByMobile()
+        {
+            return null;
+        }
+        #endregion
 
 
 
