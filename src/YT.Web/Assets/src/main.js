@@ -51,6 +51,9 @@ router.beforeEach((to, from, next) => {
     }
     return;
   } else {
+    if (from.path === '/login') {
+      next({ path: '/' });
+    }
     next();
   }
   // if (!token) {
