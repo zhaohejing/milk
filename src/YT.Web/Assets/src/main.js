@@ -22,6 +22,7 @@ Vue.prototype.$fmtTime = (date, format) => {
  * @param data 数组
  * @param parentId 父节点id
  * @param pidField 父节点字段名
+ * @param grants 已授权信息
  */
 const converToTreedata = (data, parentId, pidField, grants) => {
   const list = [];
@@ -30,9 +31,19 @@ const converToTreedata = (data, parentId, pidField, grants) => {
       item.children = converToTreedata(data, item.id, pidField, grants);
       item.title = item.displayName;
       if (grants) {
-        const has = grants.findIndex(key => key === item.name) >= 0;
-        item.checked = has;
-        item.expand = has;
+        const temp = grants.findIndex(key => key === item.name);
+        if (temp > 0) {
+          if (!item.children || item.children.length <= 0) {
+            item.checked = true;
+            item.expand = true;
+          } else {
+            item.checked = false;
+            item.expand = true;
+          }
+        } else {
+          item.checked = false;
+          item.expand = true;
+        }
       }
       list.push(item);
     }
@@ -45,14 +56,18 @@ const token = localStorage.getItem('Milk-Token');
 router.beforeEach((to, from, next) => {
   if (!token) {
     if (to.path !== '/login') {
-      next({ path: '/login' });
+      next({
+        path: '/login'
+      });
     } else {
       next();
     }
     return;
   } else {
     if (from.path === '/login') {
-      next({ path: '/' });
+      next({
+        path: '/'
+      });
     }
     next();
   }
