@@ -10,9 +10,11 @@ import iView from 'iview';
 import 'iview/dist/styles/iview.css';
 import TreeView from 'vue-json-tree-view';
 import MilkTable from 'components/table/mtable';
+import TreeGrid from 'components/table/treegrid';
 Vue.use(iView);
 Vue.use(TreeView);
 Vue.component('milk-table', MilkTable);
+Vue.component('tree-table', TreeGrid);
 /* 格式化日期*/
 Vue.prototype.$fmtTime = (date, format) => {
   return dtime(date).format(format || 'YYYY-MM-DD HH:mm:ss');

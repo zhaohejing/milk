@@ -88,6 +88,12 @@ export const asyncRouterMap = [
             icon: '',
             hidden: false,
             component: r => require(['views/card/card'], r)
+          }, {
+            path: 'card/only',
+            name: '唯鲜卡管理',
+            icon: '',
+            hidden: false,
+            component: r => require(['views/card/onlymilk'], r)
           }
         ]
       },

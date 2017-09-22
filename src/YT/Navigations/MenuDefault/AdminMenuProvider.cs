@@ -31,7 +31,8 @@ namespace YT.Navigations.MenuDefault
                    new MenuDefinition("充值卡管理","","card",true,StaticPermissionsName.Page_Card) {
                     Childs=   new List<MenuDefinition>()
                 {
-                    new MenuDefinition( "卡片管理","/card/charge","",true,StaticPermissionsName.Page_Card_Charge)
+                    new MenuDefinition( "卡片管理","/card/charge","",true,StaticPermissionsName.Page_Card_Charge),
+                    new MenuDefinition( "唯鲜卡管理","/card/only","",true,StaticPermissionsName.Page_Card_Only),
                 }
                    },
                 new MenuDefinition("推广管理","","person-stalker",true,StaticPermissionsName.Page_Generalize) {

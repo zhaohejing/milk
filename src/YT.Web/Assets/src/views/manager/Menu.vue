@@ -1,11 +1,12 @@
 <template>
-    <div class="animated fadeIn">
-        <Button @cilck="add">测试</Button>
+       <div class="animated fadeIn">
+        <Row>
+            <tree-table ref="list"  :columns="cols" :items="cols" >
+            </tree-table>
+        </Row>
         <!-- 添加和编辑窗口 -->
-        <Modal :transfer="false" v-model="modal.isEdit" :title="modal.title" :mask-closable="false"
-         @on-ok="save"
-          @on-cancel="cancel">
-            <modify-menu @submit-complete="cancel" ref="menu" :user="modal.current" v-if="modal.isEdit" />
+        <Modal :transfer="false" v-model="modal.isEdit" :title="modal.title" :mask-closable="false" @on-ok="save" @on-cancel="cancel">
+            <modify-role  ref="role" :role="modal.current" v-if="modal.isEdit" />
         </Modal>
 
     </div>
