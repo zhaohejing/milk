@@ -1,77 +1,104 @@
 <template>
-       <div class="animated fadeIn">
-        <Row>
-            <tree-table ref="list"  :columns="cols" :items="cols" >
-            </tree-table>
-        </Row>
-        <!-- 添加和编辑窗口 -->
-        <Modal :transfer="false" v-model="modal.isEdit" :title="modal.title" :mask-closable="false" @on-ok="save" @on-cancel="cancel">
-            <modify-role  ref="role" :role="modal.current" v-if="modal.isEdit" />
-        </Modal>
-
-    </div>
+    <tree-table 
+        :items='data' 
+        :columns='columns'
+        @on-row-click='rowClick'
+        @on-selection-change='selectionClick'
+        @on-sort-change='sortClick'
+      ></tree-table>
 </template>
-
 <script>
-import { getUsers, getRoles, getUserForEdit, deleteUser } from 'api/manage';
-import modifyMenu from './modify-menu';
-export default {
-    data() {
-        return {
-            modal: {
-                isEdit: false, title: '添加', current: null
+    export default {
+        data() {
+            return {
+                columns: [{
+                    type: 'selection',
+                    width: '50',
+                }, {
+                    title: '编码',
+                    key: 'code',
+                    sortable: true,
+                    width: '150',
+                }, {
+                    title: '名称',
+                    key: 'name',
+                    width: '150',
+                }, {
+                    title: '状态',
+                    key: 'status',
+                    width: '150',
+                }, {
+                    title: '备注',
+                    key: 'remark',
+                    width: '150',
+                }, {
+                    title: '操作',
+                    type: 'action',
+                    actions: [{
+                        type: 'primary',
+                        text: '编辑'
+                    }, {
+                        type: 'error',
+                        text: '删除'
+                    }],
+                    width: '150',
+                }],
+                data: [{
+                    id: '1',
+                    code: '0001',
+                    name: '测试数据1',
+                    status: '启用',
+                    remark: '测试数据测试数据',
+                    _checked: true
+                }, {
+                    id: '2',
+                    code: '0002',
+                    name: '测试数据2',
+                    status: '启用',
+                    remark: '测试数据测试数据',
+                    children: [{
+                        id: '01',
+                        code: '00001',
+                        name: '测试数据01',
+                        status: '启用',
+                        remark: '测试数据测试数据',
+                    }, {
+                        id: '02',
+                        code: '00002',
+                        name: '测试数据02',
+                        status: '启用',
+                        remark: '测试数据测试数据',
+                    }]
+                }, {
+                    id: '3',
+                    code: '0003',
+                    name: '测试数据3',
+                    status: '启用',
+                    remark: '测试数据测试数据'
+                }, {
+                    id: '4',
+                    code: '0004',
+                    name: '测试数据4',
+                    status: '启用',
+                    remark: '测试数据测试数据'
+                }]
+            }
+        },
+        components: {
+        },
+        methods: {
+            rowClick(data, index, event) {
+                console.log('当前行数据:' + data)
+                console.log('点击行号:' + index)
+                console.log('点击事件:' + event)
+            },
+            selectionClick(arr) {
+                console.log('选中数据id数组:' + arr)
+            },
+            sortClick(key, type) {
+                console.log('排序字段:' + key)
+                console.log('排序规则:' + type)
             }
         }
-    },
-    components: {
-        modifyMenu
-    },
-    created() {
-    },
-    methods: {
-        //删除
-        delete(model) {
-            var table = this.$refs.list;
-            this.$Modal.confirm({
-                title: '删除提示', content: "确定要删除当前用户么?",
-                onOk: () => {
-                    const parms = { id: model.id }
-                    deleteUser(parms).then(c => {
-                        if (c.data.success) {
-                            table.initData();
-                        }
-                    })
-                }
-            })
-        },
-        add() {
-            this.modal.isEdit = true;
-            this.modal.title = "添加用户";
-        },
-        edit(row) {
-            this.modal.current = row.id;
-            this.modal.isEdit = true;
-            this.modal.title = "编辑用户:" + row.name;
-        },
-        save() {
-            this.$refs.menu.commit();
-        },
-        cancel(result) {
-            this.modal.isEdit = false;
-            this.modal.title = "添加用户";
-            this.modal.current = null;
-            if (result) {
-                this.$refs.list.initData();
-            }
-        }
-    },
-
-    mounted() {
     }
-}
 </script>
-
-
-<style type="text/css" scoped>
-
-</style>

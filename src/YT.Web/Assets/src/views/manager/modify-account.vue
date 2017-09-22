@@ -3,7 +3,7 @@
         <TabPane label="用户信息" name="user">
             <Row>
                 <Col :md="22">
-                <Form ref="user" :model="current.user" :rules="ruleValidate" :label-width="100">
+                <Form ref="user" :model="current.user" :rules="ruleValidate" :label-width="120">
                     <FormItem label="用户名" prop="userName">
                         <Input v-model="current.user.userName" placeholder="请输入用户名"></Input>
                     </FormItem>
