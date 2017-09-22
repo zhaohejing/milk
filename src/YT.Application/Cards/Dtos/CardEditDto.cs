@@ -27,7 +27,7 @@ namespace YT.Cards.Dtos
         /// </summary>
         [DisplayName("金额")]
         [Required]
-        public decimal Money { get; set; }
+        public int Money { get; set; }
 
         /// <summary>
         /// 是否已使用

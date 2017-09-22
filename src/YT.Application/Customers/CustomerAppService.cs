@@ -29,20 +29,23 @@ namespace YT.Customers
         private readonly ICustomerListExcelExporter _customerListExcelExporter;
         private readonly IRepository<Promoter> _promoteRepository;
         private readonly IRepository<Card> _cardRepository;
-        /// <summary>
-        /// ctor
-        /// </summary>
-        /// <param name="customerRepository"></param>
-        /// <param name="customerListExcelExporter"></param>
-        /// <param name="promoteRepository"></param>
-        /// <param name="cardRepository"></param>
+        private readonly IRepository<ChargeRecord> _recordRepository;
+      /// <summary>
+      /// ctor
+      /// </summary>
+      /// <param name="customerRepository"></param>
+      /// <param name="customerListExcelExporter"></param>
+      /// <param name="promoteRepository"></param>
+      /// <param name="cardRepository"></param>
+      /// <param name="recordRepository"></param>
         public CustomerAppService(IRepository<Customer, int> customerRepository
-      , ICustomerListExcelExporter customerListExcelExporter, IRepository<Promoter> promoteRepository, IRepository<Card> cardRepository)
+      , ICustomerListExcelExporter customerListExcelExporter, IRepository<Promoter> promoteRepository, IRepository<Card> cardRepository, IRepository<ChargeRecord> recordRepository)
         {
             _customerRepository = customerRepository;
             _customerListExcelExporter = customerListExcelExporter;
             _promoteRepository = promoteRepository;
             _cardRepository = cardRepository;
+            _recordRepository = recordRepository;
         }
 
 
@@ -132,7 +135,12 @@ namespace YT.Customers
             if (input.Money != 0)
             {
                 entity.Balance += input.Money;
-                if (card != null) card.IsUsed = true;
+                if (card != null)
+                {
+                    card.IsUsed = true;
+                    await _recordRepository.InsertAsync(new ChargeRecord(entity.Id, card.Money, card.Id));
+                }
+              
             }
             else
             {
@@ -170,6 +178,8 @@ namespace YT.Customers
             }
 
             var entity = input.MapTo<Customer>();
+            entity = await _customerRepository.InsertAsync(entity);
+          await  CurrentUnitOfWork.SaveChangesAsync();
             if (!input.Card.IsNullOrWhiteSpace())
             {
                 var card = await _cardRepository.FirstOrDefaultAsync(c => c.CardCode.Equals(input.Card));
@@ -177,9 +187,9 @@ namespace YT.Customers
                 {
                     entity.Balance = card.Money;
                     card.IsUsed = true;
+                    await _recordRepository.InsertAsync(new ChargeRecord(entity.Id, card.Money, card.Id));
                 }
             }
-            entity = await _customerRepository.InsertAsync(entity);
             return entity.MapTo<CustomerEditDto>();
         }
 
@@ -208,6 +218,7 @@ namespace YT.Customers
                     {
                         entity.Balance = card.Money;
                         card.IsUsed = true;
+                        await _recordRepository.InsertAsync(new ChargeRecord(entity.Id, card.Money, card.Id));
                     }
                 }
 
@@ -271,11 +282,6 @@ namespace YT.Customers
 
 
         #region 手机端接口
-
-        public async Task<CustomerListDto> LoginByMobile()
-        {
-            return null;
-        }
         #endregion
 
 

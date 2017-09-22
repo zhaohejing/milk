@@ -53,7 +53,7 @@ namespace YT.Customers.Dtos
         /// <summary>
         /// 金钱
         /// </summary>
-        public decimal Money { get; set; }
+        public int Money { get; set; }
         /// <summary>
         /// 卡编号
         /// </summary>

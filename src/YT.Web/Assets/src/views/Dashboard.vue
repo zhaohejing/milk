@@ -1,8 +1,6 @@
 <template>
     <div class="animated fadeIn">
-
         <Row>
-
             <Col :sm="24" :md="8">
             <h3>👍WZ后台管理框架👍</h3>
             <h5>
@@ -11,14 +9,12 @@
             </Col>
 
             <div class="state-info">
-
                 <section class="panel">
                     <div class="panel-body">
                         <div class="summary">
                             <span>yearly income</span>
                             <h3 class="green-txt">$ 45,600</h3>
                         </div>
-
                         <div id="expense" class="chart-bar"> <img src="static/img/greenincome.png"></div>
                     </div>
                 </section>

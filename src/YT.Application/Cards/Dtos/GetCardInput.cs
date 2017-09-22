@@ -27,7 +27,7 @@ namespace YT.Cards.Dtos
         /// <summary>
         /// 金额
         /// </summary>
-        public decimal? Rmb { get; set; }
+        public int? Rmb { get; set; }
         /// <summary>
         /// 用于排序的默认值
         /// </summary>

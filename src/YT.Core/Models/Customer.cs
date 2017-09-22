@@ -70,7 +70,7 @@ namespace YT.Models
         /// <summary>
         /// 余额
         /// </summary>
-        public decimal Balance { get; set; } = 0.00M;
+        public int Balance { get; set; } = 0;
         public int? ProveId { get; set; }
         public virtual Area Prove { get; set; }
         public int? CityId { get; set; }
