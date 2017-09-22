@@ -3,7 +3,6 @@
          
 	using System;
     using System.Collections.Generic;
-    using System.Data.Entity;
 	using Abp.Runtime.Session;
 	using Abp.Timing.Timezone;
 	using YT.DataExporting.Excel.EpPlus;
@@ -13,7 +12,7 @@
 namespace YT.SpecialCards.Exporting
 {
     /// <summary>
-    /// 奶鲜卡的导出EXCEL功能的实现
+    /// 唯鲜卡的导出EXCEL功能的实现
     /// </summary>
     public class SpecialCardListExcelExporter : EpPlusExcelExporterBase, ISpecialCardListExcelExporter
     {
@@ -34,7 +33,7 @@ namespace YT.SpecialCards.Exporting
     
 
          /// <summary>
-        /// 导出奶鲜卡到EXCEL文件
+        /// 导出唯鲜卡到EXCEL文件
         /// <param name="specialCardListDtos">导出信息的DTO</param>
         /// </summary>
     public    FileDto ExportSpecialCardToFile(List<SpecialCardListDto> specialCardListDtos){
@@ -50,7 +49,8 @@ var sheet=excelPackage.Workbook.Worksheets.Add(L("SpecialCard"));
                           L("CardCode"),  
      L("Password"),  
      L("IsActive"),  
-     L("CreationTime") 
+     L("IsUsed"),  
+     L("CreationTime")
                         );
          AddObjects(sheet,2,specialCardListDtos,
             
@@ -60,13 +60,15 @@ var sheet=excelPackage.Workbook.Worksheets.Add(L("SpecialCard"));
        
       _ => _.IsActive,   
        
- _ =>_timeZoneConverter.Convert( _.CreationTime,_abpSession.TenantId, _abpSession.GetUserId()) 
+      _ => _.IsUsed,   
+       
+ _ =>_timeZoneConverter.Convert( _.CreationTime,_abpSession.TenantId, _abpSession.GetUserId())
 );
                     //写个时间转换的吧
           //var creationTimeColumn = sheet.Column(10);
                     //creationTimeColumn.Style.Numberformat.Format = "yyyy-mm-dd";
 
-        for (var i = 1; i <= 4; i++)
+        for (var i = 1; i <= 5; i++)
                     {
                         sheet.Column(i).AutoFit();
                     }       

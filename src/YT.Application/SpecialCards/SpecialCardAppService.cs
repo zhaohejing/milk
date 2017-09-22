@@ -17,32 +17,28 @@ using Abp.Authorization;
 using Abp.AutoMapper;
 using Abp.Configuration;
 using Abp.Domain.Repositories;
+using Abp.Extensions;
 using Abp.Linq.Extensions;
 using YT.Dto;
 using YT.Models;
 using YT.SpecialCards.Dtos;
 using YT.SpecialCards.Exporting;
 
-
 namespace YT.SpecialCards
 {
     /// <summary>
-    /// 奶鲜卡服务实现
+    /// 唯鲜卡服务实现
     /// </summary>
     [AbpAuthorize]
-
     public class SpecialCardAppService : YtAppServiceBase, ISpecialCardAppService
     {
         private readonly IRepository<SpecialCard, int> _specialCardRepository;
         private readonly ISpecialCardListExcelExporter _specialCardListExcelExporter;
-
-
         /// <summary>
         /// 构造方法
         /// </summary>
-        public SpecialCardAppService(IRepository<SpecialCard, int> specialCardRepository,
-              ISpecialCardListExcelExporter specialCardListExcelExporter
-  )
+        public SpecialCardAppService(IRepository<SpecialCard, int> specialCardRepository
+      , ISpecialCardListExcelExporter specialCardListExcelExporter)
         {
             _specialCardRepository = specialCardRepository;
             _specialCardListExcelExporter = specialCardListExcelExporter;
@@ -54,22 +50,16 @@ namespace YT.SpecialCards
         /// 
         /// </summary>
         private IQueryable<SpecialCard> SpecialCardRepositoryAsNoTrack => _specialCardRepository.GetAll().AsNoTracking();
-
-
         #endregion
-
-
-        #region 奶鲜卡管理
-
+        #region 唯鲜卡管理
         /// <summary>
-        /// 根据查询条件获取奶鲜卡分页列表
+        /// 根据查询条件获取唯鲜卡分页列表
         /// </summary>
         public async Task<PagedResultDto<SpecialCardListDto>> GetPagedSpecialCardsAsync(GetSpecialCardInput input)
         {
-
             var query = SpecialCardRepositoryAsNoTrack;
-            //TODO:根据传入的参数添加过滤条件
-
+            query = query.WhereIf(!input.Card.IsNullOrWhiteSpace(), c => c.CardCode.Contains(input.Card))
+                .WhereIf(input.State.HasValue, c => c.IsUsed == input.State.Value);
             var specialCardCount = await query.CountAsync();
 
             var specialCards = await query
@@ -85,14 +75,12 @@ namespace YT.SpecialCards
         }
 
         /// <summary>
-        /// 通过Id获取奶鲜卡信息进行编辑或修改 
+        /// 通过Id获取唯鲜卡信息进行编辑或修改 
         /// </summary>
         public async Task<GetSpecialCardForEditOutput> GetSpecialCardForEditAsync(NullableIdDto<int> input)
         {
             var output = new GetSpecialCardForEditOutput();
-
             SpecialCardEditDto specialCardEditDto;
-
             if (input.Id.HasValue)
             {
                 var entity = await _specialCardRepository.GetAsync(input.Id.Value);
@@ -106,27 +94,19 @@ namespace YT.SpecialCards
             output.SpecialCard = specialCardEditDto;
             return output;
         }
-
-
         /// <summary>
-        /// 通过指定id获取奶鲜卡ListDto信息
+        /// 通过指定id获取唯鲜卡ListDto信息
         /// </summary>
         public async Task<SpecialCardListDto> GetSpecialCardByIdAsync(EntityDto<int> input)
         {
             var entity = await _specialCardRepository.GetAsync(input.Id);
-
             return entity.MapTo<SpecialCardListDto>();
         }
-
-
-
-
-
-
-
         /// <summary>
-        /// 新增或更改奶鲜卡
+        /// 新增或更改唯鲜卡
         /// </summary>
+        [AbpAuthorize]
+
         public async Task CreateOrUpdateSpecialCardAsync(CreateOrUpdateSpecialCardInput input)
         {
             if (input.SpecialCardEditDto.Id.HasValue)
@@ -140,55 +120,45 @@ namespace YT.SpecialCards
         }
 
         /// <summary>
-        /// 新增奶鲜卡
+        /// 新增唯鲜卡
         /// </summary>
-        protected virtual async Task<SpecialCardEditDto> CreateSpecialCardAsync(SpecialCardEditDto input)
+        protected async Task<SpecialCardEditDto> CreateSpecialCardAsync(SpecialCardEditDto input)
         {
-            //TODO:新增前的逻辑判断，是否允许新增
-
             var entity = input.MapTo<SpecialCard>();
-
             entity = await _specialCardRepository.InsertAsync(entity);
             return entity.MapTo<SpecialCardEditDto>();
         }
 
         /// <summary>
-        /// 编辑奶鲜卡
+        /// 编辑唯鲜卡
         /// </summary>
         protected virtual async Task UpdateSpecialCardAsync(SpecialCardEditDto input)
         {
-            //TODO:更新前的逻辑判断，是否允许更新
-
-            if (input.Id != null)
-            {
-                var entity = await _specialCardRepository.GetAsync(input.Id.Value);
-                input.MapTo(entity);
-
-                await _specialCardRepository.UpdateAsync(entity);
-            }
+            var entity = await _specialCardRepository.GetAsync(input.Id.Value);
+            input.MapTo(entity);
+            await _specialCardRepository.UpdateAsync(entity);
         }
 
         /// <summary>
-        /// 删除奶鲜卡
+        /// 删除唯鲜卡
         /// </summary>
+        [AbpAuthorize]
         public async Task DeleteSpecialCardAsync(EntityDto<int> input)
         {
-            //TODO:删除前的逻辑判断，是否允许删除
             await _specialCardRepository.DeleteAsync(input.Id);
         }
 
         /// <summary>
-        /// 批量删除奶鲜卡
+        /// 批量删除唯鲜卡
         /// </summary>
+        [AbpAuthorize]
         public async Task BatchDeleteSpecialCardAsync(List<int> input)
         {
-            //TODO:批量删除前的逻辑判断，是否允许删除
             await _specialCardRepository.DeleteAsync(s => input.Contains(s.Id));
         }
 
         #endregion
-        #region 奶鲜卡的Excel导出功能
-
+        #region 唯鲜卡的Excel导出功能
         /// <summary>
         /// 导出
         /// </summary>
@@ -196,27 +166,11 @@ namespace YT.SpecialCards
         public async Task<FileDto> GetSpecialCardToExcel()
         {
             var entities = await _specialCardRepository.GetAll().ToListAsync();
-
             var dtos = entities.MapTo<List<SpecialCardListDto>>();
-
             var fileDto = _specialCardListExcelExporter.ExportSpecialCardToFile(dtos);
-
-
-
             return fileDto;
         }
-
-
         #endregion
-
-
-
-
-
-
-
-
-
 
     }
 }

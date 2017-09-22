@@ -77,7 +77,11 @@ namespace YT.Models
         public virtual Area City { get; set; }
         public int? AreaId { get; set; }
         public virtual Area Area { get; set; }
-
+        /// <summary>
+        /// 可能会有为显卡
+        /// </summary>
+        public  int? SpecialId { get; set; }
+        public  virtual  SpecialCard Special { get; set; }
     }
     /// <summary>
     /// 推广员管理

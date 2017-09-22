@@ -48,7 +48,6 @@ namespace YT.Models
         /// <summary>
         /// 客户实体
         /// </summary>
-        public virtual  Customer Customer { get; set; }
         /// <summary>
         /// 充值卡id
         /// </summary>
@@ -56,7 +55,6 @@ namespace YT.Models
         /// <summary>
         /// 卡
         /// </summary>
-        public  virtual  Card Card { get; set; }
         /// <summary>
         /// 充值金额 单位 分
         /// </summary>
@@ -88,6 +86,10 @@ namespace YT.Models
         /// 启用禁用
         /// </summary>
         public bool IsActive { get; set; }
+        /// <summary>
+        /// 是否已使用
+        /// </summary>
+        public bool IsUsed { get; set; }
     }
     /// <summary>
     /// 群发记录信息

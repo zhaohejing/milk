@@ -1,16 +1,13 @@
 ﻿                           
  
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Abp.Application.Services;
-using Abp.Application.Services.Dto;
 using YT.Dto;
 using YT.SpecialCards.Dtos;
 
 namespace YT.SpecialCards.Exporting
 {
 	/// <summary>
-    /// 奶鲜卡的数据导出功能 
+    /// 唯鲜卡的数据导出功能 
     /// </summary>
     public interface ISpecialCardListExcelExporter
     {
@@ -43,7 +40,7 @@ namespace YT.SpecialCards.Exporting
     //}
 
         /// <summary>
-        /// 导出奶鲜卡到EXCEL文件
+        /// 导出唯鲜卡到EXCEL文件
         /// <param name="specialCardListDtos">导出信息的DTO</param>
         /// </summary>
         FileDto ExportSpecialCardToFile(List<SpecialCardListDto> specialCardListDtos);

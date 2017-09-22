@@ -46,10 +46,24 @@
                 </Col>
             </Row>
         </Form>
+          <Row>
+            <Card>
+                <p slot="title">绑定唯鲜卡</p>
+                <milk-table :layout="[8,8,8]" ref="special" :columns="colsA" :search-api="searchApiA" :params="paramsA">
+                    <template slot="search">
+                        <Form ref="paramsA" :model="paramsA" inline :label-width="70">
+                            <FormItem label="卡号">
+                                <Input v-model="paramsA.card" style="width:200px;" placeholder="请输入卡号"></Input>
+                            </FormItem>
+                        </Form>
+                    </template>
+                </milk-table>
+            </Card>
+        </Row>
         <Row>
             <Card>
                 <p slot="title">绑定充值卡</p>
-                <milk-table ref="list" :columns="cols" :search-api="searchApi" :params="params">
+                <milk-table :layout="[8,8,8]" ref="card" :columns="cols" :search-api="searchApi" :params="params">
                     <template slot="search">
                         <Form ref="params" :model="params" inline :label-width="70">
                             <FormItem label="金额">
@@ -65,7 +79,7 @@
 <script>
 import { updateClient, getClientForEdit } from 'api/client';
 import { getCards } from 'api/card';
-
+import { getSpecialCards  } from 'api/specialcard';
 export default {
     name: 'modifyClient',
     props: {
@@ -87,6 +101,7 @@ export default {
                     gender: true,
                     password: "",
                     promoterId: null,
+                    specialId:null
                 }
             }
             ,
@@ -117,8 +132,28 @@ export default {
                     key: 'money'
                 }
             ],
+            colsA:[
+                 {
+                    type: 'index',
+                    align: 'center',
+                    width: '70px'
+                },
+                {
+                    title: '唯鲜卡卡号',
+                    key: 'cardCode'
+                },
+                {
+                    title: '密码',
+                    key: 'password',
+                    render(){
+                        return '******';
+                    }
+                }
+            ],
             searchApi: getCards,
+            searchApiA: getSpecialCards,
             params: { rmb: null, state: false },
+            paramsA: { card: '', state: false },
         }
     },
     created() {
@@ -142,9 +177,13 @@ export default {
             this.$refs.client.validate((valid) => {
                 if (valid) {
                     debugger;
-                    let card = this.$refs.list.current;
+                    let card = this.$refs.card.current;
                     if (card) {
                         this.client.customerEditDto.card = card.cardCode;
+                    }
+                     let special = this.$refs.special.current;
+                    if (special) {
+                        this.client.customerEditDto.specialId = special.id;
                     }
                     updateClient(this.client).then(r => {
                         if (r.data.success) {

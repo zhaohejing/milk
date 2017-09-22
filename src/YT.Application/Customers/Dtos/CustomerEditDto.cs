@@ -92,6 +92,10 @@ namespace YT.Customers.Dtos
         /// </summary>
         public string Card { get; set; }
         /// <summary>
+        /// 可能会有为显卡
+        /// </summary>
+        public int? SpecialId { get; set; }
+        /// <summary>
         /// 是否启用
         /// </summary>
         [DisplayName("是否启用")]

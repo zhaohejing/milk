@@ -159,7 +159,7 @@ export default {
         edit(row) {
             this.modal.current = row.id;
             this.modal.isEdit = true;
-            this.modal.title = "编辑客户:" + row.displayName;
+            this.modal.title = "编辑客户:" + row.customerName;
         },
         save() {
             this.$refs.client.commit();

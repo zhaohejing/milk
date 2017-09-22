@@ -4,8 +4,8 @@
             <milk-table ref="list" :layout="[10,10,4]" :columns="cols" :search-api="searchApi" :params="params">
                 <template slot="search">
                     <Form ref="params" :model="params" inline :label-width="70">
-                        <FormItem label="充值卡">
-                            <Input v-model="params.code" placeholder="充值卡"></Input>
+                        <FormItem label="唯鲜卡">
+                            <Input v-model="params.code" placeholder="唯鲜卡"></Input>
                         </FormItem>
                         <FormItem label="状态">
                             <Select v-model="params.state" style="width:200px" clearable>
@@ -28,20 +28,22 @@
         </Row>
         <!-- 添加和编辑窗口 -->
         <Modal :transfer="false" v-model="modal.isEdit" :title="modal.title" :mask-closable="false" @on-ok="save" @on-cancel="cancel">
-            <Form ref="card" :model="current.cardEditDto" inline :label-width="70">
-                <FormItem label="金额" prop="money">
-                    <InputNumber v-model="current.cardEditDto.money" style="width:200px;" :min="1" :step="0.01" placeholder="请输入金额"></InputNumber>
+            <Form ref="specialCard" :model="current.specialCardEditDto" :rules="ruleValidate" inline :label-width="100">
+                <FormItem label="唯鲜卡号" prop="cardCode">
+                    <Input v-model="current.specialCardEditDto.cardCode" placeholder="请输入唯鲜卡号"></Input>
+                </FormItem>
+                <FormItem label="密码" prop="password">
+                    <Input v-model="current.specialCardEditDto.password" placeholder="请输入密码"></Input>
                 </FormItem>
             </Form>
         </Modal>
-
     </div>
 </template>
 
 <script>
-import { getCards, updateCard, getCardForEdit, deleteCard } from 'api/card';
+import { getSpecialCards, updateSpecialCard, getSpecialCardForEdit, deleteSpecialCard } from 'api/specialcard';
 export default {
-    name: 'card',
+    name: 'specialcard',
     data() {
         return {
             cols: [
@@ -51,12 +53,12 @@ export default {
                     width: '70px'
                 },
                 {
-                    title: '充值卡号码',
+                    title: '唯鲜卡',
                     key: 'cardCode'
                 },
                 {
-                    title: '金额',
-                    key: 'money'
+                    title: '密码',
+                    key: 'password'
                 },
                 {
                     title: '状态',
@@ -88,23 +90,45 @@ export default {
                                         this.delete(params.row)
                                     }
                                 }
-                            }, '删除')
+                            }, '删除'),
+                            h('Button', {
+                                props: {
+                                    type: 'info',
+                                    size: 'small'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.edit(params.row)
+                                    }
+                                }
+                            }, '编辑')
                         ]);
                     }
                 }
             ],
-            searchApi: getCards,
+            searchApi: getSpecialCards,
             params: { code: '', state: null },
             modal: {
                 isEdit: false,
                 title: '添加',
             },
             current: {
-                cardEditDto: {
-                    money: 0,
+                specialCardEditDto: {
+                    id: null,
+                    cardCode: "",
+                    password: "",
+                    isActive: true,
                     isUsed: false
                 }
-            }
+            },
+            ruleValidate: {
+                cardCode: [
+                    { required: true, message: '唯鲜卡号不可为空', trigger: 'blur' }
+                ],
+                password: [
+                    { required: true, message: '密码不能为空', trigger: 'blur' }
+                ]
+            },
 
         }
     },
@@ -117,12 +141,12 @@ export default {
         //删除
         delete(model) {
             var table = this.$refs.list;
-            let content=`确定要删除当前${model.isUsed?'已使用':'未使用' }的充值卡么。`
+            let content = `确定要删除当前${model.isUsed ? '已使用' : '未使用'}的充值卡么。`
             this.$Modal.confirm({
-                title: '删除提示', content:content,
+                title: '删除提示', content: content,
                 onOk: () => {
                     const parms = { id: model.id }
-                    deleteCard(parms).then(c => {
+                    deleteSpecialCard(parms).then(c => {
                         if (c.data.success) {
                             table.initData();
                         }
@@ -130,33 +154,56 @@ export default {
                 }
             })
         },
+        edit(row) {
+            if (row.id) {
+                getSpecialCardForEdit({ id: row.id }).then(c => {
+                    this.current.specialCardEditDto = c.data.result.specialCard;
+                     this.modal.isEdit = true;
+                 this.modal.title = "编辑唯鲜卡:"+this.current.specialCardEditDto.cardCode;
+                }).catch(e => {
+                    this.$Message.error({
+                        message: e.data.error,
+                        duration: 5 * 1000,
+                        closable: true
+                    });
+                });
+            }
+        },
         add() {
             this.modal.isEdit = true;
-            this.modal.title = "添加充值卡";
+            this.modal.title = "添加唯鲜卡";
         },
         save() {
             var table = this.$refs.list;
-            if (!this.current.cardEditDto.money) {
-                this.$Message.error({
-                    message: '金额不可为空',
-                    duration: 5 * 1000,
-                    closable: true
-                });
-                return;
-            }
-            updateCard(this.current).then(r => {
-                if (r.data.success) {
-                    table.initData();
+            this.$refs.specialCard.validate((valid) => {
+                if (valid) {
+                    updateSpecialCard(this.current).then(r => {
+                        if (r.data.success) {
+                            this.current.specialCardEditDto = {
+                                id: null,
+                                cardCode: "",
+                                password: "",
+                                isActive: true,
+                                isUsed: false
+                            };
+                            table.initData();
+                        } else {
+                            table.initData();
+                        }
+                    });
                 } else {
-                    table.initData();
+                    this.$Message.error('表单验证失败!');
                 }
-            });
+            })
         },
         cancel() {
             this.modal.isEdit = false;
-            this.modal.title = "添加充值卡";
-            this.current.cardEditDto = {
-                money: 0,
+            this.modal.title = "添加唯鲜卡";
+            this.current.specialCardEditDto = {
+                id: null,
+                cardCode: "",
+                password: "",
+                isActive: true,
                 isUsed: false
             };
             this.$refs.list.initData();

@@ -22,7 +22,7 @@ namespace YT.Customers
     /// 客户表服务实现
     /// </summary>
     [AbpAuthorize]
-   
+
     public class CustomerAppService : YtAppServiceBase, ICustomerAppService
     {
         private readonly IRepository<Customer, int> _customerRepository;
@@ -30,22 +30,25 @@ namespace YT.Customers
         private readonly IRepository<Promoter> _promoteRepository;
         private readonly IRepository<Card> _cardRepository;
         private readonly IRepository<ChargeRecord> _recordRepository;
-      /// <summary>
-      /// ctor
-      /// </summary>
-      /// <param name="customerRepository"></param>
-      /// <param name="customerListExcelExporter"></param>
-      /// <param name="promoteRepository"></param>
-      /// <param name="cardRepository"></param>
-      /// <param name="recordRepository"></param>
+        private readonly IRepository<SpecialCard> _scRepository;
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="customerRepository"></param>
+        /// <param name="customerListExcelExporter"></param>
+        /// <param name="promoteRepository"></param>
+        /// <param name="cardRepository"></param>
+        /// <param name="recordRepository"></param>
+        /// <param name="scRepository"></param>
         public CustomerAppService(IRepository<Customer, int> customerRepository
-      , ICustomerListExcelExporter customerListExcelExporter, IRepository<Promoter> promoteRepository, IRepository<Card> cardRepository, IRepository<ChargeRecord> recordRepository)
+      , ICustomerListExcelExporter customerListExcelExporter, IRepository<Promoter> promoteRepository, IRepository<Card> cardRepository, IRepository<ChargeRecord> recordRepository, IRepository<SpecialCard> scRepository)
         {
             _customerRepository = customerRepository;
             _customerListExcelExporter = customerListExcelExporter;
             _promoteRepository = promoteRepository;
             _cardRepository = cardRepository;
             _recordRepository = recordRepository;
+            _scRepository = scRepository;
         }
 
 
@@ -108,7 +111,7 @@ namespace YT.Customers
             return output;
         }
 
-     
+
 
         /// <summary>
         /// 通过指定id获取客户表ListDto信息
@@ -126,10 +129,10 @@ namespace YT.Customers
         /// </summary>
         public async Task CustomerCharge(CustomerChargeInput input)
         {
-            var card =await _cardRepository.FirstOrDefaultAsync(c => c.CardCode.Equals(input.CardCode));
-            if (card!=null&&card.IsUsed)
+            var card = await _cardRepository.FirstOrDefaultAsync(c => c.CardCode.Equals(input.CardCode));
+            if (card != null && card.IsUsed)
             {
-                throw  new AbpException("该充值卡已被使用");
+                throw new AbpException("该充值卡已被使用");
             }
             var entity = await _customerRepository.GetAsync(input.Id);
             if (input.Money != 0)
@@ -140,7 +143,7 @@ namespace YT.Customers
                     card.IsUsed = true;
                     await _recordRepository.InsertAsync(new ChargeRecord(entity.Id, card.Money, card.Id));
                 }
-              
+
             }
             else
             {
@@ -176,20 +179,27 @@ namespace YT.Customers
             {
                 throw new AbpException("用户账号已存在");
             }
-
             var entity = input.MapTo<Customer>();
             entity = await _customerRepository.InsertAsync(entity);
-          await  CurrentUnitOfWork.SaveChangesAsync();
-            if (!input.Card.IsNullOrWhiteSpace())
-            {
-                var card = await _cardRepository.FirstOrDefaultAsync(c => c.CardCode.Equals(input.Card));
-                if (!card.IsUsed)
-                {
-                    entity.Balance = card.Money;
-                    card.IsUsed = true;
-                    await _recordRepository.InsertAsync(new ChargeRecord(entity.Id, card.Money, card.Id));
-                }
-            }
+            await CurrentUnitOfWork.SaveChangesAsync();
+            if (input.Card.IsNullOrWhiteSpace()) return entity.MapTo<CustomerEditDto>();
+
+            var card = await _cardRepository.FirstOrDefaultAsync(c => c.CardCode.Equals(input.Card));
+            if (card.IsUsed) return entity.MapTo<CustomerEditDto>();
+
+            entity.Balance = card.Money;
+            card.IsUsed = true;
+            await _recordRepository.InsertAsync(new ChargeRecord(entity.Id, card.Money, card.Id));
+
+            if (!input.SpecialId.HasValue || input.SpecialId.Value <= 0) return entity.MapTo<CustomerEditDto>();
+
+            var sc = await _scRepository.FirstOrDefaultAsync(c => c.Id == input.SpecialId.Value);
+
+            if (sc == null || sc.IsUsed) return entity.MapTo<CustomerEditDto>();
+            input.SpecialId = sc.Id;
+            sc.IsUsed = true;
+
+
             return entity.MapTo<CustomerEditDto>();
         }
 
@@ -220,6 +230,16 @@ namespace YT.Customers
                         card.IsUsed = true;
                         await _recordRepository.InsertAsync(new ChargeRecord(entity.Id, card.Money, card.Id));
                     }
+                }
+                if (input.SpecialId.HasValue&&entity.SpecialId!=input.SpecialId)
+                {
+                    var sc = await _scRepository.FirstOrDefaultAsync(c => c.Id == input.SpecialId.Value);
+                    if (sc != null)
+                    {
+                        input.SpecialId = sc.Id;
+                        sc.IsUsed = true;
+                    }
+                  
                 }
 
 
@@ -279,8 +299,6 @@ namespace YT.Customers
 
 
         #endregion
-
-
         #region 手机端接口
         #endregion
 
