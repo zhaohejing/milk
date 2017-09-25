@@ -85,6 +85,9 @@ export default {
                                     type: 'error',
                                     size: 'small'
                                 },
+                                 style: {
+                                    marginRight: '5px'
+                                },
                                 on: {
                                     click: () => {
                                         this.delete(params.row)

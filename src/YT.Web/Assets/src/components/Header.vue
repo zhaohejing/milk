@@ -8,15 +8,13 @@
       </li>
 
     </ul>
-    <ul class="nav navbar-nav ml-auto">
-
+    <ul class="nav navbar-nav ml-auto" >
       <li class="nav-item d-md-down-none">
         <a class="nav-link">
           <Icon type="android-notifications" size="20"></Icon>
           <span class="badge badge-pill badge-danger">1</span>
         </a>
       </li>
-
       <Dropdown class="nav-item">
         <a href="javascript:void(0)">
           <span slot="button">

@@ -30,7 +30,7 @@
         <Modal :transfer="false" v-model="modal.isEdit" :title="modal.title" :mask-closable="false" @on-ok="save" @on-cancel="cancel">
             <Form ref="card" :model="current.cardEditDto" inline :label-width="70">
                 <FormItem label="金额" prop="money">
-                    <InputNumber v-model="current.cardEditDto.money" style="width:200px;" :min="1" :step="0.01" placeholder="请输入金额"></InputNumber>
+                    <InputNumber :precision="0" v-model="current.cardEditDto.money" style="width:200px;" :min="1" :step="1" placeholder="请输入金额"></InputNumber>
                 </FormItem>
             </Form>
         </Modal>
@@ -56,7 +56,10 @@ export default {
                 },
                 {
                     title: '金额',
-                    key: 'money'
+                    key: 'money',
+                    render: (h, params) => {
+                        return params.row.money / 100;
+                    }
                 },
                 {
                     title: '状态',
@@ -117,9 +120,9 @@ export default {
         //删除
         delete(model) {
             var table = this.$refs.list;
-            let content=`确定要删除当前${model.isUsed?'已使用':'未使用' }的充值卡么。`
+            let content = `确定要删除当前${model.isUsed ? '已使用' : '未使用'}的充值卡么。`
             this.$Modal.confirm({
-                title: '删除提示', content:content,
+                title: '删除提示', content: content,
                 onOk: () => {
                     const parms = { id: model.id }
                     deleteCard(parms).then(c => {

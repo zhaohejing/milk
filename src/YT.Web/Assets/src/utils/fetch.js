@@ -56,6 +56,7 @@ service.interceptors.response.use(
   //       return response.data;
   //     }
   error => {
+    debugger;
     if (error.response.data.unAuthorizedRequest) {
       store.dispatch('FedLogOut');
     }

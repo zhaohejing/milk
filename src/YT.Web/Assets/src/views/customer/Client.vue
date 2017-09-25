@@ -75,6 +75,7 @@ export default {
                     title: '操作',
                     key: 'action',
                     align: 'center',
+                    width:'300px',
                     render: (h, params) => {
                         return h('div', [
                             h('Button', {
@@ -95,6 +96,9 @@ export default {
                                 props: {
                                     type: 'error',
                                     size: 'small'
+                                },
+                                 style: {
+                                    marginRight: '5px'
                                 },
                                 on: {
                                     click: () => {
