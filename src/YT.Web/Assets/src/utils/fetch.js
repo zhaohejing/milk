@@ -1,6 +1,6 @@
 import axios from 'axios';
 import store from '../store';
-import vue from 'vue';
+// import vue from 'vue';
 // import router from '../router';
 
 // 创建axios实例
@@ -56,7 +56,6 @@ service.interceptors.response.use(
   //       return response.data;
   //     }
   error => {
-    debugger;
     if (error.response.data.unAuthorizedRequest) {
       store.dispatch('FedLogOut');
     }

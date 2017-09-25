@@ -54,10 +54,11 @@ const converToTreedata = (data, parentId, pidField, grants) => {
 };
 Vue.prototype.$converToTreedata = converToTreedata;
 Vue.config.productionTip = false;
-const token = localStorage.getItem('Milk-Token');
 router.beforeEach((to, from, next) => {
+const token = localStorage.getItem('Milk-Token');
+
   if (!token) {
-    if (to.path !== '/login') {
+    if (to.path != '/login') {
       next({
         path: '/login'
       });
@@ -66,21 +67,13 @@ router.beforeEach((to, from, next) => {
     }
     return;
   } else {
-    if (from.path === '/login' && to.path !== '/') {
+    if (from.path == '/login' && to.path != '/') {
       next({
         path: '/'
       });
     }
     next();
   }
-  // if (!token) {
-  //   // next({
-  //   //   path: '/login',
-  //   //   query: { redirect: to.fullPath } // 将跳转的路由path作为参数，登录成功后跳转到该路由
-  //   // });
-  // } else {
-  //   next();
-  // }
 });
 new Vue({
   el: '#app',

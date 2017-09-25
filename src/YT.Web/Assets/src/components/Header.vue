@@ -1,6 +1,7 @@
 <template>
   <navbar>
-    <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button" @click="mobileSidebarToggle">&#9776;</button>
+    <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button"
+     @click="mobileSidebarToggle">&#9776;</button>
     <a class="navbar-brand"></a>
     <ul class="nav navbar-nav d-md-down-none">
       <li class="nav-item">

@@ -60,7 +60,7 @@ module.exports = {
         'dot-notation': 'warn',
 
         // require the use of === and !==
-        'eqeqeq': ['error', 'smart'],
+        'eqeqeq': ['warn', 'smart'],
 
         // disallow the use of arguments.caller or arguments.callee
         'no-caller': 'error',

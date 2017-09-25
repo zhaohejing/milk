@@ -4,7 +4,7 @@
     <div class="app-body">
       <Sidebar/>
       <main class="main">
-        <breadcrumb :list="list"/>
+        <breadcrumb :list="list" />
         <div class="container-fluid">
           <router-view></router-view>
         </div>
@@ -21,7 +21,7 @@ import Sidebar from '../components/Sidebar'
 import AppAside from '../components/Aside'
 import AppFooter from '../components/Footer'
 import Breadcrumb from '../components/Breadcrumb'
-
+import { mapGetters, mapActions } from 'vuex';
 export default {
   name: 'full',
   components: {
@@ -31,12 +31,34 @@ export default {
     AppFooter,
     Breadcrumb
   },
+  created() {
+    this.GetInfo();
+  },
   computed: {
-    name () {
+    ...mapGetters([
+      'name'
+    ]),
+    name() {
       return this.$route.name
     },
-    list () {
+    list() {
       return this.$route.matched
+    }
+  },
+  methods: {
+    ...mapActions([
+      'GetInfo'
+    ])
+  },
+  watch: {
+    name: function(newvalue) {
+      if (newValue && newValue!=='') {
+				}else{
+				 this.$Message.error('请重新登陆');
+					setTimeout(() => {
+						this.$router.replace('/login')
+					}, 500)
+				}
     }
   }
 }
