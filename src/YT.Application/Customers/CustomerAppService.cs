@@ -299,8 +299,7 @@ namespace YT.Customers
 
 
         #endregion
-        #region 手机端接口
-        #endregion
+     
 
 
 

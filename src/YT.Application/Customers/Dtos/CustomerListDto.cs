@@ -55,5 +55,10 @@ namespace YT.Customers.Dtos
         /// </summary>
         [DisplayName("创建时间")]
         public      DateTime CreationTime { get; set; }
+        /// <summary>
+        /// 头像
+        /// </summary>
+        [DisplayName("头像")]
+        public  string Avatar { get; set; }
     }
 }

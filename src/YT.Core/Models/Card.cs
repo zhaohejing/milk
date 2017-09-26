@@ -173,4 +173,14 @@ namespace YT.Models
         /// </summary>
         public DateTime? PickTime { get; set; }
     }
+    /// <summary>
+    /// 验证码信息
+    /// </summary>
+    [Table("milk_vilidatecode")]
+    public class VilidateCode : CreationAuditedEntity
+    {
+        public string Mobile { get; set; }
+        public string Code { get; set; }
+       
+    }
 }

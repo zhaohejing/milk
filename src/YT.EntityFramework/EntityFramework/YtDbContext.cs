@@ -76,7 +76,15 @@ namespace YT.EntityFramework
         /// 群发记录
         /// </summary>
         public  virtual  IDbSet<WeChatRecord> WeChatRecord { get; set; }
-         public YtDbContext()
+        /// <summary>
+        /// 吸管记录
+        /// </summary>
+        public  virtual  IDbSet<Straw> Straw { get; set; }
+        /// <summary>
+        /// 手机验证码
+        /// </summary>
+        public  virtual  IDbSet<VilidateCode> VilidateCode { get; set; }
+        public YtDbContext()
             : base("Default")
         {
 

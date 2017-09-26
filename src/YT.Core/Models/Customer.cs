@@ -31,6 +31,12 @@ namespace YT.Models
         /// 生日
         /// </summary>
         public DateTime? BirthDay { get; set; }
+
+        /// <summary>
+        /// 是否可以领取吸管
+        /// </summary>
+        public bool CanPickUpStraw { get; set; } = false;
+
         /// <summary>
         /// 性别
         /// </summary>
@@ -39,10 +45,6 @@ namespace YT.Models
         /// 点位信息(json)
         /// </summary>
         public string Position { get; set; }
-        /// <summary>
-        /// 验证码
-        /// </summary>
-        public string VilidateCode { get; set; }
         /// <summary>
         /// 密码
         /// </summary>
@@ -68,6 +70,10 @@ namespace YT.Models
         /// </summary>
         public bool IsActive { get; set; }
         /// <summary>
+        /// 头像
+        /// </summary>
+        public string Avatar { get; set; }
+        /// <summary>
         /// 余额
         /// </summary>
         public int Balance { get; set; } = 0;
@@ -82,6 +88,14 @@ namespace YT.Models
         /// </summary>
         public  int? SpecialId { get; set; }
         public  virtual  SpecialCard Special { get; set; }
+    }
+    /// <summary>
+    /// 用户吸管领取记录
+    /// </summary>
+    [Table("milk_straw")]
+    public class Straw : CreationAuditedEntity
+    {
+        public string UserKey { get; set; } 
     }
     /// <summary>
     /// 推广员管理

@@ -7,6 +7,21 @@ using System.Threading.Tasks;
 namespace YT.Models
 {
     /// <summary>
+    /// 全局静态类
+    /// </summary>
+    public static class MilkConsts
+    {
+        public static List<ChargeType> ChargeTypes =>   new List<ChargeType>()
+            {
+                new ChargeType(1,10000,10000),
+                new ChargeType(2,20000,21000),
+                new ChargeType(3,30000,32000),
+                new ChargeType(4,50000,54000),
+                new ChargeType(5,100000,110000),
+            };
+}
+
+    /// <summary>
     /// 性别
     /// </summary>
    public enum Gender
