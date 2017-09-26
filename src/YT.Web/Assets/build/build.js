@@ -10,11 +10,8 @@ var config = require('../config');
 var webpackConfig = require('./webpack.prod.conf');
 
 console.log(process.env.NODE_ENV)
-
 var spinner = ora('building for ' + process.env.NODE_ENV + '...')
 spinner.start()
-
-
 rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
     if (err) throw err
     webpack(webpackConfig, function (err, stats) {

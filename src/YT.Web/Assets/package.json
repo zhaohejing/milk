@@ -1,8 +1,8 @@
 {
-  "name": "WZ",
+  "name": "milk",
   "version": "1.0.0",
-  "description": "WZ base on Vue.js",
-  "author": "herozhou <zhouhero@hotmail.com>",
+  "description": "Milk base on Vue.js",
+  "author": "zhaohejing <454258314@qq.com>",
   "license": "MIT",
   "private": true,
   "scripts": {

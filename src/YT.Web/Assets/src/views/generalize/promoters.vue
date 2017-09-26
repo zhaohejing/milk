@@ -3,7 +3,7 @@
         <Row>
             <milk-table ref="list" :layout="[14,6,4]" :columns="cols" :search-api="searchApi" :params="params">
                 <template slot="search">
-                    <Form ref="params" :model="params" inline :label-width="70">
+                    <Form ref="params" :model="params" inline :label-width="60">
                         <FormItem label="推广员">
                             <Input v-model="params.name" placeholder="推广员"></Input>
                         </FormItem>
