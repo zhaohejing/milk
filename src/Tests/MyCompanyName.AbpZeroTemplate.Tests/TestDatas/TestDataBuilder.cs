@@ -5,10 +5,10 @@ namespace YT.Tests.TestDatas
 {
     public class TestDataBuilder
     {
-        private readonly YtDbContext _context;
+        private readonly MilkDbContext _context;
         private readonly int _tenantId;
 
-        public TestDataBuilder(YtDbContext context, int tenantId)
+        public TestDataBuilder(MilkDbContext context, int tenantId)
         {
             _context = context;
             _tenantId = tenantId;

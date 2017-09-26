@@ -12,7 +12,7 @@ namespace YT.Migrator
     {
         public override void PreInitialize()
         {
-            Database.SetInitializer<YtDbContext>(null);
+            Database.SetInitializer<MilkDbContext>(null);
 
             Configuration.BackgroundJobs.IsJobExecutionEnabled = false;
             Configuration.ReplaceService(typeof(IEventBus), () =>

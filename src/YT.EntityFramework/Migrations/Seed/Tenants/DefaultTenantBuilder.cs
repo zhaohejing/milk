@@ -9,9 +9,9 @@ namespace YT.Migrations.Seed.Tenants
 {
     public class DefaultTenantBuilder
     {
-        private readonly YtDbContext _context;
+        private readonly MilkDbContext _context;
 
-        public DefaultTenantBuilder(YtDbContext context)
+        public DefaultTenantBuilder(MilkDbContext context)
         {
             _context = context;
         }

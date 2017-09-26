@@ -22,8 +22,8 @@ namespace YT.EntityFramework
      * - constructor(existingConnection,contextOwnsConnection) can be used by ABP if DbContextEfTransactionStrategy is used.
      * See http://www.aspnetboilerplate.com/Pages/Documents/EntityFramework-Integration for more.
      */
-
-    public class YtDbContext : AbpZeroDbContext<Tenant, Role, User>
+    [DbConfigurationType(typeof(MySql.Data.Entity.MySqlEFConfiguration))]
+    public class MilkDbContext : AbpZeroDbContext<Tenant, Role, User>
     {
        /// <summary>
        /// 对象存储
@@ -84,25 +84,25 @@ namespace YT.EntityFramework
         /// 手机验证码
         /// </summary>
         public  virtual  IDbSet<VilidateCode> VilidateCode { get; set; }
-        public YtDbContext()
+        public MilkDbContext()
             : base("Default")
         {
 
         }
 
-        public YtDbContext(string nameOrConnectionString)
+        public MilkDbContext(string nameOrConnectionString)
             : base(nameOrConnectionString)
         {
 
         }
 
-        public YtDbContext(DbConnection existingConnection)
+        public MilkDbContext(DbConnection existingConnection)
            : base(existingConnection, false)
         {
 
         }
 
-        public YtDbContext(DbConnection existingConnection, bool contextOwnsConnection)
+        public MilkDbContext(DbConnection existingConnection, bool contextOwnsConnection)
             : base(existingConnection, contextOwnsConnection)
         {
 

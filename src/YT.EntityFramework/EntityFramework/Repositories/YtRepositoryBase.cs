@@ -9,10 +9,10 @@ namespace YT.EntityFramework.Repositories
     /// </summary>
     /// <typeparam name="TEntity">Entity type</typeparam>
     /// <typeparam name="TPrimaryKey">Primary key type of the entity</typeparam>
-    public abstract class YtRepositoryBase<TEntity, TPrimaryKey> : EfRepositoryBase<YtDbContext, TEntity, TPrimaryKey>
+    public abstract class YtRepositoryBase<TEntity, TPrimaryKey> : EfRepositoryBase<MilkDbContext, TEntity, TPrimaryKey>
         where TEntity : class, IEntity<TPrimaryKey>
     {
-        protected YtRepositoryBase(IDbContextProvider<YtDbContext> dbContextProvider)
+        protected YtRepositoryBase(IDbContextProvider<MilkDbContext> dbContextProvider)
             : base(dbContextProvider)
         {
 
@@ -29,7 +29,7 @@ namespace YT.EntityFramework.Repositories
     public abstract class YtRepositoryBase<TEntity> : YtRepositoryBase<TEntity, int>
         where TEntity : class, IEntity<int>
     {
-        protected YtRepositoryBase(IDbContextProvider<YtDbContext> dbContextProvider)
+        protected YtRepositoryBase(IDbContextProvider<MilkDbContext> dbContextProvider)
             : base(dbContextProvider)
         {
 

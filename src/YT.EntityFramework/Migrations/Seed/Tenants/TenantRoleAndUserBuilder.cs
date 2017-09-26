@@ -13,10 +13,10 @@ namespace YT.Migrations.Seed.Tenants
 {
     public class TenantRoleAndUserBuilder
     {
-        private readonly YtDbContext _context;
+        private readonly MilkDbContext _context;
         private readonly int _tenantId;
 
-        public TenantRoleAndUserBuilder(YtDbContext context, int tenantId)
+        public TenantRoleAndUserBuilder(MilkDbContext context, int tenantId)
         {
             _context = context;
             _tenantId = tenantId;

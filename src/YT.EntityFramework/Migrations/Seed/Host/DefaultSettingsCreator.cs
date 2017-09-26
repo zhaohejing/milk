@@ -9,9 +9,9 @@ namespace YT.Migrations.Seed.Host
 {
     public class DefaultSettingsCreator
     {
-        private readonly YtDbContext _context;
+        private readonly MilkDbContext _context;
 
-        public DefaultSettingsCreator(YtDbContext context)
+        public DefaultSettingsCreator(MilkDbContext context)
         {
             _context = context;
         }

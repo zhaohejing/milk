@@ -9,7 +9,7 @@ namespace YT.Migrations.Seed.Host
     {
         public static List<ApplicationLanguage> InitialLanguages { get; private set; }
 
-        private readonly YtDbContext _context;
+        private readonly MilkDbContext _context;
 
         static DefaultLanguagesCreator()
         {
@@ -20,7 +20,7 @@ namespace YT.Migrations.Seed.Host
             };
         }
 
-        public DefaultLanguagesCreator(YtDbContext context)
+        public DefaultLanguagesCreator(MilkDbContext context)
         {
             _context = context;
         }

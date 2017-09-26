@@ -1,9 +1,9 @@
 <template>
     <div class="animated fadeIn">
         <Row>
-            <milk-table :layout="[18,3,3]" ref="list" :columns="cols" :search-api="searchApi" :params="params">
+            <milk-table :layout="[20,2,2]" ref="list" :columns="cols" :search-api="searchApi" :params="params">
                 <template slot="search">
-                    <Form ref="params" :model="params" inline :label-width="80">
+                    <Form ref="params" :model="params" inline :label-width="70">
                         <FormItem label="用户姓名">
                             <Input v-model="params.userName" placeholder="用户姓名"></Input>
                         </FormItem>

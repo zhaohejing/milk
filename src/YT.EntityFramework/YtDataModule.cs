@@ -18,7 +18,7 @@ namespace YT
         public override void PreInitialize()
         {
             //´´½¨db
-            Database.SetInitializer(new CreateDatabaseIfNotExists<YtDbContext>());
+            Database.SetInitializer(new CreateDatabaseIfNotExists<MilkDbContext>());
 
             //web.config (or app.config for non-web projects) file should contain a connection string named "Default".
             Configuration.DefaultNameOrConnectionString = "Default";

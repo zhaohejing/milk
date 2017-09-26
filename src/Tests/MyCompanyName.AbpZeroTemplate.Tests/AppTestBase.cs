@@ -32,7 +32,7 @@ namespace YT.Tests
     /// This is base class for all our test classes.
     /// It prepares ABP system, modules and a fake, in-memory database.
     /// Seeds database with initial data.
-    /// Provides methods to easily work with <see cref="YtDbContext"/>.
+    /// Provides methods to easily work with <see cref="MilkDbContext"/>.
     /// </summary>
     public abstract class AppTestBase : AbpIntegratedTestBase<AbpZeroTemplateTestModule>
     {
@@ -133,31 +133,31 @@ namespace YT.Tests
             return new DisposeAction(() => AbpSession.TenantId = previousTenantId);
         }
 
-        protected void UsingDbContext(Action<YtDbContext> action)
+        protected void UsingDbContext(Action<MilkDbContext> action)
         {
             UsingDbContext(AbpSession.TenantId, action);
         }
 
-        protected Task UsingDbContextAsync(Func<YtDbContext, Task> action)
+        protected Task UsingDbContextAsync(Func<MilkDbContext, Task> action)
         {
             return UsingDbContextAsync(AbpSession.TenantId, action);
         }
 
-        protected T UsingDbContext<T>(Func<YtDbContext, T> func)
+        protected T UsingDbContext<T>(Func<MilkDbContext, T> func)
         {
             return UsingDbContext(AbpSession.TenantId, func);
         }
 
-        protected Task<T> UsingDbContextAsync<T>(Func<YtDbContext, Task<T>> func)
+        protected Task<T> UsingDbContextAsync<T>(Func<MilkDbContext, Task<T>> func)
         {
             return UsingDbContextAsync(AbpSession.TenantId, func);
         }
 
-        protected void UsingDbContext(int? tenantId, Action<YtDbContext> action)
+        protected void UsingDbContext(int? tenantId, Action<MilkDbContext> action)
         {
             using (UsingTenantId(tenantId))
             {
-                using (var context = LocalIocManager.Resolve<YtDbContext>())
+                using (var context = LocalIocManager.Resolve<MilkDbContext>())
                 {
                     context.DisableAllFilters();
                     action(context);
@@ -166,11 +166,11 @@ namespace YT.Tests
             }
         }
 
-        protected async Task UsingDbContextAsync(int? tenantId, Func<YtDbContext, Task> action)
+        protected async Task UsingDbContextAsync(int? tenantId, Func<MilkDbContext, Task> action)
         {
             using (UsingTenantId(tenantId))
             {
-                using (var context = LocalIocManager.Resolve<YtDbContext>())
+                using (var context = LocalIocManager.Resolve<MilkDbContext>())
                 {
                     context.DisableAllFilters();
                     await action(context);
@@ -179,13 +179,13 @@ namespace YT.Tests
             }
         }
 
-        protected T UsingDbContext<T>(int? tenantId, Func<YtDbContext, T> func)
+        protected T UsingDbContext<T>(int? tenantId, Func<MilkDbContext, T> func)
         {
             T result;
 
             using (UsingTenantId(tenantId))
             {
-                using (var context = LocalIocManager.Resolve<YtDbContext>())
+                using (var context = LocalIocManager.Resolve<MilkDbContext>())
                 {
                     context.DisableAllFilters();
                     result = func(context);
@@ -196,13 +196,13 @@ namespace YT.Tests
             return result;
         }
 
-        protected async Task<T> UsingDbContextAsync<T>(int? tenantId, Func<YtDbContext, Task<T>> func)
+        protected async Task<T> UsingDbContextAsync<T>(int? tenantId, Func<MilkDbContext, Task<T>> func)
         {
             T result;
 
             using (UsingTenantId(tenantId))
             {
-                using (var context = LocalIocManager.Resolve<YtDbContext>())
+                using (var context = LocalIocManager.Resolve<MilkDbContext>())
                 {
                     context.DisableAllFilters();
                     result = await func(context);

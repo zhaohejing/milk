@@ -4,9 +4,9 @@ namespace YT.Migrations.Seed.Host
 {
     public class InitialHostDbBuilder
     {
-        private readonly YtDbContext _context;
+        private readonly MilkDbContext _context;
 
-        public InitialHostDbBuilder(YtDbContext context)
+        public InitialHostDbBuilder(MilkDbContext context)
         {
             _context = context;
         }

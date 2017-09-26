@@ -13,9 +13,9 @@ namespace YT.Migrations.Seed.Host
 {
     public class HostRoleAndUserCreator
     {
-        private readonly YtDbContext _context;
+        private readonly MilkDbContext _context;
 
-        public HostRoleAndUserCreator(YtDbContext context)
+        public HostRoleAndUserCreator(MilkDbContext context)
         {
             _context = context;
         }

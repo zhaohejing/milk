@@ -49,17 +49,19 @@ export default {
     ...mapActions([
       'GetInfo'
     ])
-  },
-  watch: {
-    name: function(newvalue) {
-      if (newValue && newValue!=='') {
-				}else{
-				 this.$Message.error('请重新登陆');
-					setTimeout(() => {
-						this.$router.replace('/login')
-					}, 500)
-				}
-    }
   }
+  //,
+  // watch: {
+  //   name: function(newvalue) {
+  //     debugger;
+  //     if (newValue && newValue!=='') {
+	// 			}else{
+	// 			 this.$Message.error('请重新登陆');
+	// 				setTimeout(() => {
+	// 					this.$router.replace('/login')
+	// 				}, 500)
+	// 			}
+  //   }
+  // }
 }
 </script>

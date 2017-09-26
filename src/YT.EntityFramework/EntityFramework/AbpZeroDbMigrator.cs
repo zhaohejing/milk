@@ -5,7 +5,7 @@ using Abp.Zero.EntityFramework;
 
 namespace YT.EntityFramework
 {
-    public class AbpZeroDbMigrator : AbpZeroDbMigrator<YtDbContext, Migrations.Configuration>
+    public class AbpZeroDbMigrator : AbpZeroDbMigrator<MilkDbContext, Migrations.Configuration>
     {
         public AbpZeroDbMigrator(
             IUnitOfWorkManager unitOfWorkManager,

@@ -18,10 +18,10 @@ namespace YT.Tests.TestDatas
      */
     public class TestOrganizationUnitsBuilder
     {
-        private readonly YtDbContext _context;
+        private readonly MilkDbContext _context;
         private readonly int _tenantId;
 
-        public TestOrganizationUnitsBuilder(YtDbContext context, int tenantId)
+        public TestOrganizationUnitsBuilder(MilkDbContext context, int tenantId)
         {
             _context = context;
             _tenantId = tenantId;

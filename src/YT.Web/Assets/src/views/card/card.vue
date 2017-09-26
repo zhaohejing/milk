@@ -1,7 +1,7 @@
 <template>
     <div class="animated fadeIn">
         <Row>
-            <milk-table ref="list" :layout="[10,10,4]" :columns="cols" :search-api="searchApi" :params="params">
+            <milk-table ref="list" :layout="[14,6,4]" :columns="cols" :search-api="searchApi" :params="params">
                 <template slot="search">
                     <Form ref="params" :model="params" inline :label-width="70">
                         <FormItem label="充值卡">
