@@ -60,5 +60,15 @@ namespace YT.Customers.Dtos
         /// </summary>
         [DisplayName("头像")]
         public  string Avatar { get; set; }
+        /// <summary>
+        /// 是否可以领取吸管
+        /// </summary>
+        [DisplayName("是否可以领取吸管")]
+        public bool CanPickUpStraw { get; set; } = false;
+        /// <summary>
+        /// 奶瓶数量
+        /// </summary>
+        [DisplayName("奶瓶数量")]
+        public int BottleCount { get; set; }
     }
 }

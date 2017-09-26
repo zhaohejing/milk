@@ -36,6 +36,10 @@ namespace YT.Models
         /// 是否可以领取吸管
         /// </summary>
         public bool CanPickUpStraw { get; set; } = false;
+        /// <summary>
+        /// 奶瓶数量
+        /// </summary>
+        public int BottleCount { get; set; } 
 
         /// <summary>
         /// 性别

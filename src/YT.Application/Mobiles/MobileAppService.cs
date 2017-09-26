@@ -213,8 +213,42 @@ namespace YT.Mobiles
             await _strawRepository.InsertAsync(new Straw() { UserKey = input.OpenId });
         }
         #endregion
+        #region 奶瓶相关
+        /// <summary>
+        /// 获取用户的奶瓶数量
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<int> GetCustomerBottleCount(UserKeyModel input)
+        {
+            var customer = await _customerRepository.FirstOrDefaultAsync(c=>c.UserKey.Equals(input.OpenId));
+            if (customer == null)
+            {
+                throw new AbpException("当前用户不存在");
+            }
+            return customer.BottleCount;
+        }
+        /// <summary>
+        /// 核销奶瓶
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task GetCustomerBottleCount(DealBottleModel input)
+        {
+            var customer = await _customerRepository.FirstOrDefaultAsync(c => c.UserKey.Equals(input.OpenId));
+            if (customer == null)
+            {
+                throw new AbpException("当前用户不存在");
+            }
+            if (input.DealCount>customer.BottleCount)
+            {
+                throw new AbpException("核销奶瓶数不可大于持有数");
+            }
+            customer.BottleCount -= input.DealCount;
+        }
+        #endregion
         #region 订单相关
-        
+
         #endregion
     }
     /// <summary>
@@ -267,6 +301,23 @@ namespace YT.Mobiles
         /// <param name="input"></param>
         /// <returns></returns>
         Task UpdateCustomerStrawState(Entity<int> input);
+
+        #endregion
+        #region 奶瓶相关
+
+        /// <summary>
+        /// 获取用户的奶瓶数量
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+          Task<int> GetCustomerBottleCount(UserKeyModel input);
+
+        /// <summary>
+        /// 核销奶瓶
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+          Task GetCustomerBottleCount(DealBottleModel input);
 
         #endregion
     }

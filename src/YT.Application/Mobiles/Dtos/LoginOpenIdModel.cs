@@ -17,7 +17,16 @@ namespace YT.Mobiles.Dtos
         /// </summary>
         public string OpenId { get; set; }
     }
-
+    /// <summary>
+    /// 用户key实体
+    /// </summary>
+    public class DealBottleModel:UserKeyModel
+    {
+        /// <summary>
+        /// openId
+        /// </summary>
+        public int DealCount { get; set; }
+    }
     /// <summary>
     /// 登陆帮助类
     /// </summary>

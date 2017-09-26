@@ -56,7 +56,6 @@ Vue.prototype.$converToTreedata = converToTreedata;
 Vue.config.productionTip = false;
 router.beforeEach((to, from, next) => {
 const token = localStorage.getItem('Milk-Token');
-
   if (!token) {
     if (to.path != '/login') {
       next({
