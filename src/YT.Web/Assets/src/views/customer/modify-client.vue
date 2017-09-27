@@ -176,7 +176,6 @@ export default {
         commit() {
             this.$refs.client.validate((valid) => {
                 if (valid) {
-                    debugger;
                     let card = this.$refs.card.current;
                     if (card) {
                         this.client.customerEditDto.card = card.cardCode;

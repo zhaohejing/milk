@@ -20,7 +20,7 @@
 import { getPromoterForEdit, updatePromoter, } from 'api/promoter';
 
 export default {
-    name: 'modifypromoter',
+    name: 'modify-promoter',
     props: {
         promoterId: {
             type: Number,
@@ -62,7 +62,6 @@ export default {
                 }
             })
         },
-
         commit() {
             this.$refs.promoter.validate((valid) => {
                 if (valid) {

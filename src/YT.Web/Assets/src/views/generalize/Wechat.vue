@@ -5,7 +5,7 @@
             <Form ref="chat" :model="chat" :rules="ruleValidate">
                 <FormItem label="发送内容" prop="content">
                     <Input v-model="chat.content" type="textarea"
-                     :autosize="{minRows: 25,maxRows: 25}" placeholder="请输入..."></Input>
+                     :autosize="{minRows: 20,maxRows: 20}" placeholder="请输入..."></Input>
                 </FormItem>
                 <FormItem>
                     <Button type="primary" @click="save">发送</Button>

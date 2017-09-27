@@ -58,10 +58,10 @@ export default {
                     key: 'promoterName'
                 },
                 {
-                    title: '状态',
-                    key: 'isActive',
+                    title: '性别',
+                    key: 'gender',
                     render: (h, params) => {
-                        return params.row.isActive ? '启用' : '禁用';
+                        return params.row.gender==1 ? '男' : '女';
                     }
                 },
                 {

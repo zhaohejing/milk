@@ -62,7 +62,7 @@ namespace YT.Cards
 
             query = query.WhereIf(!input.Code.IsNullOrWhiteSpace(), c => c.CardCode.Contains(input.Code))
                 .WhereIf(input.State.HasValue, c => c.IsUsed == input.State.Value)
-                .WhereIf(input.Rmb.HasValue, c => c.Money<=input.Rmb.Value);
+                .WhereIf(input.Rmb.HasValue, c => c.Money ==input.Rmb.Value*100);
             var cardCount = await query.CountAsync();
             var cards = await query
             .OrderBy(input.Sorting)

@@ -1,5 +1,5 @@
 <template>
-    <milk-table  ref="list" :columns="cols" :search-api="searchApi" :params="params">
+    <milk-table ref="list" :columns="cols" :search-api="searchApi" :params="params">
         <template slot="search">
             <Form ref="params" :model="params" inline :label-width="70">
                 <FormItem label="金额">
@@ -28,7 +28,7 @@ export default {
             client: {
                 id: this.clientId,
                 money: null,
-                cardCode:''
+                cardCode: ''
             },
             cols: [
                 {
@@ -42,7 +42,10 @@ export default {
                 },
                 {
                     title: '金额',
-                    key: 'money'
+                    key: 'money',
+                    render: (h, params) => {
+                        return params.row.money / 100;
+                    }
                 }
             ],
             searchApi: getCards,
@@ -53,15 +56,17 @@ export default {
     },
     mounted() {
     },
+    computed: {
+    },
     methods: {
         commit() {
             let card = this.$refs.list.current;
-            if (card&&card.money&&card.cardCode) {
+            if (card && card.money && card.cardCode) {
                 this.client.money = card.money;
                 this.client.cardCode = card.cardCode;
-            }else{
-                  this.$Message.error('请选择充值卡!');
-                  return;
+            } else {
+                this.$Message.error('请选择充值卡!');
+                return;
             }
             if (!this.client.id) {
                 this.$Message.error('请选择要充值的账户!');
