@@ -544,8 +544,9 @@ namespace YT.Mobiles
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-          Task<PagedResultDto<ChargeRecordDto>> GetChargeRecord(UserChargeModel input);
+        Task<PagedResultDto<ChargeRecordDto>> GetChargeRecord(UserChargeModel input);
 
         #endregion
     }
 }
+
