@@ -22,9 +22,6 @@ export default {
   },
   components: { SidebarItem },
   computed: {
-    ...mapGetters([
-      'siderbar_routers'
-    ]),
   },
   methods: {
     handleClick(e) {

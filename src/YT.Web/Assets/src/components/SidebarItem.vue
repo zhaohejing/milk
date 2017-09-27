@@ -5,7 +5,7 @@
         <template v-for="item in routes">
           <router-link :key="item.name" tag="li" class="nav-item nav-dropdown" v-if="item.children&&item.children.length>0"
              to="" disabled exact>
-            <div class="nav-link nav-dropdown-toggle" @click="handleClick">
+            <div class="nav-link nav-dropdown-toggle"  @click="handleClick">
               <Icon :type="item.icon" />{{ item.displayName}} </div>
             <ul class="nav-dropdown-items">
               <li class="nav-item" :key="child.name" v-for="child in item.children" @click="addActive">
