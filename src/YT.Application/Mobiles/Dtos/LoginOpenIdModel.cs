@@ -17,6 +17,7 @@ namespace YT.Mobiles.Dtos
         /// </summary>
         public string OpenId { get; set; }
     }
+  
     /// <summary>
     /// 用户key实体
     /// </summary>

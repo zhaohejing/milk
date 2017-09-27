@@ -52,9 +52,7 @@ namespace YT.Models
         /// 充值卡id
         /// </summary>
         public int? CardId { get; set; }
-        /// <summary>
-        /// 卡
-        /// </summary>
+     
         /// <summary>
         /// 充值金额 单位 分
         /// </summary>
@@ -119,7 +117,7 @@ namespace YT.Models
         /// <summary>
         /// 状态
         /// </summary>
-        public int OrderState { get; set; }
+        public OrderState OrderState { get; set; }
         /// <summary>
         /// 购买人 客户id
         /// </summary>
@@ -133,6 +131,10 @@ namespace YT.Models
         /// </summary>
         [ForeignKey("OrderId")]
         public  virtual  ICollection<OrderItem> OrderItems { get; set; }
+        /// <summary>
+        /// 预定时间
+        /// </summary>
+        public  DateTime OrderTime { get; set; }
     }
     /// <summary>
     /// 订单子项

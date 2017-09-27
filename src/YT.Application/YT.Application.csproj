@@ -168,6 +168,7 @@
     <Compile Include="Customers\ICustomerAppService.cs" />
     <Compile Include="Customers\MobileDtos\LoginByMobileInput.cs" />
     <Compile Include="Dto\DictionaryDto.cs" />
+    <Compile Include="Mobiles\Dtos\OrderDto.cs" />
     <Compile Include="Mobiles\MobileAppService.cs" />
     <Compile Include="Navigations\Dtos\CreateOrUpdateMenuInput.cs" />
     <Compile Include="Navigations\Dtos\GetMenuForEditOutput.cs" />

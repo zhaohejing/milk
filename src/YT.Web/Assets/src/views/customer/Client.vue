@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { getClients, deleteClient, getClientForEdit, updateClient } from 'api/client';
+import { getClients, deleteClient, getClientForEdit, updateClient, updateStraw } from 'api/client';
 import modifyClient from './modify-client';
 export default {
     name: 'role',
@@ -61,7 +61,7 @@ export default {
                     title: '性别',
                     key: 'gender',
                     render: (h, params) => {
-                        return params.row.gender==1 ? '男' : '女';
+                        return params.row.gender == 1 ? '男' : '女';
                     }
                 },
                 {
@@ -75,7 +75,7 @@ export default {
                     title: '操作',
                     key: 'action',
                     align: 'center',
-                    width:'300px',
+                    width: '300px',
                     render: (h, params) => {
                         return h('div', [
                             h('Button', {
@@ -97,7 +97,7 @@ export default {
                                     type: 'error',
                                     size: 'small'
                                 },
-                                 style: {
+                                style: {
                                     marginRight: '5px'
                                 },
                                 on: {
@@ -106,14 +106,14 @@ export default {
                                     }
                                 }
                             }, '删除'),
-                             h('Button', {
+                            h('Button', {
                                 props: {
                                     type: 'info',
                                     size: 'small'
                                 },
                                 on: {
                                     click: () => {
-                                        this.delete(params.row)
+                                        this.updateStraw(params.row)
                                     }
                                 }
                             }, '添加吸管')
@@ -147,12 +147,22 @@ export default {
             this.$Modal.confirm({
                 title: '删除提示', content: "确定要删除当前客户么?",
                 onOk: () => {
-                    const parms = { id: model.id }
-                    deleteClient(parms).then(c => {
+                    const params = { id: model.id }
+                    deleteClient(params).then(c => {
                         if (c.data.success) {
                             table.initData();
                         }
                     })
+                }
+            })
+        },
+        updateStraw(row) {
+            var table = this.$refs.list;
+            const params = { id: row.id }
+            updateStraw(params).then(c => {
+                if (c.data.success) {
+                     this.$Message.success('添加吸管成功!');
+                    table.initData();
                 }
             })
         },

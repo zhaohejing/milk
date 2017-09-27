@@ -38,3 +38,10 @@ export function deleteClient(data) {
     data
   });
 }
+export function updateStraw(data) {
+  return fetch({
+    url: '/api/services/app/mobile/UpdateCustomerStrawState',
+    method: 'post',
+    data
+  });
+}
