@@ -129,7 +129,10 @@ export default {
                 },
                 {
                     title: '金额',
-                    key: 'money'
+                    key: 'money',
+                    render:(h,params)=>{
+                        return params.row.money/100;
+                    }
                 }
             ],
             colsA:[

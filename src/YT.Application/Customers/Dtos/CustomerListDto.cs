@@ -44,7 +44,7 @@ namespace YT.Customers.Dtos
         /// <summary>
         /// 余额
         /// </summary>
-        public decimal Balance { get; set; } = 0.00M;
+        public int Balance { get; set; } 
         /// <summary>
         /// 是否启用
         /// </summary>

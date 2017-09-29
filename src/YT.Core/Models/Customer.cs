@@ -99,7 +99,7 @@ namespace YT.Models
     [Table("milk_straw")]
     public class Straw : CreationAuditedEntity
     {
-        public string UserKey { get; set; } 
+        public int CustomerId { get; set; } 
     }
     /// <summary>
     /// 推广员管理

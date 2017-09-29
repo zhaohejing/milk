@@ -29,7 +29,8 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   response => response,
   error => {
-    if (error.response.data.unAuthorizedRequest) {
+    debugger;
+    if (error.response.status === 401) {
       store.dispatch('FedLogOut');
     }
     return Promise.reject(error);

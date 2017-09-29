@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
 using Abp.Runtime.Validation;
 using Abp.Extensions;
@@ -100,7 +101,7 @@ namespace YT.Mobiles.Dtos
     /// 用户核销商品input
     /// </summary>
 
-    public class UserUpdateOrderModel : UserKeyModel
+    public class UserUpdateOrderModel : EntityDto
     {
         /// <summary>
         /// 商品id

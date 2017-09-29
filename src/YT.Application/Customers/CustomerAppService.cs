@@ -10,6 +10,7 @@ using Abp.AutoMapper;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.Linq.Extensions;
+using Microsoft.AspNet.Identity;
 using YT.Customers.Dtos;
 using YT.Customers.Exporting;
 using YT.Dto;
@@ -180,6 +181,7 @@ namespace YT.Customers
                 throw new AbpException("用户账号已存在");
             }
             var entity = input.MapTo<Customer>();
+            entity.Password = new PasswordHasher().HashPassword(entity.Password);
             entity = await _customerRepository.InsertAsync(entity);
             await CurrentUnitOfWork.SaveChangesAsync();
             if (input.Card.IsNullOrWhiteSpace()) return entity.MapTo<CustomerEditDto>();
@@ -241,7 +243,10 @@ namespace YT.Customers
                     }
                   
                 }
-
+                if (!input.Password.IsNullOrWhiteSpace())
+                {
+                entity.Password = new PasswordHasher().HashPassword(input.Password);
+                }
 
                 await _customerRepository.UpdateAsync(entity);
             }

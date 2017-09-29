@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Abp.Application.Services.Dto;
 using YT.Models;
 
 namespace YT.Mobiles.Dtos
@@ -21,7 +23,7 @@ namespace YT.Mobiles.Dtos
     /// <summary>
     /// 用户key实体
     /// </summary>
-    public class DealBottleModel:UserKeyModel
+    public class DealBottleModel:EntityDto
     {
         /// <summary>
         /// openId
@@ -33,13 +35,16 @@ namespace YT.Mobiles.Dtos
     /// </summary>
     public class LoginOpenIdModel
     {
+
         /// <summary>
         /// 客户登陆名
         /// </summary>
+        [Required]
         public string Name { get; set; }
         /// <summary>
         /// 密码
         /// </summary>
+        [Required]
         public string Password { get; set; }
         /// <summary>
         /// openId
@@ -56,9 +61,9 @@ namespace YT.Mobiles.Dtos
         /// </summary>
         public string CardCode { get; set; }
         /// <summary>
-        /// 密码
+        /// 设备编码
         /// </summary>
-        public string Password { get; set; }
+        public string DeviceCode { get; set; }
     }
     /// <summary>
     /// 注册model
