@@ -107,6 +107,10 @@ namespace YT.Mobiles.Dtos
         /// 商品id
         /// </summary>
         public int OrderItemId { get; set; }
+        /// <summary>
+        /// 设备编码
+        /// </summary>
+        public string DeviceCode { get; set; }
     }
     /// <summary>
     /// 用户预定商品

@@ -81,6 +81,7 @@ namespace YT.Models
         /// 余额
         /// </summary>
         public int Balance { get; set; } = 0;
+
         public int? ProveId { get; set; }
         public virtual Area Prove { get; set; }
         public int? CityId { get; set; }

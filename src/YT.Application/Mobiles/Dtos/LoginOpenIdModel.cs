@@ -121,4 +121,14 @@ namespace YT.Mobiles.Dtos
         /// </summary>
         public string OpenId { get; set; }
     }
+    /// <summary>
+    /// 判断是否可以取奶参数
+    /// </summary>
+    public class LoginKeyInput:EntityDto
+    {
+        /// <summary>
+        /// 设备编码
+        /// </summary>
+        public string DeviceCode { get; set; }
+    }
 }

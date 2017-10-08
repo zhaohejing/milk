@@ -69,16 +69,17 @@ namespace YT.Mobiles
         /// <returns></returns>
         public async Task<CustomerListDto> LoginByOpenId(LoginOpenIdModel input)
         {
-          
+
             var customer =
               await _customerRepository.FirstOrDefaultAsync(
                     c => c.Account.Equals(input.Name));
             if (customer == null) throw new UserFriendlyException("当前用户不存在");
-            if (new PasswordHasher().VerifyHashedPassword( customer.Password,input.Password) != PasswordVerificationResult.Success)
+            if (new PasswordHasher().VerifyHashedPassword(customer.Password, input.Password) != PasswordVerificationResult.Success)
             {
                 throw new UserFriendlyException("密码错误");
             }
-            if (customer.UserKey.IsNullOrWhiteSpace()) customer.UserKey = input.OpenId;
+            if (customer.UserKey.IsNullOrWhiteSpace()) customer.UserKey = input.OpenId;//每次更新openid-----------------by gxq
+            //customer.UserKey = input.OpenId;
             return customer.MapTo<CustomerListDto>();
         }
         /// <summary>
@@ -96,8 +97,10 @@ namespace YT.Mobiles
                 throw new UserFriendlyException("该唯鲜卡不存在");
             }
 
+            //var customer =
+            //  await _customerRepository.FirstOrDefaultAsync(c => c.SpecialId.HasValue && c.SpecialId == card.Id && c.Position.Equals(input.DeviceCode));去掉设备编码判断（因为登录没有）-------by gxq
             var customer =
-              await _customerRepository.FirstOrDefaultAsync(c => c.SpecialId.HasValue && c.SpecialId == card.Id&&c.Position.Equals(input.DeviceCode));
+              await _customerRepository.FirstOrDefaultAsync(c => c.SpecialId.HasValue && c.SpecialId == card.Id);
             if (customer == null) throw new UserFriendlyException("当前用户不存在");
             return customer.MapTo<CustomerListDto>();
         }
@@ -179,6 +182,10 @@ namespace YT.Mobiles
         /// <returns></returns>
         public async Task UpdateCustomerStrawState(EntityDto<int> input)
         {
+
+            //var customer =
+            //  await _customerRepository.FirstOrDefaultAsync(c => c.SpecialId.HasValue && c.SpecialId == card.Id && c.Position.Equals(input.DeviceCode));
+
             var customer = await GetCurrentCustomerById(input.Id);
             customer.CanPickUpStraw = true;
         }
@@ -187,16 +194,18 @@ namespace YT.Mobiles
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<bool> CanPickUpStraw(EntityDto input)
+        public async Task<bool> CanPickUpStraw(LoginKeyInput input)//这里要传设备编码的
         {
-            var customer = await GetCurrentCustomerById(input.Id);
+
+            var customer =
+            await GetCurrentCustomerById(input.Id,input.DeviceCode);//获取是不是可以获取吸管的时候，还要判断设备编码
             var now = DateTime.Today;
             var left = now.AddDays(-(int)now.DayOfWeek + 1);
             var right = now.AddDays(8 - (int)now.DayOfWeek);
             var count =
               await _strawRepository.CountAsync(
-                    c => c.CreationTime >= left && c.CreationTime < right && c.CustomerId==customer.Id);
-            customer.CanPickUpStraw = count <= 0;
+                    c => c.CreationTime >= left && c.CreationTime < right && c.CustomerId == customer.Id);
+            customer.CanPickUpStraw = count <= 0;//这个逻辑不对吧。
             return customer.CanPickUpStraw;
         }
         /// <summary>
@@ -204,11 +213,15 @@ namespace YT.Mobiles
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task PickUpStraw(EntityDto input)
+        public async Task<bool> PickUpStraw(LoginKeyInput input)//这里要传设备编码的
         {
-            var customer = await GetCurrentCustomerById(input.Id);
+
+            var customer =
+           await GetCurrentCustomerById(input.Id, input.DeviceCode);//获取是不是可以获取吸管的时候，还要判断设备编码
             customer.CanPickUpStraw = false;
-            await _strawRepository.InsertAsync(new Straw() { CustomerId = customer.Id });
+            await _strawRepository.InsertAsync(new Straw() { CustomerId = customer.Id });//这个是没看懂
+            return true;// 外部调用接口要有返回值,我这么写可能不对，
+
         }
         #endregion
         #region 奶瓶相关
@@ -227,14 +240,16 @@ namespace YT.Mobiles
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task DealCustomerBottle(DealBottleModel input)
+        public async Task<bool> DealCustomerBottle(DealBottleModel input)
         {
             var customer = await GetCurrentCustomerById(input.Id);
             if (input.DealCount > customer.BottleCount)
             {
                 throw new UserFriendlyException("核销奶瓶数不可大于持有数");
             }
-            customer.BottleCount -= input.DealCount;
+            customer.BottleCount -= input.DealCount;//这里缺少个逻辑，就是核销多少瓶，就要为余额增加多少，一个瓶子，一元钱
+            customer.Balance += input.DealCount;
+            return true;//外部调用接口要有返回值,我这么写可能不对，
         }
         #endregion
         #region 订单相关
@@ -245,7 +260,7 @@ namespace YT.Mobiles
         /// <returns></returns>
         public async Task<List<OrderDto>> GetUserOrdersCurrentDay(UserKeyModel input)
         {
-            var end = DateTime.Today.AddDays(86399F / 86400);
+            var end = DateTime.Today.AddDays(1);
             var today = DateTime.Today;
             var customer = await GetCurrentCustomerByOpenId(input.OpenId);
             var orders = await _orderRepository.GetAllListAsync(c => c.CustomerId == customer.Id && c.OrderTime >= today && c.OrderTime < end);
@@ -272,9 +287,9 @@ namespace YT.Mobiles
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<List<dynamic>> CanUpdateOrder(EntityDto input)
+        public async Task<List<dynamic>> CanUpdateOrder(LoginKeyInput input)
         {
-            var customer = await GetCurrentCustomerById(input.Id);
+           var customer = await GetCurrentCustomerById(input.Id,input.DeviceCode);
             var end = DateTime.Today.AddDays(1);
             var today = DateTime.Today;
             var orders =
@@ -284,16 +299,18 @@ namespace YT.Mobiles
             {
                 throw new UserFriendlyException("当天没有订单可以核销");
             }
-            if (orders.All(c=>c.OrderItems.All(e=>e.OrderState==OrderState.HadTake)))
+            if (orders.All(c => c.OrderItems.All(e => e.OrderState == OrderState.HadTake)))
             {
                 throw new UserFriendlyException("当天订单商品已经全部核销");
             }
-         var result=new List<dynamic>();
+            var result = new List<dynamic>();
             foreach (var order in orders)
             {
-                result.AddRange(order.OrderItems.Where(c=>c.OrderState==OrderState.Predetermined).Select(c=>new
+                result.AddRange(order.OrderItems.Where(c => c.OrderState == OrderState.Predetermined).Select(c => new
                 {
-                    c.CommodityId,c.Commodity, c.Id
+                    c.CommodityId,
+                    c.Commodity,
+                    c.Id
                 }));
             }
             return result;
@@ -303,9 +320,9 @@ namespace YT.Mobiles
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task UpdateOrderItemState(UserUpdateOrderModel input)
+        public async Task UpdateOrderItemState(UserUpdateOrderModel input)//少设备编码。这个咋加。
         {
-            var customer = await GetCurrentCustomerById(input.Id);
+            var customer = await GetCurrentCustomerById(input.Id, input.DeviceCode);
             var orderItem = await _orderItemRepository.FirstOrDefaultAsync(c => c.Id == input.OrderItemId);
             if (orderItem == null) throw new UserFriendlyException("该商品订单不存在");
             var end = DateTime.Today.AddDays(86399F / 86400);
@@ -343,7 +360,7 @@ namespace YT.Mobiles
                     var o = await _orderRepository.FirstOrDefaultAsync(c => c.OrderNum == order.Order.Value);
                     if (o.OrderState == OrderState.Predetermined)
                     {
-                        bottleCount+= await DealOrder(o, o.OrderItems, order.Products);
+                        bottleCount += await DealOrder(o, o.OrderItems, order.Products);
                     }
                 }
                 else
@@ -426,16 +443,16 @@ namespace YT.Mobiles
         public async Task<dynamic> GetRangeTimeOrder(EntityDto<int> input)
         {
             var now = DateTime.Today;
-            var right= now.AddDays(1);
+            var right = now.AddDays(1);
             var left = now.AddDays(-7);
             var customer = await GetCurrentCustomerById(input.Id);
             var orders =
                 _orderRepository.GetAllIncluding(c => c.OrderItems)
-                    .Where(c => c.OrderTime >= left && c.OrderTime < right && c.CustomerId==customer.Id);
-            var total =await orders.SumAsync(c => c.OrderItems.Count);
-            var hapick = await orders.SumAsync(c => c.OrderItems.Count(d=>d.OrderState==OrderState.HadTake));
-            var cost = await orders.SumAsync(c => c.OrderItems.Sum(d=>d.Cost));
-            return new {total = total, hadpick = hapick, cost = cost};
+                    .Where(c => c.OrderTime >= left && c.OrderTime < right && c.CustomerId == customer.Id);
+            var total = await orders.SumAsync(c => c.OrderItems.Count);
+            var hapick = await orders.SumAsync(c => c.OrderItems.Count(d => d.OrderState == OrderState.HadTake));
+            var cost = await orders.SumAsync(c => c.OrderItems.Sum(d => d.Cost));
+            return new { total = total, hadpick = hapick, cost = cost };
         }
         #endregion
         #region 商品相关
@@ -488,18 +505,27 @@ namespace YT.Mobiles
             return count;
         }
         /// <summary>
-        /// 根据id获取用户信息
+        /// 根据id和设备id获取用户信息
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="deviceCode"></param>
         /// <returns></returns>
-        private async Task<Customer> GetCurrentCustomerById(int id)
+        private async Task<Customer> GetCurrentCustomerById(int id,string deviceCode="")
         {
-            var customer = await _customerRepository.FirstOrDefaultAsync(id);
-            if (customer == null)
+            Customer current = null;
+            if (deviceCode.IsNullOrWhiteSpace())
+            {
+                current = await _customerRepository.FirstOrDefaultAsync(id);
+            }
+            else
+            {
+                current = await _customerRepository.FirstOrDefaultAsync(c => c.Id == id && c.Position.Equals(deviceCode));
+            }
+            if (current == null)
             {
                 throw new UserFriendlyException("当前用户不存在");
             }
-            return customer;
+            return current;
         }
         /// <summary>
         /// 根据openid 获取用户信息
@@ -553,14 +579,14 @@ namespace YT.Mobiles
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<bool> CanPickUpStraw(EntityDto input);
+        Task<bool> CanPickUpStraw(LoginKeyInput input);
 
         /// <summary>
         /// 用户获取吸管
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task PickUpStraw(EntityDto input);
+        Task<bool> PickUpStraw(LoginKeyInput input);
         /// <summary>
         /// 管理员设置用户的吸管状态
         /// </summary>
@@ -583,7 +609,7 @@ namespace YT.Mobiles
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task DealCustomerBottle(DealBottleModel input);
+        Task<bool> DealCustomerBottle(DealBottleModel input);
 
         #endregion
         #region 订单相关
@@ -633,7 +659,7 @@ namespace YT.Mobiles
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<List<dynamic>> CanUpdateOrder(EntityDto input);
+        Task<List<dynamic>> CanUpdateOrder(LoginKeyInput input);
         /// <summary>
         /// 获取用户七天消费记录
         /// </summary>
