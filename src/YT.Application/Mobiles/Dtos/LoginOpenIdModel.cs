@@ -60,10 +60,6 @@ namespace YT.Mobiles.Dtos
         /// 客户登陆名
         /// </summary>
         public string CardCode { get; set; }
-        /// <summary>
-        /// 设备编码
-        /// </summary>
-        public string DeviceCode { get; set; }
     }
     /// <summary>
     /// 注册model

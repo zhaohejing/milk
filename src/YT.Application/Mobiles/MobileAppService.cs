@@ -447,8 +447,12 @@ namespace YT.Mobiles
             var left = now.AddDays(-7);
             var customer = await GetCurrentCustomerById(input.Id);
             var orders =
-                _orderRepository.GetAllIncluding(c => c.OrderItems)
+                _orderRepository.GetAll()
                     .Where(c => c.OrderTime >= left && c.OrderTime < right && c.CustomerId == customer.Id);
+            if (!orders.Any())
+            {
+                return new { total = 0, hadpick = 0, cost = 0 };
+            }
             var total = await orders.SumAsync(c => c.OrderItems.Count);
             var hapick = await orders.SumAsync(c => c.OrderItems.Count(d => d.OrderState == OrderState.HadTake));
             var cost = await orders.SumAsync(c => c.OrderItems.Sum(d => d.Cost));
