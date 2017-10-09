@@ -40,7 +40,9 @@ namespace YT.Promoters.Dtos
         /// </summary>
         [DisplayName("分享二维码")]
         public   string  ShareUrl { get; set; }
-
+        /// <summary>
+        /// 是否启用
+        /// </summary>
         public   bool  IsActive { get; set; }
 
     }

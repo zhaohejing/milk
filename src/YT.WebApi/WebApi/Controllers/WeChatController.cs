@@ -67,7 +67,7 @@ namespace YT.WebApi.Controllers
         private async Task<string> GetAccessToken()
         {
             var url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx2a5d55f687f63dff&secret=cae60453b500c4ade00179fbbb941c07";
-            return HttpHelper.Get(url);
+            return await Task.Run(()=> HttpHelper.Get(url)) ;
         }
 
 

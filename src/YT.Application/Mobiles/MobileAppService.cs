@@ -464,7 +464,7 @@ namespace YT.Mobiles
         /// 获取商品详情
         /// </summary>
         /// <returns></returns>
-        public async Task<dynamic> GetProducts()
+        public dynamic GetProducts()
         {
             return new List<dynamic>()
             {
@@ -677,7 +677,7 @@ namespace YT.Mobiles
         /// 获取商品详情
         /// </summary>
         /// <returns></returns>
-        Task<dynamic> GetProducts();
+        dynamic GetProducts();
 
         #endregion
     }
